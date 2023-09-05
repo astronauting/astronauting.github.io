@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/astronauting-rbr.top/img/favicon.ico">
+
+    <title>
+        
+          机械臂基础（应用）知识学习3 - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/astronauting-rbr.top/2023/04/03/robot3/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/astronauting-rbr.top/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/astronauting-rbr.top/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/astronauting-rbr.top/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#机械臂" title="机械臂">机械臂</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#matlab" title="matlab">matlab</a>
+                        
+                    </div>
+                    <h1>机械臂基础（应用）知识学习3</h1>
+                    <h2 class="subheading">本篇着重介绍总结逆运动学部分知识，并且给出 python 应用程序。</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-04-03
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>从目前的一些网站资料上看，机械臂运动学相关的讲解是非常散乱的，就算是有人用大量篇幅去讲解、归纳也还是有很多问题存在。我觉得这中间最重要的点在于过程中公式推导和几何理解没办法直接通过文本形式讲的很透彻，原理理解方面推荐台大林沛群老师的机器人运动学课程，里面老师会结合机器人模型进行讲解，更容易理解。无论是网课还是网上主流的教程，都只给出了满足佩珀准则（机械臂三轴交于一点）的方法，我的项目所应用的类 UR 结构机械臂并没有明显的 piper 特征，但鉴于另有说法是三轴平行的机械臂默认在无限远处交于一点，同样满足准则。我还是根据准则进行了计算以及程序编写。</p>
+<p>在此章中我具体的展示了过程中的矩阵公式以及程序代码，但具体的公式推导则需要考虑几何结构进行理解，这一部分可以<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1v4411H7ez?p=26&amp;vd_source=1fc05a9db72debde35dc344fcb430f17">点击链接</a>从视频中学习,涉及的代码内容量较多，因此大部分公式以截图的形式进行说明。</p>
+<p>处理逆运动学问题有两种主要的方法，前面提到的应用 piper 准则的解析法以及通过牛顿迭代等方法进行处理的数值法，在此处我优先介绍解析法，一方面是由于目前市面上的大多数机器人都满足 piper 准则，另一方面数值迭代的方法教程资源不是很多，我还没太搞懂。另外正运动学的部分之前写的不太详细，仅仅是贴出了代码，具体如何在 python 中进行应用，如何将旋转矩阵和欧拉角进行相互转换，还需要再做讲解。</p>
+<h2 id="求解逆解"><a href="#求解逆解" class="headerlink" title="求解逆解"></a>求解逆解</h2><p>首先，整个求解过程需要围绕之前正运动中应用标准 DH 参数法得到的变换矩阵 T 展开，矩阵基本形式如下所示：<br><img src="https://pic.imgdb.cn/item/642a4c24a682492fccd27205.jpg" alt=""><br>左上角的 3*3 矩阵即为旋转矩阵，可以通过以下公式变换转化为欧拉角，欧拉角是姿态角，即 Rx、Ry、Rz（不同的坐标系可能不一样，还要再做转换）。具体公式如下：<br><img src="https://pic.imgdb.cn/item/642a2dffa682492fcca5a2ad.jpg" alt=""><br>逆运动学的整体目标是实现末端执行器的位姿和姿态到关节角度的转换，此处定义末端执行器姿态为：[ <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="2.241ex" height="1.439ex" role="img" focusable="false" viewBox="0 -442 990.5 636"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g><g data-mml-node="TeXAtom" transform="translate(536,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g></g></g></g></g></svg></mjx-container>,<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.667ex;" xmlns="http://www.w3.org/2000/svg" width="2.11ex" height="1.667ex" role="img" focusable="false" viewBox="0 -442 932.5 737"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g><g data-mml-node="TeXAtom" transform="translate(536,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g></g></g></svg></mjx-container>,<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="2.07ex" height="1.439ex" role="img" focusable="false" viewBox="0 -442 914.8 636"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g><g data-mml-node="TeXAtom" transform="translate(536,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D467" d="M347 338Q337 338 294 349T231 360Q211 360 197 356T174 346T162 335T155 324L153 320Q150 317 138 317Q117 317 117 325Q117 330 120 339Q133 378 163 406T229 440Q241 442 246 442Q271 442 291 425T329 392T367 375Q389 375 411 408T434 441Q435 442 449 442H462Q468 436 468 434Q468 430 463 420T449 399T432 377T418 358L411 349Q368 298 275 214T160 106L148 94L163 93Q185 93 227 82T290 71Q328 71 360 90T402 140Q406 149 409 151T424 153Q443 153 443 143Q443 138 442 134Q425 72 376 31T278 -11Q252 -11 232 6T193 40T155 57Q111 57 76 -3Q70 -11 59 -11H54H41Q35 -5 35 -2Q35 13 93 84Q132 129 225 214T340 322Q352 338 347 338Z"></path></g></g></g></g></g></svg></mjx-container>,r,y,p ]，将末端坐标系到基座标系的变换矩阵用这六个量表示出来：<br><img src="https://pic.imgdb.cn/item/642a2fafa682492fcca8c2cc.jpg" alt=""><br><img src="https://pic.imgdb.cn/item/642a4c03a682492fccd248fa.jpg" alt=""><br>后续推导将围绕这个矩阵进行展开。</p>
+<h3 id="关节1求解"><a href="#关节1求解" class="headerlink" title="关节1求解"></a>关节1求解</h3><p><img src="https://pic.imgdb.cn/item/642a302ea682492fcca95c82.jpg" alt=""></p>
+<h3 id="关节5求解"><a href="#关节5求解" class="headerlink" title="关节5求解"></a>关节5求解</h3><p><img src="https://pic.imgdb.cn/item/642a3055a682492fcca98a4f.jpg" alt=""></p>
+<h3 id="关节6求解"><a href="#关节6求解" class="headerlink" title="关节6求解"></a>关节6求解</h3><p><img src="https://pic.imgdb.cn/item/642a3072a682492fcca9abdd.jpg" alt=""></p>
+<h3 id="关节3求解"><a href="#关节3求解" class="headerlink" title="关节3求解"></a>关节3求解</h3><p><img src="https://pic.imgdb.cn/item/642a30a6a682492fcca9f2dd.jpg" alt=""></p>
+<h3 id="关节2求解"><a href="#关节2求解" class="headerlink" title="关节2求解"></a>关节2求解</h3><p><img src="https://pic.imgdb.cn/item/642a30baa682492fccaa08fd.jpg" alt=""></p>
+<h3 id="关节4求解"><a href="#关节4求解" class="headerlink" title="关节4求解"></a>关节4求解</h3><p><img src="https://pic.imgdb.cn/item/642a30eca682492fccaa452c.jpg" alt=""></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>推导流程大致就是根据矩阵等式，将六个关节参数陆续进行求解，当然随着参数的增加以及公式的计算，会逐渐增加解的个数，最终会有八组逆解。在这八组逆解中如何取舍，同样是我们需要研究的问题，之后会进行记录。在写码的过程中，我基本上是围绕以上公式进行编写的，需要注意的有以下几点：</p>
+<ul>
+<li>在 python 中一定要使用 numpy 库进行处理，math 库虽然有对应的公式，但是无法对矩阵进行处理，后续会产生报错。</li>
+<li>多解的情况要分类处理，储存在对应的矩阵中，结果为正的解放在一行，为负的解要放在另一行，并且需要实现规定好矩阵维度。</li>
+<li>编写前如果对 numpy 没有过一定的了解，建议先去学习一下概念，只需要了解基本公式指令以及如何定义空矩阵即可。</li>
+<li>虽然可以直接调用转换矩阵参数，但由于这些参数在计算过程中要频繁调用，建议一一定义进行简化。<br>如果没有一步步跟着公式进行代码编写，我绝对不会发现以上的问题，所以希望还是能够自己跟着计算过程进行编写，这对于写代码的基本功来说帮助是很大的。</li>
+</ul>
+<h2 id="逆解-python-代码实现"><a href="#逆解-python-代码实现" class="headerlink" title="逆解 python 代码实现"></a>逆解 python 代码实现</h2><p>上面的公式其实在 MATLAB 中要更好编写（参考代码便是 MATLAB 形式），但基于我们项目整体的背景需要，将逆解代码放在 python 中进行处理。整体流程并无太多需要着重讲述的地方，只需要注意上面提到的几个注意点即可，代码如下(引用库为 math 和 numpy)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">inverse_kinematics</span>(<span class="params">pos, rot, d, a</span>):</span><br><span class="line">    <span class="comment"># 计算逆运动学，返回六个关节的角度</span></span><br><span class="line">    R = np.array(rot)</span><br><span class="line">    pos = np.array(pos)</span><br><span class="line">    <span class="comment"># 将T的各个向量参数写出以便运算</span></span><br><span class="line">    nx=R[<span class="number">0</span>,<span class="number">0</span>];ny=R[<span class="number">1</span>,<span class="number">0</span>];nz=R[<span class="number">2</span>,<span class="number">0</span>];</span><br><span class="line">    ox=R[<span class="number">0</span>,<span class="number">1</span>];oy=R[<span class="number">1</span>,<span class="number">1</span>];oz=R[<span class="number">2</span>,<span class="number">1</span>];</span><br><span class="line">    ax=R[<span class="number">0</span>,<span class="number">2</span>];ay=R[<span class="number">1</span>,<span class="number">2</span>];az=R[<span class="number">2</span>,<span class="number">2</span>];</span><br><span class="line">    px = pos[<span class="number">0</span>];py = pos[<span class="number">1</span>];pz = pos[<span class="number">2</span>];</span><br><span class="line">    <span class="comment"># 计算第一关节的角度</span></span><br><span class="line">    m = d[<span class="number">5</span>]*ay-py</span><br><span class="line">    n = ax*d[<span class="number">5</span>]-px</span><br><span class="line">    theta1 = np.empty((<span class="number">1</span>,<span class="number">2</span>))</span><br><span class="line">    theta1[<span class="number">0</span>,<span class="number">0</span>] = math.atan2(m, n)-math.atan2(d[<span class="number">3</span>],math.sqrt(m**<span class="number">2</span>+n**<span class="number">2</span>-d[<span class="number">3</span>]**<span class="number">2</span>))</span><br><span class="line">    theta1[<span class="number">0</span>,<span class="number">1</span>] = math.atan2(m, n)-math.atan2(d[<span class="number">3</span>],-math.sqrt(m**<span class="number">2</span>+n**<span class="number">2</span>-d[<span class="number">3</span>]**<span class="number">2</span>))</span><br><span class="line">    <span class="comment"># 计算第五关节的角度</span></span><br><span class="line">    theta5 = np.empty((<span class="number">2</span>,<span class="number">2</span>))</span><br><span class="line">    theta5[<span class="number">0</span>,:<span class="number">2</span>] = np.arccos(ax*np.sin(theta1)-ay*np.cos(theta1))</span><br><span class="line">    theta5[<span class="number">1</span>,:<span class="number">2</span>] = -np.arccos(ax * np.sin(theta1) - ay * np.cos(theta1))</span><br><span class="line">    <span class="comment"># 计算第六关节的角度</span></span><br><span class="line">    mm = nx * np.sin(theta1)-ny*np.cos(theta1);</span><br><span class="line">    nn = ox * np.sin(theta1)-oy*np.cos(theta1);</span><br><span class="line">    <span class="comment"># 公式：theta6=atan2(mm,nn)-atan2(sin(theta5),0)</span></span><br><span class="line">    theta6 = np.empty((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">    theta6[<span class="number">0</span>,:<span class="number">2</span>] = np.arctan2(mm,nn)-np.arctan2(np.sin(theta5[<span class="number">0</span>,:<span class="number">2</span>]),<span class="number">0</span>)</span><br><span class="line">    theta6[<span class="number">1</span>,:<span class="number">2</span>] = np.arctan2(mm,nn)-np.arctan2(np.sin(theta5[<span class="number">1</span>,:<span class="number">2</span>]),<span class="number">0</span>)</span><br><span class="line">    <span class="comment"># 计算第三关节的角度</span></span><br><span class="line">    mmm = np.empty((<span class="number">2</span>,<span class="number">2</span>))</span><br><span class="line">    nnn = np.empty((<span class="number">2</span>,<span class="number">2</span>))</span><br><span class="line">    mmm[<span class="number">0</span>,:<span class="number">2</span>] = d[<span class="number">4</span>]*(np.sin(theta6[<span class="number">0</span>,:<span class="number">2</span>])*(nx*np.cos(theta1)+ny*np.sin(theta1))+np.cos(theta6[<span class="number">0</span>,<span class="number">0</span>:<span class="number">2</span>])*(ox*np.cos(theta1) + oy*np.sin(theta1)))\</span><br><span class="line">-d[<span class="number">5</span>]*(ax*np.cos(theta1) + ay*np.sin(theta1))+px*np.cos(theta1) + py*np.sin(theta1)</span><br><span class="line">    nnn[<span class="number">0</span>,:<span class="number">2</span>] = pz-d[<span class="number">0</span>]-az*d[<span class="number">5</span>]+d[<span class="number">4</span>]*(oz*np.cos(theta6[<span class="number">0</span>,:<span class="number">2</span>])+nz*np.sin(theta6[<span class="number">0</span>,:<span class="number">2</span>]))</span><br><span class="line">    mmm[<span class="number">1</span>,:<span class="number">2</span>] = d[<span class="number">4</span>] * (np.sin(theta6[<span class="number">1</span>,:<span class="number">2</span>])*(nx*np.cos(theta1) + ny*np.sin(theta1)) + np.cos(theta6[<span class="number">1</span>,:<span class="number">2</span>])*(ox*np.cos(theta1) + oy * np.sin(theta1)))\</span><br><span class="line">-d[<span class="number">5</span>]*(ax*np.cos(theta1) + ay*np.sin(theta1)) + px*np.cos(theta1) + py*np.sin(theta1)</span><br><span class="line">    nnn[<span class="number">1</span>,:<span class="number">2</span>] = pz-d[<span class="number">0</span>]-az*d[<span class="number">5</span>]+d[<span class="number">4</span>]*(oz*np.cos(theta6[<span class="number">1</span>,:<span class="number">2</span>])+nz*np.sin(theta6[<span class="number">1</span>,:<span class="number">2</span>]))</span><br><span class="line">    theta3 = np.empty((<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line">    theta3[<span class="number">0</span>:<span class="number">2</span>,:] = np.arccos((np.square(mmm)+np.square(nnn) - (a[<span class="number">1</span>])**<span class="number">2</span>-(a[<span class="number">2</span>])**<span class="number">2</span>)/(<span class="number">2</span>*a[<span class="number">1</span>]*a[<span class="number">2</span>]))</span><br><span class="line">    theta3[<span class="number">2</span>:<span class="number">4</span>,:] = -np.arccos((np.square(mmm)+np.square(nnn) - (a[<span class="number">1</span>])**<span class="number">2</span>-(a[<span class="number">2</span>])**<span class="number">2</span>)/(<span class="number">2</span>*a[<span class="number">1</span>]*a[<span class="number">2</span>]))</span><br><span class="line">    <span class="comment"># 计算第二关节的角度</span></span><br><span class="line">    mmm_s2 = np.empty((<span class="number">4</span>,<span class="number">2</span>))</span><br><span class="line">    nnn_s2 = np.empty((<span class="number">4</span>,<span class="number">2</span>))</span><br><span class="line">    mmm_s2[<span class="number">0</span>:<span class="number">2</span>,:]=mmm</span><br><span class="line">    mmm_s2[<span class="number">2</span>:<span class="number">4</span>,:]=mmm</span><br><span class="line">    nnn_s2[<span class="number">0</span>:<span class="number">2</span>,:]=nnn</span><br><span class="line">    nnn_s2[<span class="number">2</span>:<span class="number">4</span>,:]=nnn</span><br><span class="line">    s2 = ((a[<span class="number">2</span>]*np.cos(theta3)+a[<span class="number">1</span>])*nnn_s2 - a[<span class="number">2</span>]*np.sin(theta3)*mmm_s2)/((a[<span class="number">1</span>])**<span class="number">2</span>+(a[<span class="number">2</span>])**<span class="number">2</span>+<span class="number">2</span>*a[<span class="number">1</span>]*a[<span class="number">2</span>]*np.cos(theta3))</span><br><span class="line">    c2 = (mmm_s2+a[<span class="number">2</span>]*np.sin(theta3)*s2)/(a[<span class="number">2</span>]*np.cos(theta3)+a[<span class="number">1</span>])</span><br><span class="line">    theta2 = np.arctan2(s2, c2)</span><br><span class="line">    <span class="comment">#整理关节角</span></span><br><span class="line">    theta = np.empty((<span class="number">8</span>,<span class="number">6</span>))</span><br><span class="line">    theta[<span class="number">0</span>:<span class="number">4</span>,<span class="number">0</span>] = theta1[<span class="number">0</span>,<span class="number">0</span>];theta[<span class="number">4</span>:<span class="number">8</span>,<span class="number">0</span>]=theta1[<span class="number">0</span>,<span class="number">1</span>]</span><br><span class="line">    theta[:,<span class="number">1</span>]=[theta2[<span class="number">0</span>,<span class="number">0</span>], theta2[<span class="number">2</span>,<span class="number">0</span>], theta2[<span class="number">1</span>,<span class="number">0</span>], theta2[<span class="number">3</span>,<span class="number">0</span>], theta2[<span class="number">0</span>,<span class="number">1</span>], theta2[<span class="number">2</span>,<span class="number">1</span>], theta2[<span class="number">1</span>,<span class="number">1</span>],theta2[<span class="number">3</span>,<span class="number">1</span>]]</span><br><span class="line">    theta[:,<span class="number">2</span>] = [theta3[<span class="number">0</span>, <span class="number">0</span>], theta3[<span class="number">2</span>, <span class="number">0</span>], theta3[<span class="number">1</span>, <span class="number">0</span>], theta3[<span class="number">3</span>, <span class="number">0</span>], theta3[<span class="number">0</span>, <span class="number">1</span>], theta3[<span class="number">2</span>, <span class="number">1</span>], theta3[<span class="number">1</span>, <span class="number">1</span>],theta3[<span class="number">3</span>, <span class="number">1</span>]]</span><br><span class="line">    theta[<span class="number">0</span>:<span class="number">2</span>,<span class="number">4</span>]=theta5[<span class="number">0</span>,<span class="number">0</span>];theta[<span class="number">2</span>:<span class="number">4</span>,<span class="number">4</span>]=theta5[<span class="number">1</span>,<span class="number">0</span>];</span><br><span class="line">    theta[<span class="number">4</span>:<span class="number">6</span>,<span class="number">4</span>]=theta5[<span class="number">0</span>,<span class="number">1</span>];theta[<span class="number">6</span>:<span class="number">8</span>,<span class="number">4</span>]=theta5[<span class="number">1</span>,<span class="number">1</span>];</span><br><span class="line">    theta[<span class="number">0</span>:<span class="number">2</span>,<span class="number">5</span>]=theta6[<span class="number">0</span>,<span class="number">0</span>];theta[<span class="number">2</span>:<span class="number">4</span>,<span class="number">5</span>]=theta6[<span class="number">1</span>,<span class="number">0</span>];</span><br><span class="line">    theta[<span class="number">4</span>:<span class="number">6</span>,<span class="number">5</span>]=theta6[<span class="number">0</span>,<span class="number">1</span>];theta[<span class="number">6</span>:<span class="number">8</span>,<span class="number">5</span>]=theta6[<span class="number">1</span>,<span class="number">1</span>];</span><br><span class="line">    <span class="comment"># 求解关节角4</span></span><br><span class="line">    theta[:,<span class="number">3</span>]=np.arctan2(-np.sin(theta[:,<span class="number">5</span>])*(nx*np.cos(theta[:,<span class="number">0</span>]) + ny*np.sin(theta[:,<span class="number">0</span>]))-np.cos(theta[:,<span class="number">5</span>])*\</span><br><span class="line">(ox*np.cos(theta[:,<span class="number">0</span>])+oy*np.sin(theta[:,<span class="number">0</span>])),oz*np.cos(theta[:,<span class="number">5</span>])+nz*np.sin(theta[:,<span class="number">5</span>]))-theta[:,<span class="number">1</span>]-theta[:,<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">return</span> theta</span><br></pre></td></tr></table></figure>
+<p>其余部分为我自己定义的初始化部分，以及调用之前的正运动学进行了一定的测试，可以进行参考。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">DH</span>(<span class="params">theta, d, a, alpha</span>):</span><br><span class="line">    <span class="comment"># DH变换矩阵</span></span><br><span class="line">    <span class="keyword">return</span> np.array([</span><br><span class="line">        [math.cos(theta), -math.sin(theta) * math.cos(alpha), math.sin(theta) * math.sin(alpha), a * math.cos(theta)],</span><br><span class="line">        [math.sin(theta), math.cos(theta) * math.cos(alpha), -math.cos(theta) * math.sin(alpha), a * math.sin(theta)],</span><br><span class="line">        [<span class="number">0</span>, math.sin(alpha), math.cos(alpha), d],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">    ])</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">forward_kinematics</span>(<span class="params">theta, d, a, alpha</span>):</span><br><span class="line">    <span class="comment"># 计算正运动学，返回末端执行器的位置和姿态</span></span><br><span class="line">    T = np.eye(<span class="number">4</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">6</span>):</span><br><span class="line">        T = T @ DH(theta[i], d[i], a[i], alpha[i])</span><br><span class="line">    pos = T[:<span class="number">3</span>, <span class="number">3</span>]</span><br><span class="line">    rot = T[:<span class="number">3</span>, :<span class="number">3</span>]</span><br><span class="line">    <span class="keyword">return</span> pos, rot</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># 设置关节角度</span></span><br><span class="line">    theta = [math.pi/<span class="number">2</span>,math.pi/<span class="number">2</span>,math.pi/<span class="number">2</span>,math.pi/<span class="number">2</span>,math.pi/<span class="number">2</span>,math.pi/<span class="number">2</span>]  <span class="comment"># 关节角度</span></span><br><span class="line">    d = [<span class="number">152</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">130</span>, <span class="number">102</span>, <span class="number">100</span>]  <span class="comment"># 关节连杆长度</span></span><br><span class="line">    a = [<span class="number">0</span>, -<span class="number">425</span>, -<span class="number">395</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]  <span class="comment"># 关节间距</span></span><br><span class="line">    alpha = [math.pi / <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, math.pi / <span class="number">2</span>, -math.pi / <span class="number">2</span>, <span class="number">0</span>]  <span class="comment"># 关节旋转角度</span></span><br><span class="line">    back_pos = [-<span class="number">820</span>, -<span class="number">230</span>, <span class="number">50</span>]  <span class="comment"># 末端执行器的位置</span></span><br><span class="line">    back_rot = [[<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">6.12</span>, <span class="number">1</span>], [<span class="number">0</span>, -<span class="number">1</span>, <span class="number">6.12</span>]]  <span class="comment"># 末端执行器的旋转矩阵</span></span><br><span class="line">    <span class="comment"># 计算正运动学</span></span><br><span class="line">    pos, rot = forward_kinematics(theta, d, a, alpha)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'正运动学结果：'</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'位置：'</span>, pos)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'姿态：'</span>, rot)</span><br><span class="line">    <span class="comment"># 计算逆运动学</span></span><br><span class="line">    theta_new = inverse_kinematics(pos, rot, d, a)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'逆运动学结果：'</span>, theta_new)</span><br><span class="line">    <span class="comment"># 回代测试</span></span><br><span class="line">    test_pos, test_rot = forward_kinematics(theta_new[<span class="number">1</span>,:], d, a, alpha)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'正运动学结果：'</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'位置：'</span>, test_pos)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'姿态：'</span>, test_rot)</span><br></pre></td></tr></table></figure>
+<h2 id="最优解选择"><a href="#最优解选择" class="headerlink" title="最优解选择"></a>最优解选择</h2><p>逆解程序给出我们八组逆解，但我们所需要的只有唯一的一组逆解，并且还有两种情况要考虑：</p>
+<ul>
+<li>并不是所有情况都有八组解，无解的坐标会输出为 nan</li>
+<li>没有规定明确的关节角范围，需要通过范围进行筛选<br>这相当于是机器人的一个初步的运动规划，具体深入的话可能还要考虑运动过程中的中间点，再到后续还有工作空间的整体规划，这一部分要更加复杂，暂且按下不表。我们现在要实现的就是选择一个最合适的末端位姿即可，这一部分资料要更少，仅有一些理论层次的说法，具体实操的公式代码以及过程实现则根本没有找到。因此这块的代码是我针对功能要求自己编写的，主体是以循环、矩阵操作的方式进行处理。代码水平不是很高，也可能有很多需要改进的地方，如果在调试运行的过程中有新的想法，请反馈给我加以修正。</li>
+</ul>
+<p>我把整体代码划成了三大块，分别是有效解选取、标准解选取以及最优解选取。从后续来看其实有些部分是完全可以合并在一起的，但是过程中逻辑比较混乱，掺在一起的话出现错误太难修改了，因此还是选择分成三步进行处理。首先是有效解选取部分，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_useful_solution</span>(<span class="params">solutions</span>):</span><br><span class="line">    s = solutions</span><br><span class="line">    l = <span class="number">0</span></span><br><span class="line">    m1 = np.zeros((<span class="number">1</span>, <span class="number">6</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">7</span>):</span><br><span class="line">         flag = <span class="literal">True</span></span><br><span class="line">         <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">5</span>):</span><br><span class="line">             <span class="keyword">if</span> pd.isnull(s[i,j]) <span class="keyword">and</span> i &lt;= <span class="number">6</span>:</span><br><span class="line">                 i = i + <span class="number">1</span></span><br><span class="line">                 j = <span class="number">0</span></span><br><span class="line">                 flag = <span class="literal">False</span></span><br><span class="line">                 <span class="keyword">break</span></span><br><span class="line">             <span class="keyword">if</span> pd.isnull(s[i,j]) <span class="keyword">and</span> i == <span class="number">7</span>:</span><br><span class="line">                 flag = <span class="literal">False</span></span><br><span class="line">                 <span class="keyword">break</span></span><br><span class="line">         <span class="keyword">if</span> flag:</span><br><span class="line">             m1 = np.resize(m1, (l+<span class="number">1</span>, <span class="number">6</span>))</span><br><span class="line">             m1[l,:] = s[i,:]</span><br><span class="line">             l = l+<span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'useful:'</span>,m1)</span><br><span class="line">    <span class="keyword">return</span> m1</span><br></pre></td></tr></table></figure>
+<p>万事开头难，这一部分我想实现的流程是将矩阵中数据进行一行行的检查（不同行是不同解，不同列是不同关节），如果发现无效数据，就跳转到下一行从头检查。要实现这个过程当然是通过循环解决方便，但最大的难题在于如何在循环检查的同时将有效数据保存为一个新的矩阵。我是通过设立了一个旗帜位进行处理的，这主要是受启发于之前的上位机程序，在不同的线程间通过旗帜位进行处理使其产生联系，同样适用于目前这种不方便将循环和有效数据保存融合的情况。因此整体流程代码便实现了，八个解对应八个循环，每次循环内对每个关节角度进行检查，一旦出现无效数据则跳转至下一行并改变旗帜位，旗帜位的改变使得数据保存环节不会进行；而下次循环开始后先重置了旗帜位，如果所有关节数据都没有问题，则可以进入数据保存环节，将此行数据记录到新矩阵中。</p>
+<p>还有一个问题是我刚开始不知道如何定义一个未知维度的矩阵，后面通过查找相关指令后选择通过 numpy 的 resize 指令进行处理，先随便定义维度，在每次保存前根据当前的行数进行重构，这样就可以将数据记录在对应的合适矩阵中。另外，需要注意无效数据 nan 必须通过对应的判别指令 pd.isnull 进行处理，这个指令来自于 pandas 库，numpy 也有对应的指令，但据说可能有报错等情况，所以此处还是选择了 pandas。</p>
+<p>接下来是标准解选取：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">select_standard_solution</span>(<span class="params">array</span>):</span><br><span class="line">    rows,columns = array.shape</span><br><span class="line">    l = <span class="number">0</span></span><br><span class="line">    m1 = np.zeros((rows, columns))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(rows):</span><br><span class="line">        flag = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(columns):</span><br><span class="line">            <span class="keyword">if</span> j == <span class="number">0</span> <span class="keyword">and</span> (array[i,j] &lt;= -<span class="number">175</span> <span class="keyword">or</span> array[i,j] &gt;= <span class="number">175</span>):</span><br><span class="line">                <span class="keyword">if</span> i &lt;= rows-<span class="number">2</span>:</span><br><span class="line">                     i = i + <span class="number">1</span></span><br><span class="line">                     j = <span class="number">0</span></span><br><span class="line">                flag = <span class="literal">False</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> j == <span class="number">1</span> <span class="keyword">and</span> (array[i,j] &lt;= -<span class="number">265</span> <span class="keyword">or</span> array[i,j] &gt;= <span class="number">85</span>):</span><br><span class="line">                <span class="keyword">if</span> i &lt;= rows-<span class="number">2</span>:</span><br><span class="line">                     i = i + <span class="number">1</span></span><br><span class="line">                     j = <span class="number">0</span></span><br><span class="line">                flag = <span class="literal">False</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> j == <span class="number">2</span> <span class="keyword">and</span> (array[i,j] &lt;= -<span class="number">160</span> <span class="keyword">or</span> array[i,j] &gt;= <span class="number">160</span>):</span><br><span class="line">                <span class="keyword">if</span> i &lt;= rows-<span class="number">2</span>:</span><br><span class="line">                     i = i + <span class="number">1</span></span><br><span class="line">                     j = <span class="number">0</span></span><br><span class="line">                flag = <span class="literal">False</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> j == <span class="number">3</span> <span class="keyword">and</span> (array[i,j] &lt;= -<span class="number">265</span> <span class="keyword">or</span> array[i,j] &gt;= <span class="number">85</span>):</span><br><span class="line">                <span class="keyword">if</span> i &lt;= rows-<span class="number">2</span>:</span><br><span class="line">                     i = i + <span class="number">1</span></span><br><span class="line">                     j = <span class="number">0</span></span><br><span class="line">                flag = <span class="literal">False</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> j == <span class="number">4</span> <span class="keyword">and</span> (array[i,j] &lt;= -<span class="number">175</span> <span class="keyword">or</span> array[i,j] &gt;= <span class="number">175</span>):</span><br><span class="line">                <span class="keyword">if</span> i &lt;= rows-<span class="number">2</span>:</span><br><span class="line">                     i = i + <span class="number">1</span></span><br><span class="line">                     j = <span class="number">0</span></span><br><span class="line">                flag = <span class="literal">False</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> j == <span class="number">5</span> <span class="keyword">and</span> (array[i,j] &lt;= -<span class="number">175</span> <span class="keyword">or</span> array[i,j] &gt;= <span class="number">175</span>):</span><br><span class="line">                <span class="keyword">if</span> i &lt;= rows-<span class="number">2</span>:</span><br><span class="line">                     i = i + <span class="number">1</span></span><br><span class="line">                     j = <span class="number">0</span></span><br><span class="line">                flag = <span class="literal">False</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> flag:</span><br><span class="line">            m1 = np.resize(m1, (l + <span class="number">1</span>, columns))</span><br><span class="line">            m1[l, :] = array[i, :]</span><br><span class="line">            l = l + <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'standard'</span>,m1)</span><br><span class="line">    <span class="keyword">return</span> m1</span><br></pre></td></tr></table></figure>
+<p>整体语法上就直接套用了上一部分功能的语法结构，只是六个关节角度的范围各不相同，因此要多增加几个判断语句，其余差别不大。<br>最优解选取：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">best_solution</span>(<span class="params">finalArray</span>):</span><br><span class="line">    fa = finalArray</span><br><span class="line">    rows,columns = fa.shape</span><br><span class="line">    config = [-<span class="number">38</span>,-<span class="number">41</span>,<span class="number">81</span>,-<span class="number">135.</span>,-<span class="number">92</span>,<span class="number">109</span>]</span><br><span class="line">    last_solution = config</span><br><span class="line">    min_distance = np.inf</span><br><span class="line">    best_solution = np.empty((<span class="number">1</span>,<span class="number">6</span>))</span><br><span class="line">    <span class="keyword">if</span> rows == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> fa</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(rows):</span><br><span class="line">            distance = np.linalg.norm((fa[i,:] - last_solution),<span class="built_in">ord</span>=<span class="literal">None</span>)</span><br><span class="line">            <span class="keyword">if</span> distance &lt; min_distance:</span><br><span class="line">                min_distance = distance</span><br><span class="line">                best_solution = fa[i,:]</span><br><span class="line">            last_solution = fa[i,:]</span><br><span class="line">        <span class="keyword">return</span> best_solution</span><br></pre></td></tr></table></figure>
+<p>这一部分的核心就是使用了 numpy 的 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40913465/article/details/103508270?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522168049079216800222877625%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=168049079216800222877625&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-103508270-null-null.142^v80^control,201^v4^add_ask,239^v2^insert_chatgpt&amp;utm_term=linalg&amp;spm=1018.2226.3001.4187">linalg</a> 模块，即线性代数函数库，norm 则是表示范数，通过对两个矩阵的差求范数来得到两者之间的距离，通过调试我选择的是二范数。然后将距离和上一距离进行对比（初始值是无穷大），更小的那一个成为新的最小值，这样结果就会是唯一的最优解。而求距离的对象则是预先设好默认值 config，6个关节角度和它进行对比，选择出最接近的一个。在实际的应用中应该要和上一次运动的关节角进行对比，此处为了方便测试选择默认，还待后续改进。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>至此，机器人运动学的基本流程就实现了，剩下的内容还有对正运动学 python 代码的补充以及更多算法的扩展，但是基本的框架已经打下了，根据这个框架可以对机器人有个初步的理解。通过这段时间对这些相关理论的学习，最大的感受有几个，在此进行分享：</p>
+<ul>
+<li>首先是国内的代码资源环境，可以说是非常差，很多内容深度不够的同时给出的代码也根本跑不通，没有详细的对代码进行说明。如果只是想了解一些东西，很浅的进行尝试，那这些教程还是能够解决一些问题的。但如果真的想要深入学习，我的建议还是从理论出发，从课程视频以及书籍出发，自己去尝试功能实现远比代码拼接来的快，对自己的提高作用要更加明显。</li>
+<li>过程中有很多地方用到了 chatGPT，接触 GPT 已经有一段时间了，过程中也经历了一系列的心理变化，但我永远会建议任何人去学习好好使用它。最开始的接触对我产生了很大的震撼，它可以根 据你的要求很好的完成任务，它为我在 mqtt 协议的部分提供了很大的帮助，能够让我在一个一窍不通的领域迅速上手。但随之而来的就是些许的迷茫，既然它可以自己写出我不会的一些代码，那还需要我做什么？我的工作是不是可以被它所取代？事实证明这只是由于科技迅速革新而带来的一点错觉，在后续深入的应用中，我逐渐了解了 GPT 运作的底层逻辑，也对它的局限性有了更全面的认识。GPT 并没有办法实现一些有深度或者说有创新性的功能，它所给出的代码也仅仅是网上现有代码的拼凑，可以这样说，它只是一个大大省略了我们时间成本和一定的学习成本的搜索引擎。让它给出一套完整的机器人运动学流程是不可能的，它不知道如何根据你的机械臂选取对应的方法，不知道如何梳理整体代码的逻辑，它能做的更类似于给出一个参考，让你对相关的指令更加熟悉。<br>  因此，仅对于编程而言，GPT 是一个非常高效的工具，有什么想实现的功能，或者说想快速了解一个程序的各种功能指令，它绝对是最佳的选择。但是，至少从目前它的运作逻辑来看，是绝不可能代替编程的。</li>
+</ul>
+<p>后续还需要将机器人通讯、逆运动学、坐标转换以及视觉识别各部分的代码结合起来，已经有了初步的雏形，具体如何处理还要进行调试，之后成功实现后再做整理。这周先把在博客之前学的一些内容做个整理放上来，主要是 TCP/IP 通讯协议这一块，有空的话再把博客建立整体流程梳理梳理。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/astronauting-rbr.top/2023/04/07/robot4/" data-toggle="tooltip" data-placement="top" title="机械臂项目应用记录">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/astronauting-rbr.top/2023/03/15/robot2/" data-toggle="tooltip" data-placement="top" title="机械臂基础（应用）知识学习2">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/astronauting-rbr.top/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/astronauting-rbr.top/tags/#机械臂" title="机械臂">机械臂</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#matlab" title="matlab">matlab</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/astronauting-rbr.top/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/astronauting-rbr.top/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/astronauting-rbr.top/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

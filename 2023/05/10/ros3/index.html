@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/astronauting-rbr.top/img/favicon.ico">
+
+    <title>
+        
+          ros学习记录（3）——ROS通信机制之服务通信与参数服务器 - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/astronauting-rbr.top/2023/05/10/ros3/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/astronauting-rbr.top/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/astronauting-rbr.top/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/astronauting-rbr.top/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#linux" title="linux">linux</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#ros" title="ros">ros</a>
+                        
+                    </div>
+                    <h1>ros学习记录（3）——ROS通信机制之服务通信与参数服务器</h1>
+                    <h2 class="subheading">通信机制学习过程记录，ROS核心部分</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-05-10
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>接上一章，对ros的服务通信机制进行学习，<strong>服务通信和话题通信是ros通信机制的两大块</strong>，熟练掌握这两块内容才能更好的使用ros。后半部分对参数服务器进行了介绍，参数服务器作为数据存储的公共容器，同样具有着不可替代的重要性。关于流程指令和各个模块常用命令的梳理，之后会有一章进行比较详细的介绍。</p>
+<h2 id="服务通信"><a href="#服务通信" class="headerlink" title="服务通信"></a>服务通信</h2><p>服务通信也是ROS中一种极其常用的通信模式，服务通信是基于请求响应模式的，是一种应答机制。也即: 一个节点A向另一个节点B发送请求，B接收处理请求并产生响应结果返回给A。比如如下场景:</p>
+<p>机械臂在待机状态中，控制系统分析视觉传感器数据发现需要夹取的工件，此时需要获取图像进行坐标获取。</p>
+<p>上述场景中就使用到了服务通信。一个节点需要向相机节点发送拍照请求，相机节点处理请求，并返回处理结果。</p>
+<p>与上述应用类似的，服务通信更适用于对<strong>实时性有要求、具有一定逻辑处理</strong>的应用场景。比如说在本教程中，要实现两个数字的求和，客户端节点运行会向服务器发送两个数字，服务器端节点接收两个数字求和并将结果响应回客户端。</p>
+<h3 id="服务通信理论模型"><a href="#服务通信理论模型" class="headerlink" title="服务通信理论模型"></a>服务通信理论模型</h3><p>服务通信较之于话题通信更简单些，理论模型如下图所示，该模型中涉及到三个角色:ROS master(管理者)、Server(服务端)、Client(客户端)</p>
+<p>ROS Master 负责保管 Server 和 Client 注册的信息，并匹配话题相同的 Server 与 Client ，帮助 Server 与 Client 建立连接，连接建立后，Client 发送请求信息，Server 返回响应信息。</p>
+<p><img src="https://pic2.imgdb.cn/item/645af0520d2dde5777f7a555.jpg" alt=""></p>
+<p>实现流程如下：</p>
+<ul>
+<li><p>Server注册<br>  Server 启动后，会通过RPC在 ROS Master 中注册自身信息，其中包含提供的服务的名称。ROS Master 会将节点的注册信息加入到注册表中。</p>
+</li>
+<li><p>Client注册<br>  Client 启动后，也会通过RPC在 ROS Master 中注册自身信息，包含需要请求的服务的名称。ROS Master 会将节点的注册信息加入到注册表中。</p>
+</li>
+<li><p>ROS Master实现信息匹配<br>  ROS Master 会根据注册表中的信息匹配Server和 Client，并通过 RPC 向 Client 发送 Server 的 TCP 地址信息。</p>
+</li>
+<li><p>Client发送请求<br>  Client 根据步骤2 响应的信息，使用 TCP 与 Server 建立网络连接，并发送请求数据。</p>
+</li>
+<li><p>Server发送响应<br>  Server 接收、解析请求的数据，并产生响应结果返回给 Client。</p>
+</li>
+</ul>
+<p><strong>注意：</strong>客户端请求被处理时，需要保证服务器已经启动</p>
+<h3 id="服务通信自定义srv"><a href="#服务通信自定义srv" class="headerlink" title="服务通信自定义srv"></a>服务通信自定义srv</h3><p><strong>需求：</strong>服务通信中，客户端提交两个整数至服务端，服务端求和并响应结果到客户端，请创建服务器与客户端通信的数据载体。<br><strong>流程：</strong>srv 文件内的可用数据类型与 msg 文件一致，且定义 srv 实现流程与自定义 msg 实现流程类似：按照固定格式创建srv文件——编辑配置文件——编译生成中间文件。</p>
+<ol>
+<li><p>定义srv文件</p>
+<p> 服务通信中，数据分成两部分，请求与响应，在 srv 文件中请求和响应使用—-分割，具体实现如下:</p>
+<p> 功能包下新建 srv 目录，添加 xxx.srv 文件，内容:</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 客户端请求时发送的两个数字</span><br><span class="line">int32 num1</span><br><span class="line">int32 num2</span><br><span class="line">---</span><br><span class="line"># 服务器响应发送的数据</span><br><span class="line">int32 sum</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑配置文件</p>
+<p> package.xml中添加编译依赖与执行依赖</p>
+<pre><code> <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build_depend</span>&gt;</span>message_generation<span class="tag">&lt;/<span class="name">build_depend</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">exec_depend</span>&gt;</span>message_runtime<span class="tag">&lt;/<span class="name">exec_depend</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">exce_depend 以前对应的是 run_depend 现在非法</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br></pre></td></tr></table></figure>
+</code></pre><p> CMakeLists.txt编辑 srv 相关配置</p>
+<pre><code> <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">find_package(catkin REQUIRED COMPONENTS</span><br><span class="line">roscpp</span><br><span class="line">rospy</span><br><span class="line">std_msgs</span><br><span class="line">message_generation</span><br><span class="line">)</span><br><span class="line"># 需要加入 message_generation,必须有 std_msgs</span><br></pre></td></tr></table></figure>
+ <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">add_service_files(</span><br><span class="line">FILES</span><br><span class="line">AddInts.srv</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">generate_messages(</span><br><span class="line">DEPENDENCIES</span><br><span class="line">std_msgs</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</code></pre><p> 注意: 官网没有在 catkin_package 中配置 message_runtime,经测试配置也可以</p>
+</li>
+<li><p>编译</p>
+<p> Python 需要调用的中间文件(…/工作空间/devel/lib/python3/dist-packages/包名/srv)<br> <img src="https://pic2.imgdb.cn/item/645af3610d2dde5777f9c58c.jpg" alt="1"></p>
+</li>
+</ol>
+<h3 id="服务通信自定义srv调用-Python"><a href="#服务通信自定义srv调用-Python" class="headerlink" title="服务通信自定义srv调用(Python)"></a>服务通信自定义srv调用(Python)</h3><p><strong>需求：</strong>编写服务通信，客户端提交两个整数至服务端，服务端求和并响应结果到客户端。<br><strong>分析：</strong>在模型实现中，ROS master 不需要实现，而连接的建立也已经被封装了，需要关注的关键点有三个:服务端、客户端、数据。<br><strong>流程：</strong>编写服务端实现——编写客户端实现——为python文件添加可执行权限——编辑配置文件——编译并执行</p>
+<ol>
+<li><p>vscode配置</p>
+<p> 需要像之前自定义 msg 实现一样配置settings.json 文件，如果以前已经配置且没有变更工作空间，可以忽略，如果需要配置，配置方式与之前相同:</p>
+<pre><code> <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;python.autoComplete.extraPaths&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;/opt/ros/noetic/lib/python3/dist-packages&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</code></pre></li>
+<li><p>服务端</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    需求: </span></span><br><span class="line"><span class="string">        编写两个节点实现服务通信，客户端节点需要提交两个整数到服务器</span></span><br><span class="line"><span class="string">        服务器需要解析客户端提交的数据，相加后，将结果响应回客户端，</span></span><br><span class="line"><span class="string">        客户端再解析</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    服务器端实现:</span></span><br><span class="line"><span class="string">        1.导包</span></span><br><span class="line"><span class="string">        2.初始化 ROS 节点</span></span><br><span class="line"><span class="string">        3.创建服务对象</span></span><br><span class="line"><span class="string">        4.回调函数处理请求并产生响应</span></span><br><span class="line"><span class="string">        5.spin 函数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 1.导包</span></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"><span class="keyword">from</span> demo03_server_client.srv <span class="keyword">import</span> AddInts,AddIntsRequest,AddIntsResponse</span><br><span class="line"><span class="comment"># 回调函数的参数是请求对象，返回值是响应对象</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doReq</span>(<span class="params">req</span>):</span><br><span class="line">    <span class="comment"># 解析提交的数据</span></span><br><span class="line">    <span class="built_in">sum</span> = req.num1 + req.num2</span><br><span class="line">    rospy.loginfo(<span class="string">&quot;提交的数据:num1 = %d, num2 = %d, sum = %d&quot;</span>,req.num1, req.num2, <span class="built_in">sum</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建响应对象，赋值并返回</span></span><br><span class="line">    <span class="comment"># resp = AddIntsResponse()</span></span><br><span class="line">    <span class="comment"># resp.sum = sum</span></span><br><span class="line">    resp = AddIntsResponse(<span class="built_in">sum</span>)</span><br><span class="line">    <span class="keyword">return</span> resp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 2.初始化 ROS 节点</span></span><br><span class="line">    rospy.init_node(<span class="string">&quot;addints_server_p&quot;</span>)</span><br><span class="line">    <span class="comment"># 3.创建服务对象</span></span><br><span class="line">    server = rospy.Service(<span class="string">&quot;AddInts&quot;</span>,AddInts,doReq)</span><br><span class="line">    <span class="comment"># 4.回调函数处理请求并产生响应</span></span><br><span class="line">    <span class="comment"># 5.spin 函数</span></span><br><span class="line">    rospy.spin()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>客户端：</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    需求: </span></span><br><span class="line"><span class="string">        编写两个节点实现服务通信，客户端节点需要提交两个整数到服务器</span></span><br><span class="line"><span class="string">        服务器需要解析客户端提交的数据，相加后，将结果响应回客户端，</span></span><br><span class="line"><span class="string">        客户端再解析</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    客户端实现:</span></span><br><span class="line"><span class="string">        1.导包</span></span><br><span class="line"><span class="string">        2.初始化 ROS 节点</span></span><br><span class="line"><span class="string">        3.创建请求对象</span></span><br><span class="line"><span class="string">        4.发送请求</span></span><br><span class="line"><span class="string">        5.接收并处理响应</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    优化:</span></span><br><span class="line"><span class="string">        加入数据的动态获取</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment">#1.导包</span></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"><span class="keyword">from</span> demo03_server_client.srv <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment">#优化实现</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) != <span class="number">3</span>:</span><br><span class="line">        rospy.logerr(<span class="string">&quot;请正确提交参数&quot;</span>)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2.初始化 ROS 节点</span></span><br><span class="line">    rospy.init_node(<span class="string">&quot;AddInts_Client_p&quot;</span>)</span><br><span class="line">    <span class="comment"># 3.创建请求对象</span></span><br><span class="line">    client = rospy.ServiceProxy(<span class="string">&quot;AddInts&quot;</span>,AddInts)</span><br><span class="line">    <span class="comment"># 请求前，等待服务已经就绪</span></span><br><span class="line">    <span class="comment"># 方式1:</span></span><br><span class="line">    <span class="comment"># rospy.wait_for_service(&quot;AddInts&quot;)</span></span><br><span class="line">    <span class="comment"># 方式2</span></span><br><span class="line">    client.wait_for_service()</span><br><span class="line">    <span class="comment"># 4.发送请求,接收并处理响应</span></span><br><span class="line">    <span class="comment"># 方式1</span></span><br><span class="line">    <span class="comment"># resp = client(3,4)</span></span><br><span class="line">    <span class="comment"># 方式2</span></span><br><span class="line">    <span class="comment"># resp = client(AddIntsRequest(1,5))</span></span><br><span class="line">    <span class="comment"># 方式3</span></span><br><span class="line">    req = AddIntsRequest()</span><br><span class="line">    <span class="comment"># req.num1 = 100</span></span><br><span class="line">    <span class="comment"># req.num2 = 200 </span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#优化</span></span><br><span class="line">    req.num1 = <span class="built_in">int</span>(sys.argv[<span class="number">1</span>])</span><br><span class="line">    req.num2 = <span class="built_in">int</span>(sys.argv[<span class="number">2</span>]) </span><br><span class="line"></span><br><span class="line">    resp = client.call(req)</span><br><span class="line">    rospy.loginfo(<span class="string">&quot;响应结果:%d&quot;</span>,resp.<span class="built_in">sum</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置权限：</p>
+<p> 终端下进入 scripts 执行: <strong>chmod +x xxx.py</strong></p>
+</li>
+<li><p>配置 CMakeLists.txt：</p>
+ <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">catkin_install_python(PROGRAMS</span><br><span class="line">scripts/AddInts_Server_p.py </span><br><span class="line">scripts/AddInts_Client_p.py</span><br><span class="line">DESTINATION $&#123;CATKIN_PACKAGE_BIN_DESTINATION&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行</p>
+<ul>
+<li>流程:<pre><code>  先启动服务：rosrun 包名 服务
+  然后再调用客户端: rosrun 包名 客户端 参数1 参数2
+</code></pre></li>
+</ul>
+</li>
+</ol>
+<h2 id="参数服务器"><a href="#参数服务器" class="headerlink" title="参数服务器"></a>参数服务器</h2><p>参数服务器在ROS中主要用于实现不同节点之间的数据共享。参数服务器相当于是独立于所有节点的一个公共容器，可以将数据存储在该容器中，被不同的节点调用，当然不同的节点也可以往其中存储数据，关于参数服务器的典型应用场景如下:</p>
+<p>机械臂导航实现时，会进行路径规划，比如: 全局路径规划，设计一个从出发点到目标点的大致路径。本地路径规划，会根据当前路况生成时时的行进路径</p>
+<p>上述场景中，全局路径规划和本地路径规划时，就会使用到参数服务器：路径规划时，需要参考机械臂的尺寸，我们可以将这些尺寸信息存储到参数服务器，全局路径规划节点与本地路径规划节点都可以从参数服务器中调用这些参数，因此参数服务器，一般适用于存在数据共享的一些应用场景。（类似于全局变量）</p>
+<h3 id="参数服务器理论模型"><a href="#参数服务器理论模型" class="headerlink" title="参数服务器理论模型"></a>参数服务器理论模型</h3><p>参数服务器实现是最为简单的，该模型如下图所示,该模型中涉及到三个角色:ROS Master (管理者)、Talker (参数设置者)、Listener (参数调用者)</p>
+<p>ROS Master 作为一个公共容器保存参数，Talker 可以向容器中设置参数，Listener 可以获取参数。<br><img src="https://pic2.imgdb.cn/item/645b11a90d2dde57771baa27.jpg" alt="1"><br>整个流程由以下步骤实现:</p>
+<ol>
+<li><p>Talker 设置参数<br> Talker 通过 RPC 向参数服务器发送参数(包括参数名与参数值)，ROS Master 将参数保存到参数列表中。</p>
+</li>
+<li><p>Listener 获取参数<br> Listener 通过 RPC 向参数服务器发送参数查找请求，请求中包含要查找的参数名。</p>
+</li>
+<li><p>ROS Master 向 Listener 发送参数值<br> ROS Master 根据步骤2请求提供的参数名查找参数值，并将查询结果通过 RPC 发送给 Listener。</p>
+</li>
+</ol>
+<p><strong>注意：</strong>参数服务器不是为高性能而设计的，因此最好用于存储静态的非二进制的简单数据</p>
+<h3 id="参数操作-Python"><a href="#参数操作-Python" class="headerlink" title="参数操作(Python)"></a>参数操作(Python)</h3><p><strong>需求：</strong>实现参数服务器参数的增删改查操作</p>
+<ol>
+<li><p>参数服务器新增(修改)参数</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    参数服务器操作之新增与修改(二者API一样)_Python实现:</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    rospy.init_node(<span class="string">&quot;set_update_paramter_p&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置各种类型参数</span></span><br><span class="line">    rospy.set_param(<span class="string">&quot;p_int&quot;</span>,<span class="number">10</span>)</span><br><span class="line">    rospy.set_param(<span class="string">&quot;p_double&quot;</span>,<span class="number">3.14</span>)</span><br><span class="line">    rospy.set_param(<span class="string">&quot;p_bool&quot;</span>,<span class="literal">True</span>)</span><br><span class="line">    rospy.set_param(<span class="string">&quot;p_string&quot;</span>,<span class="string">&quot;hello python&quot;</span>)</span><br><span class="line">    rospy.set_param(<span class="string">&quot;p_list&quot;</span>,[<span class="string">&quot;hello&quot;</span>,<span class="string">&quot;haha&quot;</span>,<span class="string">&quot;xixi&quot;</span>])</span><br><span class="line">    rospy.set_param(<span class="string">&quot;p_dict&quot;</span>,&#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;hulu&quot;</span>,<span class="string">&quot;age&quot;</span>:<span class="number">8</span>&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 修改</span></span><br><span class="line">    rospy.set_param(<span class="string">&quot;p_int&quot;</span>,<span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>参数服务器获取参数</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    参数服务器操作之查询_Python实现:    </span></span><br><span class="line"><span class="string">        get_param(键,默认值)</span></span><br><span class="line"><span class="string">            当键存在时，返回对应的值，如果不存在返回默认值</span></span><br><span class="line"><span class="string">        get_param_cached</span></span><br><span class="line"><span class="string">        get_param_names</span></span><br><span class="line"><span class="string">        has_param</span></span><br><span class="line"><span class="string">        search_param</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    rospy.init_node(<span class="string">&quot;get_param_p&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#获取参数</span></span><br><span class="line">    int_value = rospy.get_param(<span class="string">&quot;p_int&quot;</span>,<span class="number">10000</span>)</span><br><span class="line">    double_value = rospy.get_param(<span class="string">&quot;p_double&quot;</span>)</span><br><span class="line">    bool_value = rospy.get_param(<span class="string">&quot;p_bool&quot;</span>)</span><br><span class="line">    string_value = rospy.get_param(<span class="string">&quot;p_string&quot;</span>)</span><br><span class="line">    p_list = rospy.get_param(<span class="string">&quot;p_list&quot;</span>)</span><br><span class="line">    p_dict = rospy.get_param(<span class="string">&quot;p_dict&quot;</span>)</span><br><span class="line"></span><br><span class="line">    rospy.loginfo(<span class="string">&quot;获取的数据:%d,%.2f,%d,%s&quot;</span>,</span><br><span class="line">                int_value,</span><br><span class="line">                double_value,</span><br><span class="line">                bool_value,</span><br><span class="line">                string_value)</span><br><span class="line">    <span class="keyword">for</span> ele <span class="keyword">in</span> p_list:</span><br><span class="line">        rospy.loginfo(<span class="string">&quot;ele = %s&quot;</span>, ele)</span><br><span class="line"></span><br><span class="line">    rospy.loginfo(<span class="string">&quot;name = %s, age = %d&quot;</span>,p_dict[<span class="string">&quot;name&quot;</span>],p_dict[<span class="string">&quot;age&quot;</span>])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># get_param_cached</span></span><br><span class="line">    int_cached = rospy.get_param_cached(<span class="string">&quot;p_int&quot;</span>)</span><br><span class="line">    rospy.loginfo(<span class="string">&quot;缓存数据:%d&quot;</span>,int_cached)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># get_param_names</span></span><br><span class="line">    names = rospy.get_param_names()</span><br><span class="line">    <span class="keyword">for</span> name <span class="keyword">in</span> names:</span><br><span class="line">        rospy.loginfo(<span class="string">&quot;name = %s&quot;</span>,name)</span><br><span class="line"></span><br><span class="line">    rospy.loginfo(<span class="string">&quot;-&quot;</span>*<span class="number">80</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># has_param</span></span><br><span class="line">    flag = rospy.has_param(<span class="string">&quot;p_int&quot;</span>)</span><br><span class="line">    rospy.loginfo(<span class="string">&quot;包含p_int吗？%d&quot;</span>,flag)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># search_param</span></span><br><span class="line">    key = rospy.search_param(<span class="string">&quot;p_int&quot;</span>)</span><br><span class="line">    rospy.loginfo(<span class="string">&quot;搜索的键 = %s&quot;</span>,key)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>参数服务器删除参数</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    参数服务器操作之删除_Python实现:</span></span><br><span class="line"><span class="string">    rospy.delete_param(&quot;键&quot;)</span></span><br><span class="line"><span class="string">    键存在时，可以删除成功，键不存在时，会抛出异常</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    rospy.init_node(<span class="string">&quot;delete_param_p&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        rospy.delete_param(<span class="string">&quot;p_int&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        rospy.loginfo(<span class="string">&quot;删除失败&quot;</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这里只给程序是因为流程和前面一样，而且不像话题、服务通信一样有中间文件，只需要修改cmakelists即可，建议自己完成这一部分。如果报错问题无法解决可以参考<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Ci4y1L7ZZ?p=86&amp;vd_source=1fc05a9db72debde35dc344fcb430f17">视频解决</a></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>在调试过程中注意自己命名的文件修改问题，另外每个项目的测试可以多定义功能包，也可以在原先的功能包中添加，多做尝试。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/astronauting-rbr.top/2023/05/11/ros4/" data-toggle="tooltip" data-placement="top" title="ros学习记录（4）——ROS基本流程、命令总结及视频内容补充">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/astronauting-rbr.top/2023/05/09/ros2/" data-toggle="tooltip" data-placement="top" title="ros学习记录（2）——ROS通信机制之话题通信">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/astronauting-rbr.top/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/astronauting-rbr.top/tags/#linux" title="linux">linux</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#ros" title="ros">ros</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/astronauting-rbr.top/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/astronauting-rbr.top/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/astronauting-rbr.top/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

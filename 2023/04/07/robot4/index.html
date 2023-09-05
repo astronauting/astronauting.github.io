@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/astronauting-rbr.top/img/favicon.ico">
+
+    <title>
+        
+          机械臂项目应用记录 - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/astronauting-rbr.top/2023/04/07/robot4/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/astronauting-rbr.top/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/astronauting-rbr.top/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/astronauting-rbr.top/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#机械臂" title="机械臂">机械臂</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#matlab" title="matlab">matlab</a>
+                        
+                    </div>
+                    <h1>机械臂项目应用记录</h1>
+                    <h2 class="subheading">本篇重点在于总结项目进展与调错记录，可供参考以及部分项目细节型功能学习。</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-04-07
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这两周项目上催的比较紧，基本上每天都在调试机械臂，如果说之前的逆运动学部分是研究理论以及算法，这两周就完全是在研究应用和功能组装。算法、逆解推导是小逻辑，应用和整体实现则是大框架的搭建，我没有研究过一个大型项目的代码是什么样的，但我清楚绝不可能是我目前这样的。这是目前最迷茫的一个点，我不知道如何去规范我的代码，让它变的更加条理，<strong>一个功能的实现可能一段程序就可以解决，但是一个项目各种功能的搭配肯定不能放在一个文件里</strong>，不仅看起来费事，调整起来要更加麻烦。现在我们实现的进度是通过电脑相机画面的鼠标点击控制机械臂到达对应点位，在这个过程中我划分了几个功能块：机器人通讯、相机功能调取、逆运动学、最优解选取、整体移动指令，这几个功能块都有各自的函数、参数，虽然我尽量的规避了过程中不同部分的变量问题，但是在实际操作中还是很有可能引起逻辑混乱，随着后续功能的加入会越来越难搞。<strong>现在我的一个想法是把代码拆分成不同的功能文件，通过引入的方式调用</strong>，但我不清楚这里面可能会有什么问题，还需要看看相关资料进行规划。</p>
+<p>接下来简要记录一下目前的整体代码结构，机器人通讯部分是公司这边给出的，内容主体是通过一系列报文进行拼凑写出完整的通讯报文发送到机械臂，将字典转换成命令再将命令解析为字典。整体实现难度不大但是内容复杂，后面接入其他接口的控制后可能还要进行编辑。相机功能调取是通过海康的一款工业相机 SDK 进行调取的，过程中修改不多，只加了一段格式转换代码将图像数据给整了出来。逆运动学和最优解选取在前面文章中已经详细介绍了，过程中根据具体运行情况进行了一定程度的修改。整体移动是定义了几个移动的主程序，分别给定不同的姿态，目前定义了三种姿态：安全姿态、夹取姿态、放置姿态。具体的过程是在鼠标点击事件的回调函数中展开的，后面要改为算法识别，每次鼠标点击给出点位数据，点位数据先进行逆运动求解，之后机械臂根据对应的解进行移动夹取。</p>
+<p>整个流程实际上只处在一个刚刚跑通的情况下，并没有很完整的功能，还需要慢慢添加。</p>
+<h2 id="代码部分"><a href="#代码部分" class="headerlink" title="代码部分"></a>代码部分</h2><p>首先是引入的库函数一览：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> msvcrt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">sys.path.append(<span class="string">"../MvImport"</span>)</span><br><span class="line"><span class="keyword">from</span> MvCameraControl_class <span class="keyword">import</span> *</span><br><span class="line">g_bExit = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<p>机械臂运动控制部分相关代码具有保密性，此处只对几个写好的功能模块进行介绍。其中，主要是不同功能的运动指令有不同的报文内容，因此需要针对性的定义功能模块名称。在不同的功能报文编写完成后，MakeCode则针对这些报文进行再加工，制作成能直接向机器发送的报文。在CodeToRobot部分，是将获得到的报文发送给机械臂，并且接受来自机械臂的反馈。以上三个部分构成了机械臂控制的整体，具体到不同的指令则有不同的组合方式。</p>
+<p><img src="https://pic.imgdb.cn/item/648673cd1ddac507ccd0ebda.jpg" alt="机械臂控制"></p>
+<p>逆运动学部分，代码编写过程在此前已经有很详细的讲解，这里只是进行了结构上的优化，具体可以对照前几篇代码进行学习。(只需要调用main函数进行执行)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Inverse_Kinematics</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">DH</span>(<span class="params">self,theta, d, a, alpha</span>):</span><br><span class="line">        <span class="comment"># DH变换矩阵</span></span><br><span class="line">        <span class="keyword">return</span> np.array([</span><br><span class="line">            [math.cos(theta), -math.sin(theta) * math.cos(alpha), math.sin(theta) * math.sin(alpha),</span><br><span class="line">             a * math.cos(theta)],</span><br><span class="line">            [math.sin(theta), math.cos(theta) * math.cos(alpha), -math.cos(theta) * math.sin(alpha),</span><br><span class="line">             a * math.sin(theta)],</span><br><span class="line">            [<span class="number">0</span>, math.sin(alpha), math.cos(alpha), d],</span><br><span class="line">            [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">        ])</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inverse_kinematics</span>(<span class="params">self,pos, rot, d, a</span>):</span><br><span class="line">        <span class="comment"># 计算逆运动学，返回六个关节的角度</span></span><br><span class="line">        R = np.array(rot)</span><br><span class="line">        pos = np.array(pos)</span><br><span class="line">        <span class="comment"># 将T的各个向量参数写出以便运算</span></span><br><span class="line">        nx = R[<span class="number">0</span>, <span class="number">0</span>];</span><br><span class="line">        ny = R[<span class="number">1</span>, <span class="number">0</span>];</span><br><span class="line">        nz = R[<span class="number">2</span>, <span class="number">0</span>];</span><br><span class="line">        ox = R[<span class="number">0</span>, <span class="number">1</span>];</span><br><span class="line">        oy = R[<span class="number">1</span>, <span class="number">1</span>];</span><br><span class="line">        oz = R[<span class="number">2</span>, <span class="number">1</span>];</span><br><span class="line">        ax = R[<span class="number">0</span>, <span class="number">2</span>];</span><br><span class="line">        ay = R[<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line">        az = R[<span class="number">2</span>, <span class="number">2</span>];</span><br><span class="line">        px = pos[<span class="number">0</span>];</span><br><span class="line">        py = pos[<span class="number">1</span>];</span><br><span class="line">        pz = pos[<span class="number">2</span>];</span><br><span class="line">        <span class="comment"># 计算第一关节的角度</span></span><br><span class="line">        m = d[<span class="number">5</span>] * ay - py</span><br><span class="line">        n = ax * d[<span class="number">5</span>] - px</span><br><span class="line">        theta1 = np.empty((<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line">        theta1[<span class="number">0</span>, <span class="number">0</span>] = math.atan2(m, n) - math.atan2(d[<span class="number">3</span>], math.sqrt(m ** <span class="number">2</span> + n ** <span class="number">2</span> - d[<span class="number">3</span>] ** <span class="number">2</span>))</span><br><span class="line">        theta1[<span class="number">0</span>, <span class="number">1</span>] = math.atan2(m, n) - math.atan2(d[<span class="number">3</span>], -math.sqrt(m ** <span class="number">2</span> + n ** <span class="number">2</span> - d[<span class="number">3</span>] ** <span class="number">2</span>))</span><br><span class="line">        <span class="comment"># 计算第五关节的角度</span></span><br><span class="line">        theta5 = np.empty((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">        theta5[<span class="number">0</span>, :<span class="number">2</span>] = np.arccos(ax * np.sin(theta1) - ay * np.cos(theta1))</span><br><span class="line">        theta5[<span class="number">1</span>, :<span class="number">2</span>] = -np.arccos(ax * np.sin(theta1) - ay * np.cos(theta1))</span><br><span class="line">        <span class="comment"># 计算第六关节的角度</span></span><br><span class="line">        mm = nx * np.sin(theta1) - ny * np.cos(theta1);</span><br><span class="line">        nn = ox * np.sin(theta1) - oy * np.cos(theta1);</span><br><span class="line">        <span class="comment"># 公式：theta6=atan2(mm,nn)-atan2(sin(theta5),0)</span></span><br><span class="line">        theta6 = np.empty((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">        theta6[<span class="number">0</span>, :<span class="number">2</span>] = np.arctan2(mm, nn) - np.arctan2(np.sin(theta5[<span class="number">0</span>, :<span class="number">2</span>]), <span class="number">0</span>)</span><br><span class="line">        theta6[<span class="number">1</span>, :<span class="number">2</span>] = np.arctan2(mm, nn) - np.arctan2(np.sin(theta5[<span class="number">1</span>, :<span class="number">2</span>]), <span class="number">0</span>)</span><br><span class="line">        <span class="comment"># 计算第三关节的角度</span></span><br><span class="line">        mmm = np.empty((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">        nnn = np.empty((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">        mmm[<span class="number">0</span>, :<span class="number">2</span>] = d[<span class="number">4</span>] * (</span><br><span class="line">                    np.sin(theta6[<span class="number">0</span>, :<span class="number">2</span>]) * (nx * np.cos(theta1) + ny * np.sin(theta1)) + np.cos(theta6[<span class="number">0</span>, <span class="number">0</span>:<span class="number">2</span>]) * (</span><br><span class="line">                        ox * np.cos(theta1) + oy * np.sin(theta1))) \</span><br><span class="line">                     - d[<span class="number">5</span>] * (ax * np.cos(theta1) + ay * np.sin(theta1)) + px * np.cos(theta1) + py * np.sin(theta1)</span><br><span class="line">        nnn[<span class="number">0</span>, :<span class="number">2</span>] = pz - d[<span class="number">0</span>] - az * d[<span class="number">5</span>] + d[<span class="number">4</span>] * (oz * np.cos(theta6[<span class="number">0</span>, :<span class="number">2</span>]) + nz * np.sin(theta6[<span class="number">0</span>, :<span class="number">2</span>]))</span><br><span class="line">        mmm[<span class="number">1</span>, :<span class="number">2</span>] = d[<span class="number">4</span>] * (</span><br><span class="line">                    np.sin(theta6[<span class="number">1</span>, :<span class="number">2</span>]) * (nx * np.cos(theta1) + ny * np.sin(theta1)) + np.cos(theta6[<span class="number">1</span>, :<span class="number">2</span>]) * (</span><br><span class="line">                        ox * np.cos(theta1) + oy * np.sin(theta1))) \</span><br><span class="line">                     - d[<span class="number">5</span>] * (ax * np.cos(theta1) + ay * np.sin(theta1)) + px * np.cos(theta1) + py * np.sin(theta1)</span><br><span class="line">        nnn[<span class="number">1</span>, :<span class="number">2</span>] = pz - d[<span class="number">0</span>] - az * d[<span class="number">5</span>] + d[<span class="number">4</span>] * (oz * np.cos(theta6[<span class="number">1</span>, :<span class="number">2</span>]) + nz * np.sin(theta6[<span class="number">1</span>, :<span class="number">2</span>]))</span><br><span class="line">        theta3 = np.empty((<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line">        theta3[<span class="number">0</span>:<span class="number">2</span>, :] = np.arccos((np.square(mmm) + np.square(nnn) - (a[<span class="number">1</span>]) ** <span class="number">2</span> - (a[<span class="number">2</span>]) ** <span class="number">2</span>) / (<span class="number">2</span> * a[<span class="number">1</span>] * a[<span class="number">2</span>]))</span><br><span class="line">        theta3[<span class="number">2</span>:<span class="number">4</span>, :] = -np.arccos((np.square(mmm) + np.square(nnn) - (a[<span class="number">1</span>]) ** <span class="number">2</span> - (a[<span class="number">2</span>]) ** <span class="number">2</span>) / (<span class="number">2</span> * a[<span class="number">1</span>] * a[<span class="number">2</span>]))</span><br><span class="line">        <span class="comment"># 计算第二关节的角度</span></span><br><span class="line">        mmm_s2 = np.empty((<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line">        nnn_s2 = np.empty((<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line">        mmm_s2[<span class="number">0</span>:<span class="number">2</span>, :] = mmm</span><br><span class="line">        mmm_s2[<span class="number">2</span>:<span class="number">4</span>, :] = mmm</span><br><span class="line">        nnn_s2[<span class="number">0</span>:<span class="number">2</span>, :] = nnn</span><br><span class="line">        nnn_s2[<span class="number">2</span>:<span class="number">4</span>, :] = nnn</span><br><span class="line">        s2 = ((a[<span class="number">2</span>] * np.cos(theta3) + a[<span class="number">1</span>]) * nnn_s2 - a[<span class="number">2</span>] * np.sin(theta3) * mmm_s2) / (</span><br><span class="line">                    (a[<span class="number">1</span>]) ** <span class="number">2</span> + (a[<span class="number">2</span>]) ** <span class="number">2</span> + <span class="number">2</span> * a[<span class="number">1</span>] * a[<span class="number">2</span>] * np.cos(theta3))</span><br><span class="line">        c2 = (mmm_s2 + a[<span class="number">2</span>] * np.sin(theta3) * s2) / (a[<span class="number">2</span>] * np.cos(theta3) + a[<span class="number">1</span>])</span><br><span class="line">        theta2 = np.arctan2(s2, c2)</span><br><span class="line">        <span class="comment"># 整理关节角</span></span><br><span class="line">        theta = np.empty((<span class="number">8</span>, <span class="number">6</span>))</span><br><span class="line">        theta[<span class="number">0</span>:<span class="number">4</span>, <span class="number">0</span>] = theta1[<span class="number">0</span>, <span class="number">0</span>];</span><br><span class="line">        theta[<span class="number">4</span>:<span class="number">8</span>, <span class="number">0</span>] = theta1[<span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">        theta[:, <span class="number">1</span>] = [theta2[<span class="number">0</span>, <span class="number">0</span>], theta2[<span class="number">2</span>, <span class="number">0</span>], theta2[<span class="number">1</span>, <span class="number">0</span>], theta2[<span class="number">3</span>, <span class="number">0</span>], theta2[<span class="number">0</span>, <span class="number">1</span>], theta2[<span class="number">2</span>, <span class="number">1</span>], theta2[<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">                       theta2[<span class="number">3</span>, <span class="number">1</span>]]</span><br><span class="line">        theta[:, <span class="number">2</span>] = [theta3[<span class="number">0</span>, <span class="number">0</span>], theta3[<span class="number">2</span>, <span class="number">0</span>], theta3[<span class="number">1</span>, <span class="number">0</span>], theta3[<span class="number">3</span>, <span class="number">0</span>], theta3[<span class="number">0</span>, <span class="number">1</span>], theta3[<span class="number">2</span>, <span class="number">1</span>], theta3[<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">                       theta3[<span class="number">3</span>, <span class="number">1</span>]]</span><br><span class="line">        theta[<span class="number">0</span>:<span class="number">2</span>, <span class="number">4</span>] = theta5[<span class="number">0</span>, <span class="number">0</span>];</span><br><span class="line">        theta[<span class="number">2</span>:<span class="number">4</span>, <span class="number">4</span>] = theta5[<span class="number">1</span>, <span class="number">0</span>];</span><br><span class="line">        theta[<span class="number">4</span>:<span class="number">6</span>, <span class="number">4</span>] = theta5[<span class="number">0</span>, <span class="number">1</span>];</span><br><span class="line">        theta[<span class="number">6</span>:<span class="number">8</span>, <span class="number">4</span>] = theta5[<span class="number">1</span>, <span class="number">1</span>];</span><br><span class="line">        theta[<span class="number">0</span>:<span class="number">2</span>, <span class="number">5</span>] = theta6[<span class="number">0</span>, <span class="number">0</span>];</span><br><span class="line">        theta[<span class="number">2</span>:<span class="number">4</span>, <span class="number">5</span>] = theta6[<span class="number">1</span>, <span class="number">0</span>];</span><br><span class="line">        theta[<span class="number">4</span>:<span class="number">6</span>, <span class="number">5</span>] = theta6[<span class="number">0</span>, <span class="number">1</span>];</span><br><span class="line">        theta[<span class="number">6</span>:<span class="number">8</span>, <span class="number">5</span>] = theta6[<span class="number">1</span>, <span class="number">1</span>];</span><br><span class="line">        <span class="comment"># 求解关节角4</span></span><br><span class="line">        theta[:, <span class="number">3</span>] = np.arctan2(</span><br><span class="line">            -np.sin(theta[:, <span class="number">5</span>]) * (nx * np.cos(theta[:, <span class="number">0</span>]) + ny * np.sin(theta[:, <span class="number">0</span>])) - np.cos(theta[:, <span class="number">5</span>]) * \</span><br><span class="line">            (ox * np.cos(theta[:, <span class="number">0</span>]) + oy * np.sin(theta[:, <span class="number">0</span>])),</span><br><span class="line">            oz * np.cos(theta[:, <span class="number">5</span>]) + nz * np.sin(theta[:, <span class="number">5</span>])) - theta[:, <span class="number">1</span>] - theta[:, <span class="number">2</span>];</span><br><span class="line">        <span class="keyword">return</span> theta</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">euler_to_rotation_matrix</span>(<span class="params">self,yaw, pitch, roll</span>):</span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        将欧拉角转换为旋转矩阵w</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            yaw (float): Yaw（偏航）角度，单位：度</span></span><br><span class="line"><span class="string">            pitch (float): Pitch（俯仰）角度，单位：度</span></span><br><span class="line"><span class="string">            roll (float): Roll（翻滚）角度，单位：度</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            np.array: 旋转矩阵</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="comment"># 将角度转换为弧度</span></span><br><span class="line">        yaw = np.radians(yaw)</span><br><span class="line">        pitch = np.radians(pitch)</span><br><span class="line">        roll = np.radians(roll)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算旋转矩阵</span></span><br><span class="line">        cy = np.cos(yaw)</span><br><span class="line">        sy = np.sin(yaw)</span><br><span class="line">        cp = np.cos(pitch)</span><br><span class="line">        sp = np.sin(pitch)</span><br><span class="line">        cr = np.cos(roll)</span><br><span class="line">        sr = np.sin(roll)</span><br><span class="line"></span><br><span class="line">        rotation_matrix = np.array([</span><br><span class="line">            [cy * cp, cy * sp * sr - sy * cr, cy * sp * cr + sy * sr],</span><br><span class="line">            [sy * cp, sy * sp * sr + cy * cr, sy * sp * cr - cy * sr],</span><br><span class="line">            [-sp, cp * sr, cp * cr]</span><br><span class="line">        ])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> rotation_matrix</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">self,back_pos,in_rot</span>):</span><br><span class="line">        d = [<span class="number">152</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">130</span>, <span class="number">102</span>, <span class="number">100</span>]  <span class="comment"># 关节连杆长度</span></span><br><span class="line">        a = [<span class="number">0</span>, -<span class="number">425</span>, -<span class="number">395</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]  <span class="comment"># 关节间距</span></span><br><span class="line">        rx = in_rot[<span class="number">0</span>]<span class="comment">#179.46;</span></span><br><span class="line">        ry = in_rot[<span class="number">1</span>]<span class="comment">#0.257;</span></span><br><span class="line">        rz = in_rot[<span class="number">2</span>]<span class="comment">#-22.851;</span></span><br><span class="line">        rot_test = [rx,ry,rz]</span><br><span class="line">        back_rot = self.euler_to_rotation_matrix(rz, ry, rx)  <span class="comment"># 末端执行器的旋转矩阵</span></span><br><span class="line">        <span class="comment"># 计算逆运动学</span></span><br><span class="line">        theta_new = self.inverse_kinematics(back_pos, back_rot, d, a)</span><br><span class="line">        theta_new = np.degrees(theta_new)</span><br><span class="line">        <span class="comment"># theta_new = np.around(theta_new, decimals=3)</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'逆运动学结果：'</span>, theta_new)</span><br><span class="line">        <span class="keyword">return</span> theta_new,rot_test</span><br></pre></td></tr></table></figure>
+<p>最优解函数也已经有了介绍，此处可能有一些细节上的修改，这篇文章更新于6月份，具体更改的点我已经忘了，但是解决了很大的问题，目前这个是最稳定的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Best_select</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_useful_solution</span>(<span class="params">self,solutions</span>):</span><br><span class="line">        s = solutions</span><br><span class="line">        l = <span class="number">0</span></span><br><span class="line">        m1 = np.zeros((<span class="number">1</span>, <span class="number">6</span>))</span><br><span class="line">        <span class="comment"># 根据关节角限制进行逆解筛选</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">7</span>):</span><br><span class="line">            flag = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">5</span>):</span><br><span class="line">                <span class="keyword">if</span> pd.isnull(s[i, j]) <span class="keyword">and</span> i &lt;= <span class="number">6</span>:</span><br><span class="line">                    i = i + <span class="number">1</span></span><br><span class="line">                    j = <span class="number">0</span></span><br><span class="line">                    flag = <span class="literal">False</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">if</span> pd.isnull(s[i, j]) <span class="keyword">and</span> i == <span class="number">7</span>:</span><br><span class="line">                    flag = <span class="literal">False</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> flag:</span><br><span class="line">                m1 = np.resize(m1, (l + <span class="number">1</span>, <span class="number">6</span>))</span><br><span class="line">                m1[l, :] = s[i, :]</span><br><span class="line">                l = l + <span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'useful:'</span>, m1)</span><br><span class="line">        <span class="keyword">return</span> m1</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">select_standard_solution</span>(<span class="params">self,array</span>):</span><br><span class="line">        rows, columns = array.shape</span><br><span class="line">        l = <span class="number">0</span></span><br><span class="line">        m1 = np.zeros((rows, columns))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,rows):</span><br><span class="line">            flag = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,columns):</span><br><span class="line">                <span class="keyword">if</span> j == <span class="number">0</span> <span class="keyword">and</span> (array[i, j] &lt;= -<span class="number">175</span> <span class="keyword">or</span> array[i, j] &gt;= <span class="number">175</span>):</span><br><span class="line">                    flag = <span class="literal">False</span></span><br><span class="line">                    <span class="comment"># print('j1',array[i, j],i)</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">elif</span> j == <span class="number">1</span> <span class="keyword">and</span> (array[i, j] &lt;= -<span class="number">265</span> <span class="keyword">or</span> array[i, j] &gt;= <span class="number">10</span>):</span><br><span class="line">                    flag = <span class="literal">False</span></span><br><span class="line">                    <span class="comment"># print('j2',array[i, j],i)</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">elif</span> j == <span class="number">2</span> <span class="keyword">and</span> (array[i, j] &lt;= -<span class="number">160</span> <span class="keyword">or</span> array[i, j] &gt;= <span class="number">160</span>):</span><br><span class="line">                    flag = <span class="literal">False</span></span><br><span class="line">                    <span class="comment"># print('j3',array[i, j],i)</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">elif</span> j == <span class="number">3</span> <span class="keyword">and</span> (array[i, j] &lt;= -<span class="number">265</span> <span class="keyword">or</span> array[i, j] &gt;= <span class="number">85</span>):</span><br><span class="line">                    flag = <span class="literal">False</span></span><br><span class="line">                    <span class="comment"># print('j4',array[i, j],i)</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">elif</span> j == <span class="number">4</span> <span class="keyword">and</span> (array[i, j] &lt;= -<span class="number">175</span> <span class="keyword">or</span> array[i, j] &gt;= <span class="number">175</span>):</span><br><span class="line">                    flag = <span class="literal">False</span></span><br><span class="line">                    <span class="comment"># print('j5',array[i, j],i)</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">elif</span> array[i,j] &lt;= -<span class="number">175</span> <span class="keyword">or</span> array[i,j] &gt;= <span class="number">175</span>:</span><br><span class="line">                    flag = <span class="literal">False</span></span><br><span class="line">                    <span class="comment"># print('j6',array[i, j],i)</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> flag == <span class="literal">True</span>:</span><br><span class="line">                m1 = np.resize(m1, (l + <span class="number">1</span>, columns))</span><br><span class="line">                m1[l, :] = array[i, :]</span><br><span class="line">                l = l + <span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'standard'</span>, m1)</span><br><span class="line">        <span class="keyword">return</span> m1</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">best_solution</span>(<span class="params">self,finalArray,lb</span>):</span><br><span class="line">        fa = finalArray</span><br><span class="line">        rows, columns = fa.shape</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">f'<span class="subst">{rows,columns}</span>'</span>)</span><br><span class="line">        <span class="keyword">if</span> lb[<span class="number">0</span>,<span class="number">1</span>] == <span class="number">0</span>:</span><br><span class="line">            config = [-<span class="number">122</span>, -<span class="number">30</span>, <span class="number">44</span>, <span class="number">76.</span>, <span class="number">89</span>, -<span class="number">12</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            config = lb</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'hi'</span>)</span><br><span class="line">        last_solution = config</span><br><span class="line">        min_distance = np.inf</span><br><span class="line">        best_solution = np.empty((<span class="number">1</span>, <span class="number">6</span>))</span><br><span class="line">        <span class="keyword">if</span> rows == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> fa</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(rows):</span><br><span class="line">                distance = np.linalg.norm((fa[i,:] - last_solution),<span class="built_in">ord</span>=<span class="literal">None</span>)</span><br><span class="line">                <span class="keyword">if</span> distance &lt; min_distance:</span><br><span class="line">                    min_distance = distance</span><br><span class="line">                    best_solution[<span class="number">0</span>,:] = fa[i,:]</span><br><span class="line">                last_solution = fa[i,:]</span><br><span class="line">            <span class="keyword">return</span> best_solution</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">self,martix,lb</span>):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            useful_m = self.get_useful_solution(martix)</span><br><span class="line">            standard_m = self.select_standard_solution(useful_m)</span><br><span class="line">            best_m = self.best_solution(standard_m,lb)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'最佳解'</span>, best_m)</span><br><span class="line">            <span class="keyword">return</span> best_m</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'逆解优化过程出错，无合适解'</span>)</span><br></pre></td></tr></table></figure>
+<p>机械臂控制的各个功能模块已经具备，接下来是调用相机画面进行鼠标点击传出点位的功能模块。整体调用了海康相机的SDK，不具有普适性，如何适配不同相机我打算放到ros里面去做，目前还没能实现，mouse_callback部分是一个鼠标点击的回调函数，每次点击都会调用这一部分的函数传出对应图像点位数据，对应的转换关系是很初级的相机画面和机械臂坐标的转换，之后研究研究正经的手眼标定。另外因为目前功能实现以鼠标点击为主，所以调用机械臂运动的指令也在这里面，后续在其它方向也要进行优化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">vison_module</span>:</span><br><span class="line"><span class="comment"># 为线程定义一个函数</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">work_thread</span>(<span class="params">self,cam=<span class="number">0</span>, pData=<span class="number">0</span>, nDataSize=<span class="number">0</span></span>):</span><br><span class="line">        stOutFrame = MV_FRAME_OUT()</span><br><span class="line">        stFrameInfo = MV_FRAME_OUT_INFO_EX()</span><br><span class="line">        memset(byref(stOutFrame), <span class="number">0</span>, sizeof(stOutFrame))</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            ret = cam.MV_CC_GetImageBuffer(stOutFrame, <span class="number">1000</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="literal">None</span> != stOutFrame.pBufAddr <span class="keyword">and</span> <span class="number">0</span> == ret:</span><br><span class="line">                <span class="comment"># print("get one frame: Width[%d], Height[%d], nFrameNum[%d]" % (</span></span><br><span class="line">                <span class="comment"># stOutFrame.stFrameInfo.nWidth, stOutFrame.stFrameInfo.nHeight, stOutFrame.stFrameInfo.nFrameNum))</span></span><br><span class="line">                pData = (c_ubyte * stOutFrame.stFrameInfo.nWidth * stOutFrame.stFrameInfo.nHeight)()</span><br><span class="line">                cdll.msvcrt.memcpy(byref(pData), stOutFrame.pBufAddr,</span><br><span class="line">                                   stOutFrame.stFrameInfo.nWidth * stOutFrame.stFrameInfo.nHeight)</span><br><span class="line">                data = np.frombuffer(pData, count=<span class="built_in">int</span>(stOutFrame.stFrameInfo.nWidth * stOutFrame.stFrameInfo.nHeight),</span><br><span class="line">                                     dtype=np.uint8)</span><br><span class="line">                self.image_control(data=data, stFrameInfo=stOutFrame.stFrameInfo)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="comment"># print("no data[0x%x]" % ret)</span></span><br><span class="line">                nRet = cam.MV_CC_FreeImageBuffer(stOutFrame)</span><br><span class="line">            <span class="keyword">if</span> g_bExit == <span class="literal">True</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            k = cv2.waitKey(<span class="number">1</span>) &amp; <span class="number">0xff</span></span><br><span class="line">            <span class="keyword">if</span> k == <span class="built_in">ord</span>(<span class="string">'q'</span>):</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">mouse_callback</span>(<span class="params">self,event, x, y, flags, param</span>):</span><br><span class="line">        v_mov = vison_move()</span><br><span class="line">        <span class="keyword">if</span> event == cv2.EVENT_LBUTTONDOWN:</span><br><span class="line">            x_a = <span class="number">568.783</span> + (<span class="number">2964</span>- x * <span class="number">4</span> ) * <span class="number">0.09028619909502261</span></span><br><span class="line">            y_a = -<span class="number">326.38</span> + (y * <span class="number">4</span>- <span class="number">2596</span> ) * <span class="number">0.09323493975903617</span></span><br><span class="line">            x_a = np.around(x_a, decimals=<span class="number">3</span>)</span><br><span class="line">            y_a = np.around(y_a, decimals=<span class="number">3</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"像素坐标: ({}, {})"</span>.<span class="built_in">format</span>(x * <span class="number">4</span>, y * <span class="number">4</span>))  <span class="comment"># x,y乘4</span></span><br><span class="line">            <span class="comment"># print("吸取坐标: ({}, {})".format((x*4-496)*0.113-861,449-(y*4-732)*0.1093))</span></span><br><span class="line">            <span class="comment"># print("吸取坐标: ({}, {})".format((x * 4 - 496) * 0.09438 - 861, 449 - (y * 4 - 732) * 0.1093))#线性拟合</span></span><br><span class="line">            <span class="comment"># print("吸取坐标: ({}, {})".format(-606.726 + (x * 4 - 2952) * 0.08644230769230778,258.898 + (2612 - y * 4) * 0.09092657992565055))  # 178.375  0.981  -14.856</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f"吸取坐标: (<span class="subst">{x_a}</span>, <span class="subst">{y_a}</span>)"</span>) <span class="comment"># 20230403 rx 179.249  ry 0.135    rz -20.827</span></span><br><span class="line">            lastbest = np.empty((<span class="number">1</span>, <span class="number">6</span>))</span><br><span class="line">            lastBest = v_mov.config(x_a, y_a,lastbest)</span><br><span class="line">            lastBest = v_mov.main(x_a,y_a,lastBest)</span><br><span class="line">            lastBest = v_mov.config(x_a,y_a,lastBest)</span><br><span class="line">            lastBest = v_mov.config(<span class="number">120</span>,-<span class="number">610</span>, lastBest)</span><br><span class="line">            lastBest = v_mov.throw(<span class="number">120</span>,-<span class="number">610</span>,lastBest)</span><br><span class="line">            <span class="comment"># time.sleep(4)</span></span><br><span class="line">            lastBest = v_mov.config(<span class="number">120</span>,-<span class="number">610</span>,lastBest)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">image_show</span>(<span class="params">self,image</span>):</span><br><span class="line">        image = cv2.resize(image, (<span class="number">1368</span>, <span class="number">912</span>), interpolation=cv2.INTER_AREA)</span><br><span class="line">        cv2.namedWindow(<span class="string">"Image"</span>)</span><br><span class="line">        cv2.setMouseCallback(<span class="string">"Image"</span>, self.mouse_callback)</span><br><span class="line">        cv2.imshow(<span class="string">"Image"</span>, image)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">image_control</span>(<span class="params">self,data, stFrameInfo</span>):</span><br><span class="line">        image = data.reshape((stFrameInfo.nHeight, stFrameInfo.nWidth))</span><br><span class="line">        self.image_show(image=image)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">start_grabbing</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        deviceList = MV_CC_DEVICE_INFO_LIST()</span><br><span class="line">        tlayerType = MV_GIGE_DEVICE | MV_USB_DEVICE</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ch:枚举设备 | en:Enum device</span></span><br><span class="line">        ret = MvCamera.MV_CC_EnumDevices(tlayerType, deviceList)</span><br><span class="line">        <span class="keyword">if</span> ret != <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"enum devices fail! ret[0x%x]"</span> % ret)</span><br><span class="line">            sys.exit()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> deviceList.nDeviceNum == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"find no device!"</span>)</span><br><span class="line">            sys.exit()</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Find %d devices!"</span> % deviceList.nDeviceNum)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, deviceList.nDeviceNum):</span><br><span class="line">            mvcc_dev_info = cast(deviceList.pDeviceInfo[i], POINTER(MV_CC_DEVICE_INFO)).contents</span><br><span class="line">            <span class="keyword">if</span> mvcc_dev_info.nTLayerType == MV_GIGE_DEVICE:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"\ngige device: [%d]"</span> % i)</span><br><span class="line">                strModeName = <span class="string">""</span></span><br><span class="line">                <span class="keyword">for</span> per <span class="keyword">in</span> mvcc_dev_info.SpecialInfo.stGigEInfo.chModelName:</span><br><span class="line">                    strModeName = strModeName + <span class="built_in">chr</span>(per)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"device model name: %s"</span> % strModeName)</span><br><span class="line"></span><br><span class="line">                nip1 = ((mvcc_dev_info.SpecialInfo.stGigEInfo.nCurrentIp &amp; <span class="number">0xff000000</span>) &gt;&gt; <span class="number">24</span>)</span><br><span class="line">                nip2 = ((mvcc_dev_info.SpecialInfo.stGigEInfo.nCurrentIp &amp; <span class="number">0x00ff0000</span>) &gt;&gt; <span class="number">16</span>)</span><br><span class="line">                nip3 = ((mvcc_dev_info.SpecialInfo.stGigEInfo.nCurrentIp &amp; <span class="number">0x0000ff00</span>) &gt;&gt; <span class="number">8</span>)</span><br><span class="line">                nip4 = (mvcc_dev_info.SpecialInfo.stGigEInfo.nCurrentIp &amp; <span class="number">0x000000ff</span>)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"current ip: %d.%d.%d.%d\n"</span> % (nip1, nip2, nip3, nip4))</span><br><span class="line">            <span class="keyword">elif</span> mvcc_dev_info.nTLayerType == MV_USB_DEVICE:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"\nu3v device: [%d]"</span> % i)</span><br><span class="line">                strModeName = <span class="string">""</span></span><br><span class="line">                <span class="keyword">for</span> per <span class="keyword">in</span> mvcc_dev_info.SpecialInfo.stUsb3VInfo.chModelName:</span><br><span class="line">                    <span class="keyword">if</span> per == <span class="number">0</span>:</span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                    strModeName = strModeName + <span class="built_in">chr</span>(per)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"device model name: %s"</span> % strModeName)</span><br><span class="line"></span><br><span class="line">                strSerialNumber = <span class="string">""</span></span><br><span class="line">                <span class="keyword">for</span> per <span class="keyword">in</span> mvcc_dev_info.SpecialInfo.stUsb3VInfo.chSerialNumber:</span><br><span class="line">                    <span class="keyword">if</span> per == <span class="number">0</span>:</span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                    strSerialNumber = strSerialNumber + <span class="built_in">chr</span>(per)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"user serial number: %s"</span> % strSerialNumber)</span><br><span class="line"></span><br><span class="line">        nConnectionNum = <span class="built_in">input</span>(<span class="string">"please input the number of the device to connect:"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">int</span>(nConnectionNum) &gt;= deviceList.nDeviceNum:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"intput error!"</span>)</span><br><span class="line">            sys.exit()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ch:创建相机实例 | en:Creat Camera Object</span></span><br><span class="line">        cam = MvCamera()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ch:选择设备并创建句柄 | en:Select device and create handle</span></span><br><span class="line">        stDeviceList = cast(deviceList.pDeviceInfo[<span class="built_in">int</span>(nConnectionNum)], POINTER(MV_CC_DEVICE_INFO)).contents</span><br><span class="line"></span><br><span class="line">        ret = cam.MV_CC_CreateHandle(stDeviceList)</span><br><span class="line">        <span class="keyword">if</span> ret != <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"create handle fail! ret[0x%x]"</span> % ret)</span><br><span class="line">            sys.exit()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ch:打开设备 | en:Open device</span></span><br><span class="line">        ret = cam.MV_CC_OpenDevice(MV_ACCESS_Exclusive, <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> ret != <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"open device fail! ret[0x%x]"</span> % ret)</span><br><span class="line">            sys.exit()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ch:探测网络最佳包大小(只对GigE相机有效) | en:Detection network optimal package size(It only works for the GigE camera)</span></span><br><span class="line">        <span class="keyword">if</span> stDeviceList.nTLayerType == MV_GIGE_DEVICE:</span><br><span class="line">            nPacketSize = cam.MV_CC_GetOptimalPacketSize()</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">int</span>(nPacketSize) &gt; <span class="number">0</span>:</span><br><span class="line">                ret = cam.MV_CC_SetIntValue(<span class="string">"GevSCPSPacketSize"</span>, nPacketSize)</span><br><span class="line">                <span class="keyword">if</span> ret != <span class="number">0</span>:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">"Warning: Set Packet Size fail! ret[0x%x]"</span> % ret)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"Warning: Get Packet Size fail! ret[0x%x]"</span> % nPacketSize)</span><br><span class="line"></span><br><span class="line">        stBool = c_bool(<span class="literal">False</span>)</span><br><span class="line">        ret = cam.MV_CC_GetBoolValue(<span class="string">"AcquisitionFrameRateEnable"</span>, stBool)</span><br><span class="line">        <span class="keyword">if</span> ret != <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"get AcquisitionFrameRateEnable fail! ret[0x%x]"</span> % ret)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ch:设置触发模式为off | en:Set trigger mode as off</span></span><br><span class="line">        ret = cam.MV_CC_SetEnumValue(<span class="string">"TriggerMode"</span>, MV_TRIGGER_MODE_OFF)</span><br><span class="line">        <span class="keyword">if</span> ret != <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"set trigger mode fail! ret[0x%x]"</span> % ret)</span><br><span class="line">            sys.exit()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ch:开始取流 | en:Start grab image</span></span><br><span class="line">        ret = cam.MV_CC_StartGrabbing()</span><br><span class="line">        <span class="keyword">if</span> ret != <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"start grabbing fail! ret[0x%x]"</span> % ret)</span><br><span class="line">            sys.exit()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            hThreadHandle = threading.Thread(target=self.work_thread, args=(cam, <span class="literal">None</span>, <span class="literal">None</span>))</span><br><span class="line">            hThreadHandle.start()</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"error: unable to start thread"</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">stop_grabbing</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"press a key to stop grabbing."</span>)</span><br><span class="line">        msvcrt.getch()</span><br><span class="line"></span><br><span class="line">        g_bExit = <span class="literal">True</span></span><br><span class="line">        hThreadHandle.join()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ch:停止取流 | en:Stop grab image</span></span><br><span class="line">        ret = cam.MV_CC_StopGrabbing()</span><br><span class="line">        <span class="keyword">if</span> ret != <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"stop grabbing fail! ret[0x%x]"</span> % ret)</span><br><span class="line">            sys.exit()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ch:关闭设备 | Close device</span></span><br><span class="line">        ret = cam.MV_CC_CloseDevice()</span><br><span class="line">        <span class="keyword">if</span> ret != <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"close deivce fail! ret[0x%x]"</span> % ret)</span><br><span class="line">            sys.exit()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ch:销毁句柄 | Destroy handle</span></span><br><span class="line">        ret = cam.MV_CC_DestroyHandle()</span><br><span class="line">        <span class="keyword">if</span> ret != <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"destroy handle fail! ret[0x%x]"</span> % ret)</span><br><span class="line">            sys.exit()</span><br></pre></td></tr></table></figure>
+<p>调用机械臂的主程序我写了三个位姿，默认位姿，夹取位姿以及放置位姿，内容都一样，只是点位略有差别，此处只放出夹取位姿供于参考。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">vison_move</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">self,x,y,lb</span>):</span><br><span class="line">        Run_ControlRobot = ControlRobot()</span><br><span class="line">        Back = Inverse_Kinematics()</span><br><span class="line">        Best = Best_select()</span><br><span class="line">        pos = [x, y, <span class="number">99.5</span>] <span class="comment">#box</span></span><br><span class="line">        <span class="comment"># pos = [x, y, 79] #formal</span></span><br><span class="line">        <span class="comment"># pos = [x, y, 61]</span></span><br><span class="line">        <span class="comment"># pos = [x, y, 150]</span></span><br><span class="line">        in_rot = [-<span class="number">178</span>,<span class="number">0</span>,<span class="number">90</span>]</span><br><span class="line">        allSolve,rot = Back.main(pos,in_rot)</span><br><span class="line">        bestSolve = Best.main(allSolve,lb)</span><br><span class="line">        Pose_now=Run_ControlRobot.GetPose()</span><br><span class="line">        test_code = Run_ControlRobot.test(bestSolve,pos,rot)</span><br><span class="line">        CNT=<span class="string">"02"</span></span><br><span class="line">        speed=<span class="string">"100"</span></span><br><span class="line">        <span class="comment">#把获取的当前坐标制作成移动的命令MoveJ</span></span><br><span class="line">        code_dict=Run_ControlRobot.GetPost_To_Codedict_MoveJ(CNT,test_code,speed)</span><br><span class="line">        code=Run_ControlRobot.MakeCode(code_dict)</span><br><span class="line">        time.sleep(<span class="number">2</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"code:"</span>,code_dict)</span><br><span class="line">        <span class="comment">#把获取的姿态给机器人动起来</span></span><br><span class="line">        Point_dict=Run_ControlRobot.CodeToRobot(code,<span class="string">'外网'</span>)</span><br><span class="line">        <span class="comment"># Run_ControlRobot.Point_Save_DB(code_dict)</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"OK"</span>)</span><br><span class="line">        <span class="keyword">return</span> bestSolve</span><br></pre></td></tr></table></figure>
+<p>如上，为机械臂整体项目代码实现的一个潦草记录，文章发布在四月份，直到今天六月十二才完成更新，过程中也修改了很多地方，更有很多细节被忘记了，以后还是得及时进行记录。除相机SDK外其它很多函数名称都是自己起的，在看程序的时候要注意区分。等到代码完全成熟的时候，需要写一个详细的流程图进行介绍。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/astronauting-rbr.top/2023/05/05/record-ubuntu/" data-toggle="tooltip" data-placement="top" title="ROS及Ubuntu系统调错记录">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/astronauting-rbr.top/2023/04/03/robot3/" data-toggle="tooltip" data-placement="top" title="机械臂基础（应用）知识学习3">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/astronauting-rbr.top/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/astronauting-rbr.top/tags/#机械臂" title="机械臂">机械臂</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#matlab" title="matlab">matlab</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/astronauting-rbr.top/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/astronauting-rbr.top/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/astronauting-rbr.top/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

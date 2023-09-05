@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/astronauting-rbr.top/img/favicon.ico">
+
+    <title>
+        
+          基于python与mqtt的传输代码及其文件传输应用(下) - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/astronauting-rbr.top/2023/03/01/mqtt2/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/astronauting-rbr.top/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/astronauting-rbr.top/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/astronauting-rbr.top/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#网络通信" title="网络通信">网络通信</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#python" title="python">python</a>
+                        
+                    </div>
+                    <h1>基于python与mqtt的传输代码及其文件传输应用(下)</h1>
+                    <h2 class="subheading">本篇实现了文件的传输任务，mqtt协议为轻量级协议，文件大小需要控制在200mb以下。</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-03-01
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>有几个要点需要提前说明，以 python 为例，一段程序最有新意、值得学习的地方在于它的逻辑安排和它的语法结构，而不是它实现了什么功能。功能的实现无非是函数指令的调用，关键在于各个指令如何通过语法进行搭配，使其能够实现更流畅的综合功能。此处用类定义的结构写，主要目的是为以后其他功能的加入服务，文件传输只是项目功能实现的一块，因此用类将各功能块进行区分是最为有效的。</p>
+<p>在结构上使用了 python 常用的文件读写结构 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34816007/article/details/105049033?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167756292216800180699540%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=167756292216800180699540&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-105049033-null-null.142^v73^control,201^v4^add_ask,239^v2^insert_chatgpt&amp;utm_term=with%20open%20as%20f%E7%94%A8%E6%B3%95&amp;spm=1018.2226.3001.4187">with open() as f:</a> 。 <strong>‘rb’</strong> 这部分是先关参数，用于表明读写的格式以及模式，有很多种参数形式，这里是以二进制格式只读文件。f则有很多方法属性，用于返回文件的内容或定义编码等，详细内容可参照链接。另外还有<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41605937/article/details/120248917?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167755102116800180671714%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=167755102116800180671714&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-2-120248917-null-null.142^v73^control,201^v4^add_ask,239^v2^insert_chatgpt&amp;utm_term=python%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0&amp;spm=1018.2226.3001.4187">回调函数</a>的调用，这是两个需要学习的点，功能整体并不复杂，因此不需要通过高级语法实现。</p>
+<h2 id="文件传输（订阅端）"><a href="#文件传输（订阅端）" class="headerlink" title="文件传输（订阅端）"></a>文件传输（订阅端）</h2><p>类的使用能够在很大程度上让代码变的清晰易懂，好的类语法代码能够把各个功能分割成块，不会因为参数问题造成整个逻辑的混乱。之前做上位机程序第一次接触类语法，理解用了好几天，就算是现在再次使用也是勉强掌握，之后需要找时间专门写博客进行回顾，这一部分的熟练掌握是必要的。过程中还用到了一些 python 文件处理指令，这同样需要进行总结回顾，文件操作不论是在何种功能下都是必须的。以下内容为订阅端各个功能块的简析：</p>
+<h3 id="库导入及初始化"><a href="#库导入及初始化" class="headerlink" title="库导入及初始化"></a>库导入及初始化</h3><p>先划定类名，确定好类名之后在其他程序可以直接继承，具体内容参照类语法定义。初始化的部分相当于一个基本设置，后面功能中需要频繁使用的、固定的、属性类的东西可以在初始化的部分进行设置，以便后续使用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> paho.mqtt.client <span class="keyword">as</span> mqtt</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Local_Sub</span>:</span><br><span class="line">    <span class="comment"># 初始化端口号、订阅主题等</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.broker = <span class="string">&#x27;xxxxx&#x27;</span> <span class="comment"># ip</span></span><br><span class="line">        self.port = xxxxx <span class="comment"># 端口</span></span><br><span class="line">        self.client_id = <span class="string">f&#x27;python-mqtt-<span class="subst">&#123;random.randint(<span class="number">0</span>, <span class="number">100</span>)&#125;</span>&#x27;</span> <span class="comment"># 用户id（随机数）</span></span><br><span class="line">        self.topic = <span class="string">&#x27;file_transfer&#x27;</span> <span class="comment"># 订阅主题（后面出于功能需要还会有其他主题，但这里是整个类功能需要实现的主题）</span></span><br><span class="line">        self.qos = <span class="number">2</span> <span class="comment"># qos 等级（qos 是 mqtt 里面的概念，相当于设置信息准确到达的等级）</span></span><br><span class="line">        self.retain = <span class="literal">True</span> <span class="comment"># 消息保留标志位，后续会使用</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;主题:<span class="subst">&#123;self.topic&#125;</span>,质量:<span class="subst">&#123;self.qos&#125;</span>&quot;</span>)</span><br><span class="line">        self.path = os.getcwd() <span class="comment"># 确定当前路径</span></span><br><span class="line">        self.dir_path = os.path.join(self.path, <span class="string">&#x27;savepng&#x27;</span>) <span class="comment">#确定接收文件的存放路径（绝对路径）</span></span><br></pre></td></tr></table></figure>
+<h3 id="mqtt连接函数"><a href="#mqtt连接函数" class="headerlink" title="mqtt连接函数"></a>mqtt连接函数</h3><p>连接功能和之前实现信息通讯时的连接函数没有太大区别，在敲代码的过程中发现回调函数真的是一个很好用的函数，定义好以后放在那边，特定事件一出现它就开始响应，这种功能的应用范围实在太广了。但是追根朔源应该是涉及到 C 语言的指针问题，因此还没有深入了解学习。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">connect_mqtt</span>(<span class="params">self</span>) -&gt; mqtt:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_connect</span>(<span class="params">client, userdata, flags, rc</span>):</span><br><span class="line">        <span class="keyword">if</span> rc == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Connected to MQTT Broker!&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Failed to connect, return code %d\n&quot;</span>, rc)</span><br><span class="line">    self.client = mqtt.Client(self.client_id)  <span class="comment"># 实例化</span></span><br><span class="line">    self.client.on_connect = on_connect</span><br><span class="line">    self.client.username_pw_set(<span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;123&#x27;</span>)</span><br><span class="line">    self.client.connect(self.broker, self.port, <span class="number">60</span>)</span><br><span class="line">    <span class="keyword">return</span> self.client</span><br></pre></td></tr></table></figure>
+<h3 id="接收回调函数（核心）"><a href="#接收回调函数（核心）" class="headerlink" title="接收回调函数（核心）"></a>接收回调函数（核心）</h3><p>接收回调函数，需要实现文件的接收、存取，同时还要给发布端发送确认信息，是整个代码功能的核心体现。<strong>这部分功能划成了三个部分：文件信息、图像文件以及 txt 文件的接收，同时它们各自有着自己的反馈信息。</strong>这里写的其实还是有些笨重的，只针对项目要实现的两种形式文件传输做了对应的块，要改进的话可以再加文件类型判断指令，将得到的文件直接对接解码和命名，这样不论是什么格式的文件都可以完成保存。</p>
+<p>还有一个问题是反馈信息的发送，还处于最开始单个文件的确认阶段，也就是说每接收一个文件就要发送确认的信息，此处代码已经实现了多个文件的传输，那么就需要在确认所有文件收到后再发送确认信息。这种功能的实现需要发布端发送所有文件后传出完结信息，再根据完结信息作出反馈，这一部分实现我觉得可以模仿<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45393094/article/details/104965561?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167774745116800180667334%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=167774745116800180667334&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-104965561-null-null.142^v73^control,201^v4^add_ask,239^v2^insert_chatgpt&amp;utm_term=%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E8%AF%A6%E8%A7%A3&amp;spm=1018.2226.3001.4187">三次握手和四次挥手</a>，毕竟 IP/TCP 协议也是 mqtt 的基础。</p>
+<p>回到代码本身，这段代码更多的还是围绕文件处理指令打转，包括文本转换处理的任务，真正用到传输的地方其实很少。换句话说，mqtt 本身的指令并不多，无非是连接、订阅、发布以及回调函数的循环调用，关键还是在于与你要实现的功能进行逻辑上的搭配。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">on_message</span>(<span class="params">self, client, userdata, msg</span>):</span><br><span class="line">    self.payload = msg.payload</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Received message on topic &#x27;<span class="subst">&#123;msg.topic&#125;</span>&#x27;&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> msg.topic == self.topic + <span class="string">&quot;/info&quot;</span>: <span class="comment"># 处理文件信息</span></span><br><span class="line">        file_info = json.loads(self.payload) <span class="comment"># 文件信息转换为字符串形式，以便显示文件名</span></span><br><span class="line">        self.filename = file_info[<span class="string">&quot;filename&quot;</span>] <span class="comment"># 字符串形式的文件信息读取</span></span><br><span class="line">        filesize = file_info[<span class="string">&quot;filesize&quot;</span>]</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Received file info: <span class="subst">&#123;self.filename&#125;</span> of size <span class="subst">&#123;filesize&#125;</span> bytes&quot;</span>)</span><br><span class="line">        token1 = client.publish(self.topic + <span class="string">&quot;/ack1&quot;</span>, <span class="string">&quot;ACK&quot;</span>, qos=<span class="number">1</span>) <span class="comment"># 确认收到文件信息（可有可无，但多获取点信息也不是坏事）</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;ack1 send&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> msg.topic == self.topic + <span class="string">&quot;/data/png&quot;</span>: <span class="comment"># 处理图像文件数据</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">f&quot;<span class="subst">&#123;self.dir_path&#125;</span>/new<span class="subst">&#123;self.filename&#125;</span>&quot;</span>, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f: </span><br><span class="line">            <span class="comment"># 文件写操作，存储位置为初始化设置好的路径（ mqtt 的文件传输只能以二进制格式处理）</span></span><br><span class="line">            f.write(msg.payload)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;file saved&quot;</span>)</span><br><span class="line">        token2 = client.publish(self.topic + <span class="string">&quot;/ack2&quot;</span>, <span class="string">&quot;ACK&quot;</span>, qos=<span class="number">1</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;ack2 send&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> msg.topic == self.topic + <span class="string">&quot;/data/txt&quot;</span>: <span class="comment"># 处理文本文件数据</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">f&quot;<span class="subst">&#123;self.dir_path&#125;</span>/new<span class="subst">&#123;self.filename&#125;</span>&quot;</span>, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(msg.payload)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;file saved&quot;</span>)</span><br><span class="line">        token2 = client.publish(self.topic + <span class="string">&quot;/ack2&quot;</span>, <span class="string">&quot;ACK&quot;</span>, qos=<span class="number">1</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;ack2 send&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="主程序段"><a href="#主程序段" class="headerlink" title="主程序段"></a>主程序段</h3><p>主程序段需要保证以上几块功能先后顺序不要错，同时我将确认主题放到了主程序段进行处理，作为订阅端要一直保持连接。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">def</span> <span class="title function_">Main</span>(<span class="params">self</span>):</span><br><span class="line">        client = self.connect_mqtt()</span><br><span class="line">        self.client.on_message = self.on_message</span><br><span class="line">        info_topic = self.topic + <span class="string">&quot;/info&quot;</span></span><br><span class="line">        data_topic1 = self.topic + <span class="string">&quot;/data/png&quot;</span></span><br><span class="line">        data_topic2 = self.topic + <span class="string">&quot;/data/txt&quot;</span></span><br><span class="line">        client.subscribe([(info_topic, <span class="number">2</span>), (data_topic1, <span class="number">2</span>), (data_topic2, <span class="number">2</span>)])</span><br><span class="line">        self.client.loop_forever()  <span class="comment"># 保持连接</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    sub = Local_Sub()</span><br><span class="line">    sub.Main()</span><br></pre></td></tr></table></figure>
+<h2 id="文件传输（发布端）"><a href="#文件传输（发布端）" class="headerlink" title="文件传输（发布端）"></a>文件传输（发布端）</h2><p>发布端的函数和订阅端在初始化及连接函数方面基本相同，只需要添加用于判断是否收到确认信息的全局变量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.received_ack = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<h3 id="文件发送函数"><a href="#文件发送函数" class="headerlink" title="文件发送函数"></a>文件发送函数</h3><p>先获取存放数据文件的目录信息，遍历目录下每个文件，将其解码发送，这便是这部分函数的主要功能。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">send_large_file</span>(<span class="params">self</span>):</span><br><span class="line">    path = os.getcwd() <span class="comment"># 获取当前目录</span></span><br><span class="line">    dir_path = os.path.join(path, <span class="string">&#x27;png&#x27;</span>) <span class="comment"># 拼接完整的子目录路径</span></span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> os.listdir(dir_path): <span class="comment"># 遍历循环</span></span><br><span class="line">        self.filename = file</span><br><span class="line">        file_path = os.path.join(dir_path, file)</span><br><span class="line">        self.filesize = os.path.getsize(file_path)</span><br><span class="line">        <span class="comment"># 先发送文件信息</span></span><br><span class="line">        file_info = &#123;<span class="string">&quot;filename&quot;</span>: self.filename, <span class="string">&quot;filesize&quot;</span>: self.filesize&#125;</span><br><span class="line">        info_json = json.dumps(file_info)</span><br><span class="line">        token1 = self.client.publish(self.topic + <span class="string">&quot;/info&quot;</span>, info_json, qos=<span class="number">2</span>)</span><br><span class="line">        token1.wait_for_publish()</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            filedata = f.read()</span><br><span class="line">        <span class="comment"># 再发送文件数据</span></span><br><span class="line">        token2 = self.client.publish(self.topic + <span class="string">&quot;/data/png&quot;</span>, filedata, qos=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="等待函数"><a href="#等待函数" class="headerlink" title="等待函数"></a>等待函数</h3><p>我通过定义三个函数进行了实现，这部分在后续可能会增删，因此尽可能避免混乱。三个函数分别用于设置主题、消息回调以及等待结束。主题设置不用多说，和订阅端相同；消息回调用于处理从订阅端返回来的消息，根据对应情况进行处理；等待结束有 100s 的延时，用于等待最终到来的结束传输过程的命令，后续可能因为文件的增多增加等待时间。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">check_sub</span>(<span class="params">self</span>):</span><br><span class="line">    ack_topic1 = self.topic + <span class="string">&quot;/ack1&quot;</span></span><br><span class="line">    ack_topic2 = self.topic + <span class="string">&quot;/ack2&quot;</span></span><br><span class="line">    self.client.subscribe([(ack_topic1, <span class="number">1</span>), (ack_topic2, <span class="number">1</span>)])</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">on_message</span>(<span class="params">self, client, userdata, msg</span>):</span><br><span class="line">    self.payload = msg.payload.decode()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Received message on topic &#x27;<span class="subst">&#123;msg.topic&#125;</span>&#x27;&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> self.payload == <span class="string">&quot;ACK&quot;</span>:  <span class="comment"># 如果收到确认消息，就将标志设为True</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Received ACK from subscriber.&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> self.payload == <span class="string">&quot;ACK&quot;</span> <span class="keyword">and</span> msg.topic == self.topic + <span class="string">&quot;/ack1&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Received ACK1 from subscriber.&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> self.payload == <span class="string">&quot;ACK&quot;</span> <span class="keyword">and</span> msg.topic == self.topic + <span class="string">&quot;/ack2&quot;</span>:  <span class="comment"># 如果收到确认消息，就将标志设为True</span></span><br><span class="line">        self.received_ack = <span class="literal">True</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">wait</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="comment"># 等待收到确认消息或超时（这里设为10秒）</span></span><br><span class="line">    timeout = <span class="number">100</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> self.received_ack <span class="keyword">and</span> timeout &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Waiting for ACK...<span class="subst">&#123;timeout&#125;</span>s left&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)  <span class="comment"># 每隔一秒检查一次</span></span><br><span class="line">        timeout -= <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> self.received_ack:  <span class="comment"># 如果收到确认消息，就打印成功并退出程序</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Received ACK from subscriber. Exiting...&quot;</span>)</span><br><span class="line">        self.client.loop_stop()</span><br><span class="line">        self.client.disconnect()</span><br><span class="line">    <span class="keyword">else</span>:  <span class="comment"># 如果超时，就打印失败并退出程序</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Timeout. No ACK from subscriber. Exiting...&quot;</span>)</span><br><span class="line">        self.client.loop_stop()</span><br><span class="line">        self.client.disconnect()</span><br></pre></td></tr></table></figure>
+<h2 id="整体程序"><a href="#整体程序" class="headerlink" title="整体程序"></a>整体程序</h2><p>这仅是项目整体流程实现的一部分代码，很多优化工作还没有去搞，很多功能拓展也没来得及做。但是用于了解 mqtt 基本传输流程已经足够了，mqtt 是轻量级的传输协议，通过它这种一对多的特性（订阅端可以有很多，并不是只有一个）可以实现很多有意思的功能，比如远程开关灯、远程控制机械等等。在文件传输方面虽然只能承载 200MB 以下的文件，但我想用于日常应用以及足够，毕竟它的特性在于一对多实现，而不是大负载传输。总之，希望之后还能在其它地方应用到这个协议。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#发布</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> paho.mqtt.client <span class="keyword">as</span> mqtt</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Local_Pub</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.broker = <span class="string">&#x27;xxxxx&#x27;</span></span><br><span class="line">        self.port = xxxxx</span><br><span class="line">        self.client_id = <span class="string">f&#x27;python-mqtt-<span class="subst">&#123;random.randint(<span class="number">0</span>, <span class="number">100</span>)&#125;</span>&#x27;</span></span><br><span class="line">        self.topic=<span class="string">&#x27;file_transfer&#x27;</span></span><br><span class="line">        self.qos=<span class="number">1</span></span><br><span class="line">        self.retain=<span class="literal">True</span></span><br><span class="line">        self.received_ack = <span class="literal">False</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;主题:<span class="subst">&#123;self.topic&#125;</span>,质量:<span class="subst">&#123;self.qos&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">connect_mqtt</span>(<span class="params">self</span>) -&gt; mqtt:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">on_connect</span>(<span class="params">client, userdata, flags, rc</span>):</span><br><span class="line">            <span class="keyword">if</span> rc == <span class="number">0</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;Connected to MQTT Broker!&quot;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;Failed to connect, return code %d\n&quot;</span>, rc)</span><br><span class="line">        self.client = mqtt.Client(self.client_id)  <span class="comment"># 实例化</span></span><br><span class="line">        self.client.on_connect = on_connect</span><br><span class="line">        self.client.username_pw_set(<span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;123&#x27;</span>)</span><br><span class="line">        self.client.connect(self.broker, self.port, <span class="number">60</span>)</span><br><span class="line">        <span class="keyword">return</span> self.client</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_publish</span>(<span class="params">self, client, userdata, mid</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;data published with mid <span class="subst">&#123;mid&#125;</span>\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_message</span>(<span class="params">self, client, userdata, msg</span>):</span><br><span class="line">        self.payload = msg.payload.decode()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Received message on topic &#x27;<span class="subst">&#123;msg.topic&#125;</span>&#x27;&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> self.payload == <span class="string">&quot;ACK&quot;</span>:  <span class="comment"># 如果收到确认消息，就将标志设为True</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Received ACK from subscriber.&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> self.payload == <span class="string">&quot;ACK&quot;</span> <span class="keyword">and</span> msg.topic == self.topic + <span class="string">&quot;/ack1&quot;</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Received ACK1 from subscriber.&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> self.payload == <span class="string">&quot;ACK&quot;</span> <span class="keyword">and</span> msg.topic == self.topic + <span class="string">&quot;/ack2&quot;</span>:  <span class="comment"># 如果收到确认消息，就将标志设为True</span></span><br><span class="line">            self.received_ack = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">check_sub</span>(<span class="params">self</span>):</span><br><span class="line">        ack_topic1 = self.topic + <span class="string">&quot;/ack1&quot;</span></span><br><span class="line">        ack_topic2 = self.topic + <span class="string">&quot;/ack2&quot;</span></span><br><span class="line">        self.client.subscribe([(ack_topic1, <span class="number">1</span>), (ack_topic2, <span class="number">1</span>)])</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">send_large_file</span>(<span class="params">self</span>):</span><br><span class="line">        path = os.getcwd() <span class="comment"># 获取当前目录</span></span><br><span class="line">        dir_path = os.path.join(path, <span class="string">&#x27;png&#x27;</span>) <span class="comment"># 拼接完整的子目录路径</span></span><br><span class="line">        <span class="keyword">for</span> file <span class="keyword">in</span> os.listdir(dir_path):</span><br><span class="line">            self.filename = file</span><br><span class="line">            file_path = os.path.join(dir_path, file)</span><br><span class="line">            self.filesize = os.path.getsize(file_path)</span><br><span class="line">            <span class="comment"># send file info first</span></span><br><span class="line">            file_info = &#123;<span class="string">&quot;filename&quot;</span>: self.filename, <span class="string">&quot;filesize&quot;</span>: self.filesize&#125;</span><br><span class="line">            info_json = json.dumps(file_info)</span><br><span class="line">            token1 = self.client.publish(self.topic + <span class="string">&quot;/info&quot;</span>, info_json, qos=<span class="number">2</span>)</span><br><span class="line">            token1.wait_for_publish()</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                filedata = f.read()</span><br><span class="line">            <span class="comment"># send file data next</span></span><br><span class="line">            token2 = self.client.publish(self.topic + <span class="string">&quot;/data/png&quot;</span>, filedata, qos=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wait</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 等待收到确认消息或超时（这里设为10秒）</span></span><br><span class="line">        timeout = <span class="number">100</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.received_ack <span class="keyword">and</span> timeout &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;Waiting for ACK...<span class="subst">&#123;timeout&#125;</span>s left&quot;</span>)</span><br><span class="line">            time.sleep(<span class="number">1</span>)  <span class="comment"># 每隔一秒检查一次</span></span><br><span class="line">            timeout -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> self.received_ack:  <span class="comment"># 如果收到确认消息，就打印成功并退出程序</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Received ACK from subscriber. Exiting...&quot;</span>)</span><br><span class="line">            self.client.loop_stop()</span><br><span class="line">            self.client.disconnect()</span><br><span class="line">        <span class="keyword">else</span>:  <span class="comment"># 如果超时，就打印失败并退出程序</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Timeout. No ACK from subscriber. Exiting...&quot;</span>)</span><br><span class="line">            self.client.loop_stop()</span><br><span class="line">            self.client.disconnect()</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Main</span>(<span class="params">self</span>):</span><br><span class="line">        self.client = self.connect_mqtt()</span><br><span class="line">        self.client.on_message = self.on_message</span><br><span class="line">        self.check_sub()</span><br><span class="line">        self.client.loop_start()</span><br><span class="line">        self.send_large_file()</span><br><span class="line">        self.client.on_publish = self.on_publish</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Sent <span class="subst">&#123;self.filename&#125;</span> of size <span class="subst">&#123;self.filesize&#125;</span> bytes&quot;</span>)</span><br><span class="line">        self.wait()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    pub = Local_Pub()</span><br><span class="line">    pub.Main()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 订阅</span></span><br><span class="line"><span class="keyword">import</span> paho.mqtt.client <span class="keyword">as</span> mqtt</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Local_Sub</span>:</span><br><span class="line">    <span class="comment"># 初始化端口号、订阅主题等</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.broker = <span class="string">&#x27;8.130.8.222&#x27;</span></span><br><span class="line">        self.port = <span class="number">31883</span></span><br><span class="line">        self.client_id = <span class="string">f&#x27;python-mqtt-<span class="subst">&#123;random.randint(<span class="number">0</span>, <span class="number">100</span>)&#125;</span>&#x27;</span></span><br><span class="line">        self.topic = <span class="string">&#x27;file_transfer&#x27;</span></span><br><span class="line">        self.qos = <span class="number">2</span></span><br><span class="line">        self.retain = <span class="literal">True</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;主题:<span class="subst">&#123;self.topic&#125;</span>,质量:<span class="subst">&#123;self.qos&#125;</span>&quot;</span>)</span><br><span class="line">        self.path = os.getcwd()</span><br><span class="line">        self.dir_path = os.path.join(self.path, <span class="string">&#x27;savepng&#x27;</span>)</span><br><span class="line">        <span class="comment">#连接函数，连接客户端并显示连接信息</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">connect_mqtt</span>(<span class="params">self</span>) -&gt; mqtt:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">on_connect</span>(<span class="params">client, userdata, flags, rc</span>):</span><br><span class="line">            <span class="keyword">if</span> rc == <span class="number">0</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;Connected to MQTT Broker!&quot;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;Failed to connect, return code %d\n&quot;</span>, rc)</span><br><span class="line">        self.client = mqtt.Client(self.client_id)  <span class="comment"># 实例化</span></span><br><span class="line">        self.client.on_connect = on_connect</span><br><span class="line">        self.client.username_pw_set(<span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;123&#x27;</span>)</span><br><span class="line">        self.client.connect(self.broker, self.port, <span class="number">60</span>)</span><br><span class="line">        <span class="keyword">return</span> self.client</span><br><span class="line">    <span class="comment"># 回调函数，用于接收、存取文件并发送确认信息</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_message</span>(<span class="params">self, client, userdata, msg</span>):</span><br><span class="line">        self.payload = msg.payload</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Received message on topic &#x27;<span class="subst">&#123;msg.topic&#125;</span>&#x27;&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> msg.topic == self.topic + <span class="string">&quot;/info&quot;</span>:</span><br><span class="line">            file_info = json.loads(self.payload)</span><br><span class="line">            self.filename = file_info[<span class="string">&quot;filename&quot;</span>]</span><br><span class="line">            filesize = file_info[<span class="string">&quot;filesize&quot;</span>]</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;Received file info: <span class="subst">&#123;self.filename&#125;</span> of size <span class="subst">&#123;filesize&#125;</span> bytes&quot;</span>)</span><br><span class="line">            token1 = client.publish(self.topic + <span class="string">&quot;/ack1&quot;</span>, <span class="string">&quot;ACK&quot;</span>, qos=<span class="number">1</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;ack1 send&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> msg.topic == self.topic + <span class="string">&quot;/data/png&quot;</span>:</span><br><span class="line">            <span class="comment"># print(f&quot;Received file data: &#123;filename&#125; of size &#123;filesize&#125; bytes&quot;)</span></span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">f&quot;<span class="subst">&#123;self.dir_path&#125;</span>/new<span class="subst">&#123;self.filename&#125;</span>&quot;</span>, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(msg.payload)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;file saved&quot;</span>)</span><br><span class="line">            token2 = client.publish(self.topic + <span class="string">&quot;/ack2&quot;</span>, <span class="string">&quot;ACK&quot;</span>, qos=<span class="number">1</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;ack2 send&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> msg.topic == self.topic + <span class="string">&quot;/data/txt&quot;</span>:</span><br><span class="line">            <span class="comment"># print(f&quot;Received file data: &#123;filename&#125; of size &#123;filesize&#125; bytes&quot;)</span></span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">f&quot;<span class="subst">&#123;self.dir_path&#125;</span>/new<span class="subst">&#123;self.filename&#125;</span>&quot;</span>, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(msg.payload)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;file saved&quot;</span>)</span><br><span class="line">            token2 = client.publish(self.topic + <span class="string">&quot;/ack2&quot;</span>, <span class="string">&quot;ACK&quot;</span>, qos=<span class="number">1</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;ack2 send&#x27;</span>)</span><br><span class="line">    <span class="comment"># 主程序段</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">Main</span>(<span class="params">self</span>):</span><br><span class="line">        client = self.connect_mqtt()</span><br><span class="line">        self.client.on_message = self.on_message</span><br><span class="line">        info_topic = self.topic + <span class="string">&quot;/info&quot;</span></span><br><span class="line">        data_topic1 = self.topic + <span class="string">&quot;/data/png&quot;</span></span><br><span class="line">        data_topic2 = self.topic + <span class="string">&quot;/data/txt&quot;</span></span><br><span class="line">        client.subscribe([(info_topic, <span class="number">2</span>), (data_topic1, <span class="number">2</span>), (data_topic2, <span class="number">2</span>)])</span><br><span class="line">        self.client.loop_forever()  <span class="comment"># 保持连接</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    sub = Local_Sub()</span><br><span class="line">    sub.Main()</span><br></pre></td></tr></table></figure>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/astronauting-rbr.top/2023/03/03/csharp1/" data-toggle="tooltip" data-placement="top" title="C#学习笔记（1）">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/astronauting-rbr.top/2023/02/28/mqtt1/" data-toggle="tooltip" data-placement="top" title="基于python与mqtt的传输代码及其文件传输应用（上）">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/astronauting-rbr.top/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/astronauting-rbr.top/tags/#网络通信" title="网络通信">网络通信</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#python" title="python">python</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/astronauting-rbr.top/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/astronauting-rbr.top/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/astronauting-rbr.top/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

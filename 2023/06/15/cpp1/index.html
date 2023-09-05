@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/astronauting-rbr.top/img/favicon.ico">
+
+    <title>
+        
+          c++上手记录 - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/astronauting-rbr.top/2023/06/15/cpp1/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/astronauting-rbr.top/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/astronauting-rbr.top/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/astronauting-rbr.top/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#编程基础" title="编程基础">编程基础</a>
+                        
+                    </div>
+                    <h1>c++上手记录</h1>
+                    <h2 class="subheading">快学快用式的学习，主要目的在于快速上手应用，深入学习放在之后进行</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-06-15
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近项目上屡屡碰到需要使用c++的地方，并且随着各种方面开发的进行觉得实在应该扎扎实实的学习一门语言吃饭，无奈时间实在不太够用，于是先从上手的角度对c++进行了初步学习，起码达到能看懂程序的阶段。然后根据需求写了关于opencv的几个函数，并且尝试了多线程的处理，效果是很理想的，多线程的方式简直就是解决卡顿最大的利器。刚刚开始入门，很多语句还看不太懂，先把我应用实现的一些小功能做个记录，方便以后回看。</p>
+<h2 id="多线程上手记录"><a href="#多线程上手记录" class="headerlink" title="多线程上手记录"></a>多线程上手记录</h2><p>快速上手就是啥不懂看啥，先要了解 c++ 是什么东西，官方来说C++ 是一种静态类型的、编译式的、通用的、大小写敏感的、不规则的编程语言，支持过程化编程、面向对象编程和泛型编程。但是对于我目前了解的，就是c++必须经过编译才可以执行（以linux端为例讲的，win端可能有所不同，还没去研究）。像我是从python开始上手编程的，就很不理解为什么不可以直接执行，要编译以后才可以执行。于是我专门去搜了搜，了解到python其实也是需要编译的，只是它把这一过程内置成解释器了，你在执行的过程中每一句其实都要经过翻译再执行，而c++或c则是编译好再执行，这也是python速度慢最大的原因。至于过程化编程和泛型编程我不太懂，等到以后掌握的更加深入后再去体会，面向对象编程则是c++的一个很大的特点，我也只有一个朦胧的概念。</p>
+<p>面向对象是和面向过程相区分的，像c就是面向过程，c++则是面向对象。面向对象关注的是对象，这个对象能做什么，有什么样的属性；而面向过程关注的是过程，这个过程内有什么流程，应该有什么顺序。<strong>这是我理解的区分，面向过程把一件事分成每个步骤来进行处理，面向对象则把一件事涉及到的各个角色赋予功能，让他们去共同执行。</strong>具体体会可以去搜搜网上的很多例子，在此就不做赘述。还有c++编译器等的安装，不同平台的安装办法，这些都是程序性的东西，不需要进行记录。</p>
+<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><p>python中模块的导入是import，在c++中，模块变成了头文件，import也变成了 #include&lt;&gt;。在导入头文件后一般需要定义命名空间，这是c++的一个比较独特的概念，我目前还没有了解学习，刚开始就按别人的程序导入了什么文件定义什么空间就好。<br>单行注释是 //，多行注释则是 /<em> 开头，</em>/ 结尾 。另外c++中每个语句都需要以分号做结尾，c++不以行末作为结束符的标识，因此可以在一行上用分号断开放置多个语句。空格标识符等要求同其它语言相差不大，遇到时再查找即可。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// main() 是程序开始执行的地方</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;Hello World&quot;</span>; <span class="comment">// 输出 Hello World</span></span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上为一段简单的c++程序，根据刚才的讲述，可能只会对主程序中的第一句产生疑问。这种样子的语句在c++程序中会经常使用到，称为输入输出运算符。输入输出是数据传送的过程，c++中将此过程形象的称为流，在输入操作时，字节流从输入设备流向内存；在输出操作时，字节流从内存流向输出设备。<strong>流中的内容可以是ASCII码值、二进制形式数据、数字音频视频、图形图像或者其他形式的信息。</strong></p>
+<p>在c++中，输入输出流被定义为类，c++的I/O库中的类为流类，用流类定义的对象称为流对象。</p>
+<p>标准输入设备与输入：<br>   cin 是标准输入设备（相当于键盘），连续从键盘读取数据，”&gt;&gt;”为提取运算符。<br>   输入的使用：cin &gt;&gt; 变量  （cin在输入字符串时，空格作为结束符）</p>
+<p>标准输出设备与输出：<br>   cout 是标准输出设备（相当于屏幕）,”&lt;&lt;”为插入运算符。<br>   输出的使用：cout &lt;&lt; 输出项 &lt;&lt; endl  (endl 相当于换行符”\n”)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> a;</span><br><span class="line">    <span class="type">char</span> ch;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;请输入一个常数&quot;</span> &lt;&lt; endl;</span><br><span class="line">    cin &gt;&gt; a;</span><br><span class="line"> </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;请输入一个字母&quot;</span> &lt;&lt; endl;</span><br><span class="line">    cin &gt;&gt; ch;</span><br><span class="line"> </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;常数为&quot;</span> &lt;&lt; a &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;字母为&quot;</span> &lt;&lt; ch &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://pic.imgdb.cn/item/648ab45b1ddac507cc2e618d.jpg" alt="1"></p>
+<p>以上流传输的原理是在内存中为每个数据流开辟一个内存缓冲区，用来存放流中的数据。当用cin和&gt;&gt;输入数据时，从键盘获取的数据先放入键盘的缓冲区中，按回车键，键盘缓冲区数据输入到程序中输入缓冲区，形成cin流，然后用提取符”&gt;&gt;”从输入缓冲区中提取数据给程序中相关变量。</p>
+<p>在输出时，先将数据放入程序中的输出缓冲区保存，缓冲区满了或遇到endl时，将缓冲区中的数据传到显示器显示出来。</p>
+<p>ios是抽象基类，派生出istream类和ostream类，”i”和”o”分别代表输入和输出，由istream类和ostream类经过多重继承派生出的类为iostream类，支持输入输出操作，iostream类库中包含许多用于输入输出的类。因此，一般iostream类是必要的导入类。</p>
+<h3 id="常用结构"><a href="#常用结构" class="headerlink" title="常用结构"></a>常用结构</h3><p>掌握了基本的语法结构以后，还需要对常用的一些逻辑结构有所掌握，循环、判断是上手阶段必须学会用的，其它功能可以暂且放一放。另外，有很多内容是没有涉及的，比如数据类型、变量类型、常量等等，这些内容无论哪个都值得深入研究，不适合在快速上手的阶段去了解，现在凭着一些基础的常识足以应付。</p>
+<p>循环结构主要是while循环和for循环，和其它程序差不太多。判断语句主要是if&amp;else语句以及switch，由于我上手阶段只用到常用的if和for循环，因此不作对比。</p>
+<h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p>多线程涉及上属于c++更高级的一部分概念，只是因为现在需要立马用才会进行学习，因此可能一些点讲的不是很透彻，只针对多线程本身作相对深入的讲解。传统的c++并没有引入线程概念，从c++11标准以后才有了头文件thread，提供了语言层面上的多线程，因此在操作前请先确定c++版本。</p>
+<p>同一进程内的多个线程能够很方便的进行数据共享以及通信，也就比进程更适用于并发操作。但需要注意由于缺少操作系统提供的保护机制，<strong>在多线程共享数据及通信时，就需要程序员做更多的工作以保证对共享数据段的操作是以预想的操作顺序进行的，并且要极力的避免死锁。</strong></p>
+<p>在我的需求中，我目前通过opencv循环的方式显示摄像头画面，并且一旦识别到工件会对继电器发出信号控制吹气阀门通断。在之前的程序中这一部分就比较耗时，现在新的需求需要延时控制通断，如果直接在循环中进行处理会导致画面非常卡顿，甚至可能会由于重复发送语句引起阻塞。因此我需要通过分支线程来解决这个问题，控制分支线程进行延时，在主程序中只需要启动分支线程即可。</p>
+<ol>
+<li><p>线程初步</p>
+<p>在头文件中引入线程文件后就可以开始对线程进行操作：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>先定义一个函数void thread_1()，之后线程开启将执行所定义的函数。（需要注意分支线程一般都是用于处理主程序中有延迟的部分）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">thread_1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="built_in">sleep</span>(<span class="number">10</span>);</span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;测试&quot;</span> &lt;&lt; endl;</span><br><span class="line">   <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着要在主线程中加入创建线程的语句，加入之前先对其三种形式进行了解：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//形式1</span></span><br><span class="line"><span class="function">std::thread <span class="title">myThread</span> <span class="params">( thread_1)</span></span>;</span><br><span class="line">myThread.<span class="built_in">join</span>();</span><br><span class="line"><span class="comment">//形式2</span></span><br><span class="line"><span class="function">std::thread <span class="title">myThread</span> <span class="params">( thread_1(<span class="number">100</span>))</span></span>;<span class="comment">//带参数的形式</span></span><br><span class="line">myThread.<span class="built_in">join</span>();</span><br><span class="line"><span class="comment">//形式3</span></span><br><span class="line">std::<span class="built_in">thread</span> (thread_1,<span class="number">1</span>).<span class="built_in">join</span>();<span class="comment">//直接创建线程，没有名字</span></span><br></pre></td></tr></table></figure>
+<p>如果需要带参数记得在定义函数的部分就设定好它的参数，我前面的例子中括号内是空的，没有定义变量。</p>
+<p>由上述三个形式中可以看出，第一个语句是启动对应线程的语句，那么紧接着的myThread.join()是什么意思？这是要确定你启动后接下来该怎么办，有两种方式：join和detach。detach方式下，启动的线程自主在后台运行，当前的代码继续往下执行，不等待新线程结束。join方式，等待启动的线程完成，主程序才会继续往下执行。</p>
+<p>因此，我肯定需要使用detach方式使得线程并发运行，于是在循环中加入如下语句：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::thread <span class="title">myThread</span> <span class="params">(thread_1)</span></span>;</span><br><span class="line">myThread.<span class="built_in">detach</span>();</span><br></pre></td></tr></table></figure>
+<p>这么一看，好像问题已经解决了。如果这样想，说明没有把思维放在循环的大背景下。循环在不断的以毫秒的速度反复进行，而分支线程一次执行需要延时几秒。在这段时间内循环已经反复调用了很多次分支线程，这样的结果就是引起未知的错误，可能会阻塞，也可能会崩溃。</p>
+</li>
+<li><p>互斥锁</p>
+<p>这个问题并不是无解的，只是需要引入一个新的概念——互斥锁。在其他语言中运用过线程的应该对这个概念并不算陌生，没接触过也不影响，这是一个很好理解的概念。例如线程1要工作，我就对我需要用到的变量加锁，锁上以后其他线程都不能调用，除非线程1工作结束后进行解锁，这样变量就又回到了大家都可以调用的状态。</p>
+<p>每个线程在对资源操作前都尝试先加锁，成功加锁才能操作，操作结束解锁。通过“锁”就将资源的访问变成互斥操作，而后与时间有关的错误也不会再产生了。<strong>但是应注意：同一时刻，只能有一个线程持有该锁。</strong></p>
+<p>当A线程对某个全局变量加锁访问，B在访问前尝试加锁，拿不到锁，B阻塞。C线程不去加锁，而直接访问该全局变量，依然能够访问，但会出现数据混乱。也就是说C线程没有去问锁是不是锁住的状态就直接访问，这样可以访问，但是整个就乱套了。<strong>锁是统一的规则，每个线程都要遵守，如果没有遵守这个规则，混乱随之而生。</strong></p>
+<p>引入锁需要导入mutex头文件,mutex头文件主要声明了与互斥量(mutex)相关的类。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line">std::mutex mtx; <span class="comment">//声明一个互斥量mtx</span></span><br></pre></td></tr></table></figure>
+<p>在我的需求中，我目前没有需要共同操作的变量，因此我定义了一个互斥变量mtx，打算分支线程运行时就锁上，主线程每次循环需要看互斥锁锁上没有，如果锁上就不调用分支线程，没锁上就去调用。还需要注意一个重要原则，<strong>锁住的代码要尽量的少。</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//循环中添加的部分</span></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">mtx_trylock</span>() == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">   <span class="function">std::thread <span class="title">myThread</span> <span class="params">(thread_1)</span></span>;</span><br><span class="line">   myThread.<span class="built_in">detach</span>();</span><br><span class="line">   <span class="built_in">mtx_unlock</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;wait!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分支线程调用的函数修改如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">thread_1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="built_in">mtx_lock</span>();</span><br><span class="line">   <span class="built_in">sleep</span>(<span class="number">10</span>);</span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;测试&quot;</span> &lt;&lt; endl;</span><br><span class="line">   <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">   <span class="built_in">mtx_unlock</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行效果十分理想，这里主要使用了三个常用操作函数：</p>
+<ul>
+<li>lock()：资源上锁</li>
+<li>unlock()：解锁资源</li>
+<li>trylock()：尝试上锁，如果已经锁住的状态会返回错误号，没有锁定则返回0表示加锁成功，因此后面需要解锁。</li>
+</ul>
+</li>
+</ol>
+<p>至此，多线程的基本运用实现。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>事实上，在初次看到c++程序的时候头很大，感觉一个字都看不懂，但是随着慢慢的了解，一个程序中复用的结构语句、运算符是很多的。只要掌握这些基础概念，读懂程序并不算太难。上手的最好办法就是解决问题，有目的去学习还是要快很多。但这样容易造成基础不牢的场景，此后还需要深入全面的对c++进行学习。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/astronauting-rbr.top/2023/06/12/calibrate/" data-toggle="tooltip" data-placement="top" title="手眼标定学习记录">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/astronauting-rbr.top/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/astronauting-rbr.top/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#编程基础" title="编程基础">编程基础</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/astronauting-rbr.top/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/astronauting-rbr.top/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/astronauting-rbr.top/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/astronauting-rbr.top/img/favicon.ico">
+
+    <title>
+        
+          基于yolov5及香橙派5的视觉识别项目记录 - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/astronauting-rbr.top/2023/06/07/record-orangepi/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/astronauting-rbr.top/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/astronauting-rbr.top/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/astronauting-rbr.top/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#yolo" title="yolo">yolo</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#linux" title="linux">linux</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#香橙派" title="香橙派">香橙派</a>
+                        
+                    </div>
+                    <h1>基于yolov5及香橙派5的视觉识别项目记录</h1>
+                    <h2 class="subheading">本篇重点在于总结项目进展与调错记录，主要记录部署过程以及基于rk3588的NPU加速实现。</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-06-07
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近两周一来一直在做视觉识别圆环工件的项目，深度学习训练以及识别实现并不是重点，重点在于如何不卡顿的在香橙派5开发板上实现。过程中走了许多弯路，并且经过试错找到了合适的解决方案，在此处把加速的方案进行记录。</p>
+<h2 id="过程记录"><a href="#过程记录" class="headerlink" title="过程记录"></a>过程记录</h2><p>模型训练的过程不作说明，从得到.pt模型文件开始进行记录，项目使用的瑞芯微RK3588是一款搭载了NPU的国产开发板，NPU是为了嵌入式神经网络和边缘计算量身定制的，但若想调用RK3588的NPU单元进行推理加速，则需要首先将模型转换为.rknn格式的模型，否则无法使用。</p>
+<p>首先官方的<a target="_blank" rel="noopener" href="https://github.com/rockchip-linux">github仓库</a>下有三个需要用的项目，分别是rknn-toolkit 、rknn-toolkit2以及rknpu2，这三个项目最好现在电脑中保存下来以便后续进行处理。</p>
+<ul>
+<li><p>win端步骤：</p>
+<p>  先使用anaconda创建一个rknn虚拟环境，配成3.6的python环境，再通过pip指令进行依赖包安装，安装时可以切到rknn-toolkit2-master\rknn-toolkit2-master\doc目录下运行如下指令实现大量安装，速度过慢记得换源。</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements_cp36-<span class="number">1</span>.<span class="number">5</span>.<span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>  要从yolov5的工程目录中运行export.py将pt模型转换成onnx模型，可以参考<a target="_blank" rel="noopener" href="https://github.com/rockchip-linux/rknn-toolkit/tree/master/examples/pytorch/yolov5">官方网址</a>中对后处理部分进行修改，注意只参考修改的部分即可，其它部分并不适用于win端操作。然后将权重.pt文件复制到export.py的同一级目录下，在虚拟环境中运行指令：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python export.py --weights best.pt --img <span class="number">640</span> --batch <span class="number">1</span> --include onnx</span><br></pre></td></tr></table></figure>
+<p>  不同版本的yolo中export的参数指令可能有所不同，有报错的话打开改文件进行查看，修改上述指令的先后顺序。<br>  比如在我的export.py中就没有include参数：</p>
+<p>  <img src="https://pic.imgdb.cn/item/648039701ddac507ccbbf856.jpg" alt="1"></p>
+<p>  然后从yolo官网重新下载了一个源码，在这个目录里面找到export.py（如下所示），里面就有include参数，之后模型便可以顺利导出了。</p>
+<p>  <img src="https://pic.imgdb.cn/item/6480385d1ddac507ccb9c4d2.jpg" alt="2"></p>
+<p>  成功导出onnx模型后将模型及三个项目源码包放在U盘里面进行下一步操作。</p>
+</li>
+<li><p>linux端步骤：</p>
+<p>  进入linux系统中，虚拟机或者双系统都无所谓，我使用的是Ubuntu20.04的系统，并且也安装了anaconda（因为本身使用的是python3.10），新建一个3.8的虚拟环境，进入knn-toolkit2源码doc目录中，输入命令：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements_cp38-<span class="number">1</span>.<span class="number">4</span>.<span class="number">0</span>.txt -i https://mirror.baidu.com/pypi/simple</span><br></pre></td></tr></table></figure>
+<p>  命令可能随着版本更新有细微差别，具体以文件夹中文件名字为准，一定要带上镜像源，不然会报错。<br>  环境装好以后进入package文件夹，输入以下命令：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install rknn_toolkit2-<span class="number">1</span>.<span class="number">4</span>.<span class="number">0</span>_22dcfef4-cp38-cp38-linux_x86_64.whl</span><br></pre></td></tr></table></figure>
+<p>  一般情况下只要环境没问题不会出错，先输入python进入python环境，再输入以下命令，如果没有报错证明环境搭建完成。</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rknn.api <span class="keyword">import</span> RKNN</span><br></pre></td></tr></table></figure>
+<p>  接下来进入进入example/onnx/yolov5文件夹下，找到我们的test.py文件，修改地址、类别、npu型号，如果后续出现多框重叠的情况还可以修改锚点信息、后处理参数。（以下截图为别的案例截图，不是本项目内容，可以自行修改）</p>
+<p>  <img src="https://pic.imgdb.cn/item/64803d0f1ddac507ccc238f3.jpg" alt="1"></p>
+<p>  <img src="https://pic.imgdb.cn/item/64803cfa1ddac507ccc218ed.jpg" alt="2"></p>
+<p>  <img src="https://pic.imgdb.cn/item/64803d251ddac507ccc262a0.jpg" alt="3"></p>
+<p>  之后在examples/onnx/yolov5目录下运行命令：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python test.py</span><br></pre></td></tr></table></figure>
+<p>  之后，程序正确运行，目录中有了rknn文件，此阶段的任务完成。</p>
+<p>  <img src="https://pic.imgdb.cn/item/64803e331ddac507ccc40efd.jpg" alt="4"></p>
+</li>
+<li><p>开发板步骤：</p>
+<p>  理论上来说，是可以通过tookit2中的源码文件在板子上实现python程序运行识别的，但是这个由于参考案例太少一直没能实现。从官方的角度来讲，tookit1和2都是将板子接到电脑上来进行调试的，专门用于板子上的还是rknpu2源码，也许之后随着开发的深入能弥补上单板运行的空缺。将rknpu2源码以及得到的rknn模型放到板子上，进入yolov5模型转换目录（注意路径自行修改）：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ptay/rknpu2-master/examples/rknn_yolov5_demo</span><br></pre></td></tr></table></figure>
+<p>  修改include文件中的头文件postprocess.h：</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> OBJ_CLASS_NUM     2  #这里的数字修改为数据集的类的个数</span></span><br></pre></td></tr></table></figure>
+<p>  修改model目录下的coco_80_labels_list.txt文件，改为自己的类并保存:</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">red_jeep</span><br><span class="line">missile_vehicle</span><br></pre></td></tr></table></figure>
+<p>  将转换后的rknn文件放在model/RK3588目录下,然后在demo文件下进行编译：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash ./build-linux_RK3588.sh</span><br></pre></td></tr></table></figure>
+<p>  成功后生成install目录</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> install/rknn_yolov5_demo_linux</span><br></pre></td></tr></table></figure>
+<p>  在model目录下放入需要推理的图片，运行</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./rknn_yolov5_demo ./model/RK3588/best.rknn ./model/test.jpg</span><br></pre></td></tr></table></figure>
+<p>  由此，便实现了通过rknn模型的推理检测，但这只是单张图片的检测，如果要使用视频实时检测则需要对demo下的src目录中的源码main.cc文件进行修改，调用opencv及循环进行实时显示。需要注意的是，要在板子里配好opencv的c++环境，之后修改CMakelist中的内容才可以正常编译。opencv越新越好，老版本会遇到很多报错，编译具体过程参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44659434/article/details/124129174?spm=1001.2014.3001.5506">此处</a>。修改后的main文件和CMakelist内容如下所示，主要修改的部分是和opencv有关的内容，另外在循环中添加了调用gpio进行控制继电器的语句，可选择性增删。<br>  main.cc:</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Copyright (c) 2021 by Rockchip Electronics Co., Ltd. All Rights Reserved.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></span><br><span class="line"><span class="comment">// you may not use this file except in compliance with the License.</span></span><br><span class="line"><span class="comment">// You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//     http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment">// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></span><br><span class="line"><span class="comment">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment">// See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment">// limitations under the License.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*-------------------------------------------</span></span><br><span class="line"><span class="comment">                Includes</span></span><br><span class="line"><span class="comment">-------------------------------------------*/</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc/imgproc.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _BASETSD_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;RgaUtils.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;im2d.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/core/core.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/video.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/imgcodecs.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/highgui.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;postprocess.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;rga.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;rknn_api.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PERF_WITH_POST 1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="comment">/*-------------------------------------------</span></span><br><span class="line"><span class="comment">                Functions</span></span><br><span class="line"><span class="comment">-------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">dump_tensor_attr</span><span class="params">(rknn_tensor_attr* attr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">std::string shape_str = attr-&gt;n_dims &lt; <span class="number">1</span> ? <span class="string">&quot;&quot;</span> : std::<span class="built_in">to_string</span>(attr-&gt;dims[<span class="number">0</span>]);</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; attr-&gt;n_dims; ++i) &#123;</span><br><span class="line">    shape_str += <span class="string">&quot;, &quot;</span> + std::<span class="built_in">to_string</span>(attr-&gt;dims[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;  index=%d, name=%s, n_dims=%d, dims=[%s], n_elems=%d, size=%d, w_stride = %d, size_with_stride=%d, fmt=%s, &quot;</span></span><br><span class="line">        <span class="string">&quot;type=%s, qnt_type=%s, &quot;</span></span><br><span class="line">        <span class="string">&quot;zp=%d, scale=%f\n&quot;</span>,</span><br><span class="line">        attr-&gt;index, attr-&gt;name, attr-&gt;n_dims, shape_str.<span class="built_in">c_str</span>(), attr-&gt;n_elems, attr-&gt;size, attr-&gt;w_stride,</span><br><span class="line">        attr-&gt;size_with_stride, <span class="built_in">get_format_string</span>(attr-&gt;fmt), <span class="built_in">get_type_string</span>(attr-&gt;type),</span><br><span class="line">        <span class="built_in">get_qnt_type_string</span>(attr-&gt;qnt_type), attr-&gt;zp, attr-&gt;scale);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">double</span> __get_us(<span class="keyword">struct</span> timeval t) &#123; <span class="keyword">return</span> (t.tv_sec * <span class="number">1000000</span> + t.tv_usec); &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">unsigned</span> <span class="type">char</span>* <span class="title">load_data</span><span class="params">(FILE* fp, <span class="type">size_t</span> ofst, <span class="type">size_t</span> sz)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>* data;</span><br><span class="line"><span class="type">int</span>            ret;</span><br><span class="line"></span><br><span class="line">data = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="literal">NULL</span> == fp) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ret = <span class="built_in">fseek</span>(fp, ofst, SEEK_SET);</span><br><span class="line"><span class="keyword">if</span> (ret != <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;blob seek failure.\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = (<span class="type">unsigned</span> <span class="type">char</span>*)<span class="built_in">malloc</span>(sz);</span><br><span class="line"><span class="keyword">if</span> (data == <span class="literal">NULL</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;buffer malloc failure.\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line">ret = <span class="built_in">fread</span>(data, <span class="number">1</span>, sz, fp);</span><br><span class="line"><span class="keyword">return</span> data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">unsigned</span> <span class="type">char</span>* <span class="title">load_model</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* filename, <span class="type">int</span>* model_size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">FILE*          fp;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>* data;</span><br><span class="line"></span><br><span class="line">fp = <span class="built_in">fopen</span>(filename, <span class="string">&quot;rb&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="literal">NULL</span> == fp) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Open file %s failed.\n&quot;</span>, filename);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">fseek</span>(fp, <span class="number">0</span>, SEEK_END);</span><br><span class="line"><span class="type">int</span> size = <span class="built_in">ftell</span>(fp);</span><br><span class="line"></span><br><span class="line">data = <span class="built_in">load_data</span>(fp, <span class="number">0</span>, size);</span><br><span class="line"></span><br><span class="line"><span class="built_in">fclose</span>(fp);</span><br><span class="line"></span><br><span class="line">*model_size = size;</span><br><span class="line"><span class="keyword">return</span> data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">saveFloat</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* file_name, <span class="type">float</span>* output, <span class="type">int</span> element_size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">FILE* fp;</span><br><span class="line">fp = <span class="built_in">fopen</span>(file_name, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; element_size; i++) &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(fp, <span class="string">&quot;%.6f\n&quot;</span>, output[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">fclose</span>(fp);</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*-------------------------------------------</span></span><br><span class="line"><span class="comment">                Main Functions</span></span><br><span class="line"><span class="comment">-------------------------------------------*/</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="type">int</span>            status     = <span class="number">0</span>;</span><br><span class="line"><span class="type">char</span>*          model_name = <span class="literal">NULL</span>;</span><br><span class="line">rknn_context   ctx;</span><br><span class="line"><span class="type">size_t</span>         actual_size        = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span>            img_width          = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span>            img_height         = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span>            img_channel        = <span class="number">0</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">float</span>    nms_threshold      = NMS_THRESH;</span><br><span class="line"><span class="type">const</span> <span class="type">float</span>    box_conf_threshold = BOX_THRESH;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">timeval</span> start_time, stop_time;</span><br><span class="line"><span class="type">int</span>            ret;</span><br><span class="line"></span><br><span class="line"><span class="comment">// init rga context</span></span><br><span class="line"><span class="type">rga_buffer_t</span> src;</span><br><span class="line"><span class="type">rga_buffer_t</span> dst;</span><br><span class="line">im_rect      src_rect;</span><br><span class="line">im_rect      dst_rect;</span><br><span class="line"><span class="built_in">memset</span>(&amp;src_rect, <span class="number">0</span>, <span class="built_in">sizeof</span>(src_rect));</span><br><span class="line"><span class="built_in">memset</span>(&amp;dst_rect, <span class="number">0</span>, <span class="built_in">sizeof</span>(dst_rect));</span><br><span class="line"><span class="built_in">memset</span>(&amp;src, <span class="number">0</span>, <span class="built_in">sizeof</span>(src));</span><br><span class="line"><span class="built_in">memset</span>(&amp;dst, <span class="number">0</span>, <span class="built_in">sizeof</span>(dst));</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (argc != <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Usage: %s &lt;rknn model&gt; \n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;post process config: box_conf_threshold = %.2f, nms_threshold = %.2f\n&quot;</span>, box_conf_threshold, nms_threshold);</span><br><span class="line"></span><br><span class="line">model_name       = (<span class="type">char</span>*)argv[<span class="number">1</span>];</span><br><span class="line"><span class="comment">//~ char* image_name = argv[2];</span></span><br><span class="line"><span class="comment">/* Create the neural network */</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Loading mode...\n&quot;</span>);</span><br><span class="line"><span class="type">int</span>            model_data_size = <span class="number">0</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>* model_data      = <span class="built_in">load_model</span>(model_name, &amp;model_data_size);</span><br><span class="line">ret                            = <span class="built_in">rknn_init</span>(&amp;ctx, model_data, model_data_size, <span class="number">0</span>, <span class="literal">NULL</span>);</span><br><span class="line"><span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;rknn_init error ret=%d\n&quot;</span>, ret);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rknn_sdk_version version;</span><br><span class="line">ret = <span class="built_in">rknn_query</span>(ctx, RKNN_QUERY_SDK_VERSION, &amp;version, <span class="built_in">sizeof</span>(rknn_sdk_version));</span><br><span class="line"><span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;rknn_init error ret=%d\n&quot;</span>, ret);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;sdk version: %s driver version: %s\n&quot;</span>, version.api_version, version.drv_version);</span><br><span class="line"></span><br><span class="line">rknn_input_output_num io_num;</span><br><span class="line">ret = <span class="built_in">rknn_query</span>(ctx, RKNN_QUERY_IN_OUT_NUM, &amp;io_num, <span class="built_in">sizeof</span>(io_num));</span><br><span class="line"><span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;rknn_init error ret=%d\n&quot;</span>, ret);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;model input num: %d, output num: %d\n&quot;</span>, io_num.n_input, io_num.n_output);</span><br><span class="line"></span><br><span class="line">rknn_tensor_attr input_attrs[io_num.n_input];</span><br><span class="line"><span class="built_in">memset</span>(input_attrs, <span class="number">0</span>, <span class="built_in">sizeof</span>(input_attrs));</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; io_num.n_input; i++) &#123;</span><br><span class="line">    input_attrs[i].index = i;</span><br><span class="line">    ret                  = <span class="built_in">rknn_query</span>(ctx, RKNN_QUERY_INPUT_ATTR, &amp;(input_attrs[i]), <span class="built_in">sizeof</span>(rknn_tensor_attr));</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;rknn_init error ret=%d\n&quot;</span>, ret);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">dump_tensor_attr</span>(&amp;(input_attrs[i]));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rknn_tensor_attr output_attrs[io_num.n_output];</span><br><span class="line"><span class="built_in">memset</span>(output_attrs, <span class="number">0</span>, <span class="built_in">sizeof</span>(output_attrs));</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; io_num.n_output; i++) &#123;</span><br><span class="line">    output_attrs[i].index = i;</span><br><span class="line">    ret                   = <span class="built_in">rknn_query</span>(ctx, RKNN_QUERY_OUTPUT_ATTR, &amp;(output_attrs[i]), <span class="built_in">sizeof</span>(rknn_tensor_attr));</span><br><span class="line">    <span class="built_in">dump_tensor_attr</span>(&amp;(output_attrs[i]));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> channel = <span class="number">3</span>;</span><br><span class="line"><span class="type">int</span> width   = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> height  = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">if</span> (input_attrs[<span class="number">0</span>].fmt == RKNN_TENSOR_NCHW) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;model is NCHW input fmt\n&quot;</span>);</span><br><span class="line">    channel = input_attrs[<span class="number">0</span>].dims[<span class="number">1</span>];</span><br><span class="line">    height  = input_attrs[<span class="number">0</span>].dims[<span class="number">2</span>];</span><br><span class="line">    width   = input_attrs[<span class="number">0</span>].dims[<span class="number">3</span>];</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;model is NHWC input fmt\n&quot;</span>);</span><br><span class="line">    height  = input_attrs[<span class="number">0</span>].dims[<span class="number">1</span>];</span><br><span class="line">    width   = input_attrs[<span class="number">0</span>].dims[<span class="number">2</span>];</span><br><span class="line">    channel = input_attrs[<span class="number">0</span>].dims[<span class="number">3</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;model input height=%d, width=%d, channel=%d\n&quot;</span>, height, width, channel);</span><br><span class="line"></span><br><span class="line">rknn_input inputs[<span class="number">1</span>];</span><br><span class="line"><span class="built_in">memset</span>(inputs, <span class="number">0</span>, <span class="built_in">sizeof</span>(inputs));</span><br><span class="line">inputs[<span class="number">0</span>].index        = <span class="number">0</span>;</span><br><span class="line">inputs[<span class="number">0</span>].type         = RKNN_TENSOR_UINT8;</span><br><span class="line">inputs[<span class="number">0</span>].size         = width * height * channel;</span><br><span class="line">inputs[<span class="number">0</span>].fmt          = RKNN_TENSOR_NHWC;</span><br><span class="line">inputs[<span class="number">0</span>].pass_through = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//~ printf(&quot;Read %s ...\n&quot;, image_name);</span></span><br><span class="line">cv::Mat orig_img;</span><br><span class="line"><span class="function">cv::VideoCapture <span class="title">cap</span><span class="params">(<span class="number">0</span>)</span></span>;</span><br><span class="line">cap.<span class="built_in">set</span>(CAP_PROP_FRAME_WIDTH, <span class="number">640</span>);</span><br><span class="line">cap.<span class="built_in">set</span>(CAP_PROP_FRAME_HEIGHT, <span class="number">480</span>);</span><br><span class="line">cap.<span class="built_in">set</span>(CAP_PROP_FPS, <span class="number">30</span>);</span><br><span class="line"><span class="built_in">system</span>(<span class="string">&quot;sudo gpio mode 3 output&quot;</span>);</span><br><span class="line"><span class="built_in">system</span>(<span class="string">&quot;orangepi&quot;</span>);</span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    <span class="comment">//~ count start</span></span><br><span class="line">    <span class="keyword">auto</span> start = std::chrono::high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    cap &gt;&gt; orig_img;</span><br><span class="line">            <span class="comment">//~ show end</span></span><br><span class="line">    <span class="keyword">auto</span> end = std::chrono::high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    std::chrono::duration&lt;<span class="type">double</span>&gt; elapsed = end - start;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;total time:&quot;</span> &lt;&lt; elapsed.<span class="built_in">count</span>() &lt;&lt; <span class="string">&quot;second&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="comment">//~ cv::Mat orig_img = cv::imread(frame, 1);</span></span><br><span class="line">    <span class="keyword">if</span> (!orig_img.data) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;cv::imread %s fail!\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cv::Mat img;</span><br><span class="line">    cv::<span class="built_in">cvtColor</span>(orig_img, img, cv::COLOR_BGR2RGB);</span><br><span class="line">    img_width  = img.cols;</span><br><span class="line">    img_height = img.rows;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;img width = %d, img height = %d\n&quot;</span>, img_width, img_height);</span><br><span class="line">    <span class="comment">// You may not need resize when src resulotion equals to dst resulotion</span></span><br><span class="line">    <span class="type">void</span>* resize_buf = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="keyword">if</span> (img_width != width || img_height != height) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;resize with RGA!\n&quot;</span>);</span><br><span class="line">        resize_buf = <span class="built_in">malloc</span>(height * width * channel);</span><br><span class="line">        <span class="built_in">memset</span>(resize_buf, <span class="number">0x00</span>, height * width * channel);</span><br><span class="line"></span><br><span class="line">        src = <span class="built_in">wrapbuffer_virtualaddr</span>((<span class="type">void</span>*)img.data, img_width, img_height, RK_FORMAT_RGB_888);</span><br><span class="line">        dst = <span class="built_in">wrapbuffer_virtualaddr</span>((<span class="type">void</span>*)resize_buf, width, height, RK_FORMAT_RGB_888);</span><br><span class="line">        ret = <span class="built_in">imcheck</span>(src, dst, src_rect, dst_rect);</span><br><span class="line">        <span class="keyword">if</span> (IM_STATUS_NOERROR != ret) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d, check error! %s&quot;</span>, __LINE__, <span class="built_in">imStrError</span>((IM_STATUS)ret));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        IM_STATUS STATUS = <span class="built_in">imresize</span>(src, dst);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// for debug</span></span><br><span class="line">        <span class="function">cv::Mat <span class="title">resize_img</span><span class="params">(cv::Size(width, height), CV_8UC3, resize_buf)</span></span>;</span><br><span class="line">        <span class="comment">//~ imshow(&quot;resize_input.jpg&quot;, resize_img);</span></span><br><span class="line"></span><br><span class="line">        inputs[<span class="number">0</span>].buf = resize_buf;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        inputs[<span class="number">0</span>].buf = (<span class="type">void</span>*)img.data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">gettimeofday</span>(&amp;start_time, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">rknn_inputs_set</span>(ctx, io_num.n_input, inputs);</span><br><span class="line"></span><br><span class="line">    rknn_output outputs[io_num.n_output];</span><br><span class="line">    <span class="built_in">memset</span>(outputs, <span class="number">0</span>, <span class="built_in">sizeof</span>(outputs));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; io_num.n_output; i++) &#123;</span><br><span class="line">        outputs[i].want_float = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ret = <span class="built_in">rknn_run</span>(ctx, <span class="literal">NULL</span>);</span><br><span class="line">    ret = <span class="built_in">rknn_outputs_get</span>(ctx, io_num.n_output, outputs, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">gettimeofday</span>(&amp;stop_time, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;once run use %f ms\n&quot;</span>, (__get_us(stop_time) - __get_us(start_time)) / <span class="number">1000</span>);</span><br><span class="line">    <span class="comment">// post process</span></span><br><span class="line">    <span class="type">float</span> scale_w = (<span class="type">float</span>)width / img_width;</span><br><span class="line">    <span class="type">float</span> scale_h = (<span class="type">float</span>)height / img_height;</span><br><span class="line"></span><br><span class="line">    <span class="type">detect_result_group_t</span> detect_result_group;</span><br><span class="line">    std::vector&lt;<span class="type">float</span>&gt;    out_scales;</span><br><span class="line">    std::vector&lt;<span class="type">int32_t</span>&gt;  out_zps;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; io_num.n_output; ++i) &#123;</span><br><span class="line">        out_scales.<span class="built_in">push_back</span>(output_attrs[i].scale);</span><br><span class="line">        out_zps.<span class="built_in">push_back</span>(output_attrs[i].zp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">post_process</span>((<span class="type">int8_t</span>*)outputs[<span class="number">0</span>].buf, (<span class="type">int8_t</span>*)outputs[<span class="number">1</span>].buf, (<span class="type">int8_t</span>*)outputs[<span class="number">2</span>].buf, height, width,</span><br><span class="line">                box_conf_threshold, nms_threshold, scale_w, scale_h, out_zps, out_scales, &amp;detect_result_group);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Draw Objects</span></span><br><span class="line">    <span class="type">char</span> text[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; detect_result_group.count; i++) &#123;</span><br><span class="line">        <span class="type">detect_result_t</span>* det_result = &amp;(detect_result_group.results[i]);</span><br><span class="line">        <span class="built_in">sprintf</span>(text, <span class="string">&quot;%s %.1f%%&quot;</span>, det_result-&gt;name, det_result-&gt;prop * <span class="number">100</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s @ (%d %d %d %d) %f\n&quot;</span>, det_result-&gt;name, det_result-&gt;box.left, det_result-&gt;box.top,</span><br><span class="line">            det_result-&gt;box.right, det_result-&gt;box.bottom, det_result-&gt;prop);</span><br><span class="line">        <span class="type">char</span> s = *det_result-&gt;name;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d here here!&quot;</span>,s);</span><br><span class="line">        <span class="keyword">if</span>(s == <span class="number">48</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;detect&quot;</span>);</span><br><span class="line">                <span class="built_in">system</span>(<span class="string">&quot;sudo gpio write 3 0&quot;</span>);</span><br><span class="line">                <span class="built_in">system</span>(<span class="string">&quot;sudo gpio write 3 1&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">if</span>(s == <span class="number">49</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">system</span>(<span class="string">&quot;sudo gpio write 3 1&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="type">int</span> x1 = det_result-&gt;box.left;</span><br><span class="line">        <span class="type">int</span> y1 = det_result-&gt;box.top;</span><br><span class="line">        <span class="type">int</span> x2 = det_result-&gt;box.right;</span><br><span class="line">        <span class="type">int</span> y2 = det_result-&gt;box.bottom;</span><br><span class="line">        <span class="built_in">rectangle</span>(orig_img, cv::<span class="built_in">Point</span>(x1, y1), cv::<span class="built_in">Point</span>(x2, y2), cv::<span class="built_in">Scalar</span>(<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">3</span>);</span><br><span class="line">        <span class="built_in">putText</span>(orig_img, text, cv::<span class="built_in">Point</span>(x1, y1 + <span class="number">12</span>), cv::FONT_HERSHEY_SIMPLEX, <span class="number">0.5</span>, cv::<span class="built_in">Scalar</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">imshow</span>(<span class="string">&quot;jpg&quot;</span>, orig_img);</span><br><span class="line">    <span class="built_in">waitKey</span>(<span class="number">27</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//~ ret = rknn_outputs_release(ctx, io_num.n_output, outputs);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//~ // loop test</span></span><br><span class="line"><span class="comment">//~ int test_count = 10;</span></span><br><span class="line"><span class="comment">//~ gettimeofday(&amp;start_time, NULL);</span></span><br><span class="line"><span class="comment">//~ for (int i = 0; i &lt; test_count; ++i) &#123;</span></span><br><span class="line">    <span class="comment">//~ rknn_inputs_set(ctx, io_num.n_input, inputs);</span></span><br><span class="line">    <span class="comment">//~ ret = rknn_run(ctx, NULL);</span></span><br><span class="line">    <span class="comment">//~ ret = rknn_outputs_get(ctx, io_num.n_output, outputs, NULL);</span></span><br><span class="line"><span class="comment">//~ #if PERF_WITH_POST</span></span><br><span class="line">    <span class="comment">//~ post_process((int8_t*)outputs[0].buf, (int8_t*)outputs[1].buf, (int8_t*)outputs[2].buf, height, width,</span></span><br><span class="line">                <span class="comment">//~ box_conf_threshold, nms_threshold, scale_w, scale_h, out_zps, out_scales, &amp;detect_result_group);</span></span><br><span class="line"><span class="comment">//~ #endif</span></span><br><span class="line">    <span class="comment">//~ ret = rknn_outputs_release(ctx, io_num.n_output, outputs);</span></span><br><span class="line"><span class="comment">//~ &#125;</span></span><br><span class="line"><span class="comment">//~ gettimeofday(&amp;stop_time, NULL);</span></span><br><span class="line"><span class="comment">//~ printf(&quot;loop count = %d , average run  %f ms\n&quot;, test_count,</span></span><br><span class="line">        <span class="comment">//~ (__get_us(stop_time) - __get_us(start_time)) / 1000.0 / test_count);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//~ deinitPostProcess();</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// release</span></span><br><span class="line"><span class="comment">//~ ret = rknn_destroy(ctx);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//~ if (model_data) &#123;</span></span><br><span class="line">    <span class="comment">//~ free(model_data);</span></span><br><span class="line"><span class="comment">//~ &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//~ if (resize_buf) &#123;</span></span><br><span class="line">    <span class="comment">//~ free(resize_buf);</span></span><br><span class="line"><span class="comment">//~ &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//~ return 0;</span></span><br><span class="line"><span class="comment">//~ &#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>  CMakelist:</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION <span class="number">3.4</span><span class="number">.1</span>)</span><br><span class="line"></span><br><span class="line">project(rknn_yolov5_demo)</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)</span><br><span class="line"><span class="built_in">set</span>(CMAKE_CXX_STANDARD_REQUIRED ON)</span><br><span class="line"></span><br><span class="line"><span class="meta"># skip 3rd-party lib dependencies</span></span><br><span class="line"><span class="built_in">set</span>(CMAKE_EXE_LINKER_FLAGS <span class="string">&quot;$&#123;CMAKE_EXE_LINKER_FLAGS&#125; -Wl,--allow-shlib-undefined&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta"># install target and libraries</span></span><br><span class="line"><span class="built_in">set</span>(CMAKE_INSTALL_PREFIX $&#123;CMAKE_SOURCE_DIR&#125;/install/rknn_yolov5_demo_$&#123;CMAKE_SYSTEM_NAME&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(CMAKE_SKIP_INSTALL_RPATH FALSE)</span><br><span class="line"><span class="built_in">set</span>(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)</span><br><span class="line"><span class="built_in">set</span>(CMAKE_INSTALL_RPATH <span class="string">&quot;$&#123;CMAKE_INSTALL_PREFIX&#125;/lib&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (CMAKE_C_COMPILER MATCHES <span class="string">&quot;aarch64&quot;</span>)</span><br><span class="line"><span class="built_in">set</span>(LIB_ARCH aarch64)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line"><span class="built_in">set</span>(LIB_ARCH armhf)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line">include_directories($&#123;CMAKE_SOURCE_DIR&#125;)</span><br><span class="line"></span><br><span class="line"><span class="meta"># rknn api</span></span><br><span class="line"><span class="keyword">if</span>(TARGET_SOC STREQUAL <span class="string">&quot;rk356x&quot;</span>)</span><br><span class="line"><span class="built_in">set</span>(RKNN_API_PATH $&#123;CMAKE_SOURCE_DIR&#125;/../../runtime/RK356X/$&#123;CMAKE_SYSTEM_NAME&#125;/librknn_api)</span><br><span class="line">elseif(TARGET_SOC STREQUAL <span class="string">&quot;rk3588&quot;</span>)</span><br><span class="line"><span class="built_in">set</span>(RKNN_API_PATH $&#123;CMAKE_SOURCE_DIR&#125;/../../runtime/RK3588/$&#123;CMAKE_SYSTEM_NAME&#125;/librknn_api)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">message(FATAL_ERROR <span class="string">&quot;TARGET_SOC is not set, ref value: rk356x or rk3588 or rv110x&quot;</span>)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (CMAKE_SYSTEM_NAME STREQUAL <span class="string">&quot;Android&quot;</span>)</span><br><span class="line"><span class="built_in">set</span>(RKNN_RT_LIB $&#123;RKNN_API_PATH&#125;/$&#123;CMAKE_ANDROID_ARCH_ABI&#125;/librknnrt.so)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line"><span class="built_in">set</span>(RKNN_RT_LIB $&#123;RKNN_API_PATH&#125;/$&#123;LIB_ARCH&#125;/librknnrt.so)</span><br><span class="line">endif()</span><br><span class="line">include_directories($&#123;RKNN_API_PATH&#125;/include)</span><br><span class="line">include_directories($&#123;CMAKE_SOURCE_DIR&#125;/../<span class="number">3</span>rdparty)</span><br><span class="line"></span><br><span class="line"><span class="meta"># opencv</span></span><br><span class="line">find_package(OpenCV REQUIRED)</span><br><span class="line"></span><br><span class="line"><span class="meta">#rga</span></span><br><span class="line"><span class="keyword">if</span>(TARGET_SOC STREQUAL <span class="string">&quot;rk356x&quot;</span>)</span><br><span class="line"><span class="built_in">set</span>(RGA_PATH $&#123;CMAKE_SOURCE_DIR&#125;/../<span class="number">3</span>rdparty/rga/RK356X)</span><br><span class="line">elseif(TARGET_SOC STREQUAL <span class="string">&quot;rk3588&quot;</span>)</span><br><span class="line"><span class="built_in">set</span>(RGA_PATH $&#123;CMAKE_SOURCE_DIR&#125;/../<span class="number">3</span>rdparty/rga/RK3588)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">message(FATAL_ERROR <span class="string">&quot;TARGET_SOC is not set, ref value: rk356x or rk3588&quot;</span>)</span><br><span class="line">endif()</span><br><span class="line"><span class="keyword">if</span> (CMAKE_SYSTEM_NAME STREQUAL <span class="string">&quot;Android&quot;</span>)</span><br><span class="line"><span class="built_in">set</span>(RGA_LIB $&#123;RGA_PATH&#125;/lib/Android/$&#123;CMAKE_ANDROID_ARCH_ABI&#125;/librga.so)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line"><span class="built_in">set</span>(RGA_LIB $&#123;RGA_PATH&#125;/lib/Linux<span class="comment">//$&#123;LIB_ARCH&#125;/librga.so)</span></span><br><span class="line">endif()</span><br><span class="line">include_directories( $&#123;RGA_PATH&#125;/include)</span><br><span class="line"></span><br><span class="line"><span class="meta"># mpp</span></span><br><span class="line"><span class="built_in">set</span>(MPP_PATH $&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/../<span class="number">3</span>rdparty/mpp)</span><br><span class="line"><span class="keyword">if</span> (CMAKE_SYSTEM_NAME STREQUAL <span class="string">&quot;Linux&quot;</span>)</span><br><span class="line"><span class="built_in">set</span>(MPP_LIBS $&#123;MPP_PATH&#125;/$&#123;CMAKE_SYSTEM_NAME&#125;/$&#123;LIB_ARCH&#125;/librockchip_mpp.so)</span><br><span class="line">elseif (CMAKE_SYSTEM_NAME STREQUAL <span class="string">&quot;Android&quot;</span>)</span><br><span class="line"><span class="built_in">set</span>(MPP_LIBS $&#123;MPP_PATH&#125;/$&#123;CMAKE_SYSTEM_NAME&#125;/$&#123;CMAKE_ANDROID_ARCH_ABI&#125;/libmpp.so)</span><br><span class="line">endif()</span><br><span class="line">include_directories($&#123;MPP_PATH&#125;/include)</span><br><span class="line"></span><br><span class="line"><span class="meta"># zlmediakit</span></span><br><span class="line"><span class="built_in">set</span>(ZLMEDIAKIT_PATH $&#123;CMAKE_SOURCE_DIR&#125;/../<span class="number">3</span>rdparty/zlmediakit)</span><br><span class="line"><span class="keyword">if</span> (CMAKE_SYSTEM_NAME STREQUAL <span class="string">&quot;Linux&quot;</span>)</span><br><span class="line">include_directories($&#123;ZLMEDIAKIT_PATH&#125;/include)</span><br><span class="line"><span class="built_in">set</span>(ZLMEDIAKIT_LIBS $&#123;ZLMEDIAKIT_PATH&#125;/$&#123;LIB_ARCH&#125;/libmk_api.so)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (ZLMEDIAKIT_LIBS)</span><br><span class="line">    add_definitions(-DBUILD_VIDEO_RTSP)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(CMAKE_INSTALL_RPATH <span class="string">&quot;lib&quot;</span>)</span><br><span class="line"></span><br><span class="line"># rknn_yolov5_demo</span><br><span class="line">include_directories( $&#123;CMAKE_SOURCE_DIR&#125;/include)</span><br><span class="line"></span><br><span class="line">add_executable(rknn_yolov5_demo</span><br><span class="line">        src/main.cpp</span><br><span class="line">        src/postprocess.cpp</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">target_link_libraries(rknn_yolov5_demo</span><br><span class="line">$&#123;RKNN_RT_LIB&#125;</span><br><span class="line">$&#123;RGA_LIB&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">target_link_libraries(rknn_yolov5_demo $&#123;OpenCV_LIBS&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (MPP_LIBS)</span><br><span class="line">add_executable(rknn_yolov5_video_demo</span><br><span class="line">        src/main_video.cpp</span><br><span class="line">        src/postprocess.cpp</span><br><span class="line">        utils/mpp_decoder.cpp</span><br><span class="line">        utils/mpp_encoder.cpp</span><br><span class="line">        utils/drawing.cpp</span><br><span class="line">)</span><br><span class="line">target_link_libraries(rknn_yolov5_video_demo</span><br><span class="line">$&#123;RKNN_RT_LIB&#125;</span><br><span class="line">$&#123;RGA_LIB&#125;</span><br><span class="line">$&#123;OpenCV_LIBS&#125;</span><br><span class="line">$&#123;MPP_LIBS&#125;</span><br><span class="line">$&#123;ZLMEDIAKIT_LIBS&#125;</span><br><span class="line">)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta"># install target and libraries</span></span><br><span class="line"><span class="built_in">set</span>(CMAKE_INSTALL_PREFIX $&#123;CMAKE_SOURCE_DIR&#125;/install/rknn_yolov5_demo_$&#123;CMAKE_SYSTEM_NAME&#125;)</span><br><span class="line">install(TARGETS rknn_yolov5_demo DESTINATION ./)</span><br><span class="line"></span><br><span class="line">install(PROGRAMS $&#123;RKNN_RT_LIB&#125; DESTINATION lib)</span><br><span class="line">install(PROGRAMS $&#123;RGA_LIB&#125; DESTINATION lib)</span><br><span class="line">install(DIRECTORY model DESTINATION ./)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (MPP_LIBS)</span><br><span class="line">install(TARGETS rknn_yolov5_video_demo DESTINATION ./)</span><br><span class="line">install(PROGRAMS $&#123;MPP_LIBS&#125; DESTINATION lib)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (ZLMEDIAKIT_LIBS)</span><br><span class="line">install(PROGRAMS $&#123;ZLMEDIAKIT_LIBS&#125; DESTINATION lib)</span><br><span class="line">endif()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>整个开发过程中走了不少弯路，各个教程也都看了一个遍，最重要的还是跟着官方的文档走，各个教程系统不一，使用的源码版本不一，很有可能产生各种错误。因此还是需要从官方文档出发，走自己的路。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/astronauting-rbr.top/2023/06/12/calibrate/" data-toggle="tooltip" data-placement="top" title="手眼标定学习记录">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/astronauting-rbr.top/2023/05/11/ros4/" data-toggle="tooltip" data-placement="top" title="ros学习记录（4）——ROS基本流程、命令总结及视频内容补充">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/astronauting-rbr.top/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/astronauting-rbr.top/tags/#yolo" title="yolo">yolo</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#linux" title="linux">linux</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#香橙派" title="香橙派">香橙派</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/astronauting-rbr.top/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/astronauting-rbr.top/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/astronauting-rbr.top/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

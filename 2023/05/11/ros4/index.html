@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/astronauting-rbr.top/img/favicon.ico">
+
+    <title>
+        
+          ros学习记录（4）——ROS基本流程、命令总结及视频内容补充 - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/astronauting-rbr.top/2023/05/11/ros4/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/astronauting-rbr.top/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/astronauting-rbr.top/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/astronauting-rbr.top/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#linux" title="linux">linux</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#ros" title="ros">ros</a>
+                        
+                    </div>
+                    <h1>ros学习记录（4）——ROS基本流程、命令总结及视频内容补充</h1>
+                    <h2 class="subheading">对ros通信、服务、功能包相关流程进行梳理，顺便对视频教学内容扩展的地方进行补充</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-05-11
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>到现在ros最基本的流程已经预备了，一些常用的命令也可以梳理总结出来供于参考。另外前几篇笔记均是一边实操一边看书面教程记录的，在教学视频中还有一些我没注意的细节点，打算把视频过一遍，梳理梳理知识点把流程变成自己的东西。</p>
+<h2 id="ros-基本流程"><a href="#ros-基本流程" class="headerlink" title="ros 基本流程"></a>ros 基本流程</h2><h3 id="功能包及源码创建、编译"><a href="#功能包及源码创建、编译" class="headerlink" title="功能包及源码创建、编译"></a>功能包及源码创建、编译</h3><ol>
+<li><p>创建工作空间并初始化</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p 自定义空间名称/src</span><br><span class="line"><span class="built_in">cd</span> 自定义空间名称</span><br><span class="line">catkin_make</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ros包创建及其依赖添加</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> src</span><br><span class="line">catkin_create_pkg 自定义ROS包名 roscpp rospy std_msgs</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在ros包中添加scripts目录并编辑python文件</p>
+ <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> ros包</span><br><span class="line"><span class="built_in">mkdir</span> scripts</span><br><span class="line">touch XXX.<span class="keyword">py</span></span><br><span class="line">gedit XXX.<span class="keyword">py</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为 python 文件添加可执行权限</p>
+ <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x 自定义文件名.py</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑 ros 包下的 CamkeList.txt 文件(直接找到对应部分取消注释修改即可，各种配置语句已经在文件中存在)</p>
+ <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">catkin_install_python(PROGRAMS scripts/自定义文件名.py</span><br><span class="line">DESTINATION $&#123;CATKIN_PACKAGE_BIN_DESTINATION&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入工作空间目录并编译</p>
+ <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> 自定义空间名称</span><br><span class="line">catkin_make</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入工作空间目录并执行</p>
+<p> 命令行1：</p>
+<pre><code> <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">roscore</span><br></pre></td></tr></table></figure>
+</code></pre><p> 命令行2：</p>
+<pre><code> <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> 工作空间</span><br><span class="line">source ./devel/setup.bash</span><br><span class="line">rosrun 包名 自定义文件名.py</span><br></pre></td></tr></table></figure>
+</code></pre></li>
+</ol>
+<p>整个流程简言之就是：创建工作空间——功能包创建——源码编辑——配置文件——编译并执行。</p>
+<h3 id="话题通信自定义msg文件流程（在已有功能包基础上）"><a href="#话题通信自定义msg文件流程（在已有功能包基础上）" class="headerlink" title="话题通信自定义msg文件流程（在已有功能包基础上）"></a>话题通信自定义msg文件流程（在已有功能包基础上）</h3><ol>
+<li><p>定义msg文件</p>
+<p> 功能包下新建msg目录，添加msg文件</p>
+ <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> 工作空间/src</span><br><span class="line"><span class="built_in">mkdir</span> msg</span><br><span class="line"><span class="built_in">cd</span> msg</span><br><span class="line">touch XXX.msg</span><br><span class="line">gedit XXX.msg</span><br></pre></td></tr></table></figure>
+<p> 文件格式如下：</p>
+ <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string XXX</span><br><span class="line">uint16 XXX</span><br><span class="line">float64 XXX</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑配置文件</p>
+</li>
+</ol>
+<p>package.xml中添加编译依赖与执行依赖</p>
+<pre><code><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build_depend</span>&gt;</span>message_generation<span class="tag">&lt;/<span class="name">build_depend</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">exec_depend</span>&gt;</span>message_runtime<span class="tag">&lt;/<span class="name">exec_depend</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">exce_depend 以前对应的是 run_depend 现在非法</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br></pre></td></tr></table></figure>
+</code></pre><p>CMakeLists.txt编辑 msg 相关配置（以下内容同样找到对应位置修改即可，位置顺序尽量不要变）</p>
+<pre><code><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">find_package(catkin REQUIRED COMPONENTS</span><br><span class="line">roscpp</span><br><span class="line">rospy</span><br><span class="line">std_msgs</span><br><span class="line">message_generation</span><br><span class="line">)</span><br><span class="line"># 需要加入 message_generation,必须有 std_msgs</span><br><span class="line"># 此处添加的是相关包</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">## 配置 msg 源文件</span><br><span class="line">add_message_files(</span><br><span class="line">FILES</span><br><span class="line">Person.msg</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 生成消息时依赖于 std_msgs</span><br><span class="line">generate_messages(</span><br><span class="line">DEPENDENCIES</span><br><span class="line">std_msgs</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#执行时依赖</span><br><span class="line">catkin_package(</span><br><span class="line">#  INCLUDE_DIRS include</span><br><span class="line">#  LIBRARIES demo02_talker_listener</span><br><span class="line">CATKIN_DEPENDS roscpp rospy std_msgs message_runtime</span><br><span class="line">#  DEPENDS system_lib</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</code></pre><p>配置完成后编译即可，整体流程为按照相关文件格式创建文件，编辑配置文件，编译生成中间文件</p>
+<h3 id="服务通信自定义srv文件流程（在已有功能包基础上）"><a href="#服务通信自定义srv文件流程（在已有功能包基础上）" class="headerlink" title="服务通信自定义srv文件流程（在已有功能包基础上）"></a>服务通信自定义srv文件流程（在已有功能包基础上）</h3><ol>
+<li><p>定义srv文件</p>
+<p> 服务通信中，数据分成两部分，请求与响应，在 srv 文件中请求和响应使用—-分割，具体实现如下:</p>
+ <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> 工作空间/src</span><br><span class="line"><span class="built_in">mkdir</span> srv</span><br><span class="line"><span class="built_in">cd</span> srv</span><br><span class="line">touch XXX.srv</span><br><span class="line">gedit XXX.srv</span><br></pre></td></tr></table></figure>
+<p> 文件格式如下(在 srv 文件中请求和响应使用—-分割)：</p>
+ <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 客户端请求时发送的两个数字</span><br><span class="line">int32 num1</span><br><span class="line">int32 num2</span><br><span class="line">---</span><br><span class="line"># 服务器响应发送的数据</span><br><span class="line">int32 sum</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑配置文件</p>
+<p> 基本内容和msg文件流程相同，只有配置源文件方面需要改为srv文件，官网没有在 catkin_package 中配置 message_runtime，经测试配置也可以实现。</p>
+</li>
+</ol>
+<h2 id="常用命令行命令"><a href="#常用命令行命令" class="headerlink" title="常用命令行命令"></a>常用命令行命令</h2><p>机器人系统中启动的节点少则几个，多则十几个、几十个，不同的节点名称各异，通信时使用话题、服务、消息、参数等等都各不相同，一个显而易见的问题是: 当需要自定义节点和其他某个已经存在的节点通信时，如何获取对方的话题、以及消息载体的格式呢？</p>
+<p>在 ROS 同提供了一些实用的命令行工具，可以用于获取不同节点的各类信息，常用的命令如下:</p>
+<ul>
+<li>rosnode : 操作节点</li>
+<li>rostopic : 操作话题</li>
+<li>rosservice : 操作服务</li>
+<li>rosmsg : 操作 msg 消息</li>
+<li>rossrv : 操作 srv 消息</li>
+<li>rosparam : 操作参数</li>
+</ul>
+<p>上述命令是动态的，在ROS程序启动后，可以动态的获取运行中的节点或参数的相关信息。</p>
+<h3 id="rosnode"><a href="#rosnode" class="headerlink" title="rosnode"></a>rosnode</h3><p>rosnode 是用于获取节点信息的命令</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rosnode <span class="built_in">ping</span>    测试到节点的连接状态</span><br><span class="line">rosnode list    列出活动节点</span><br><span class="line">rosnode info    打印节点信息</span><br><span class="line">rosnode machine 列出指定设备上节点</span><br><span class="line">rosnode kill    杀死某个节点</span><br><span class="line">rosnode cleanup 清除不可连接的节点</span><br></pre></td></tr></table></figure>
+<h3 id="rostopic"><a href="#rostopic" class="headerlink" title="rostopic"></a>rostopic</h3><p>rostopic 包含 rostopic 命令行工具，用于显示有关 ROS 主题的调试信息，包括发布者，订阅者，发布频率和 ROS 消息。它还包含一个实验性 Python 库，用于动态获取有关主题的信息并与之交互。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">rostopic bw     显示主题使用的带宽</span><br><span class="line">rostopic delay  显示带有 header 的主题延迟</span><br><span class="line">rostopic <span class="built_in">echo</span>   打印消息到屏幕</span><br><span class="line">rostopic <span class="built_in">find</span>   根据类型查找主题</span><br><span class="line">rostopic hz     显示主题的发布频率</span><br><span class="line">rostopic info   显示主题相关信息</span><br><span class="line">rostopic list   显示所有活动状态下的主题</span><br><span class="line">rostopic pub    将数据发布到主题</span><br><span class="line">rostopic <span class="built_in">type</span>   打印主题类型</span><br></pre></td></tr></table></figure>
+<h3 id="rosmsg"><a href="#rosmsg" class="headerlink" title="rosmsg"></a>rosmsg</h3><p>rosmsg是用于显示有关 ROS 消息类型的信息的命令行工具。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rosmsg show    显示消息描述</span><br><span class="line">rosmsg info    显示消息信息</span><br><span class="line">rosmsg list    列出所有消息</span><br><span class="line">rosmsg md5    显示 md5 加密后的消息</span><br><span class="line">rosmsg package    显示某个功能包下的所有消息</span><br><span class="line">rosmsg packages    列出包含消息的功能包</span><br></pre></td></tr></table></figure>
+<h3 id="rosservice"><a href="#rosservice" class="headerlink" title="rosservice"></a>rosservice</h3><p>rosservice 包含用于列出和查询 ROSServices 的 rosservice 命令行工具。</p>
+<p>调用部分服务时，如果对相关工作空间没有配置 path，需要进入工作空间调用 source ./devel/setup.bash</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rosservice args 打印服务参数</span><br><span class="line">rosservice <span class="keyword">call</span>    使用提供的参数调用服务</span><br><span class="line">rosservice <span class="built_in">find</span>    按照服务类型查找服务</span><br><span class="line">rosservice info    打印有关服务的信息</span><br><span class="line">rosservice list    列出所有活动的服务</span><br><span class="line">rosservice <span class="built_in">type</span>    打印服务类型</span><br><span class="line">rosservice uri    打印服务的 ROSRPC uri</span><br></pre></td></tr></table></figure>
+<h3 id="rossrv"><a href="#rossrv" class="headerlink" title="rossrv"></a>rossrv</h3><p>rossrv是用于显示有关ROS服务类型的信息的命令行工具，与 rosmsg 使用语法高度雷同。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rossrv show    显示服务消息详情</span><br><span class="line">rossrv info    显示服务消息相关信息</span><br><span class="line">rossrv list    列出所有服务信息</span><br><span class="line">rossrv md5    显示 md5 加密后的服务消息</span><br><span class="line">rossrv package    显示某个包下所有服务消息</span><br><span class="line">rossrv packages    显示包含服务消息的所有包</span><br></pre></td></tr></table></figure>
+<h3 id="rosparam"><a href="#rosparam" class="headerlink" title="rosparam"></a>rosparam</h3><p>rosparam包含rosparam命令行工具，用于使用YAML编码文件在参数服务器上获取和设置ROS参数。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rosparam <span class="built_in">set</span>    设置参数</span><br><span class="line">rosparam get    获取参数</span><br><span class="line">rosparam load    从外部文件加载参数</span><br><span class="line">rosparam dump    将参数写出到外部文件</span><br><span class="line">rosparam delete    删除参数</span><br><span class="line">rosparam list    列出所有参数</span><br></pre></td></tr></table></figure>
+<h2 id="视频内容补充"><a href="#视频内容补充" class="headerlink" title="视频内容补充"></a>视频内容补充</h2><h3 id="python配置问题"><a href="#python配置问题" class="headerlink" title="python配置问题"></a>python配置问题</h3><p>在老版本的python脚本是可以直接运行的，不需要进行配置和编译，但在最新的noetic版本却需要进行配置，主要是由于会产生一些异常，此处介绍不配置的情况下会出现的异常以及解决办法</p>
+<p><strong>现象：</strong> 当没有配置cmakelists直接执行时会抛出异常，异常内容为“python：没有文件或目录”</p>
+<p><strong>原因：</strong> 不配置的情况下，会去脚本文件声明目录下寻找解释器，这种情况下找不到解释器。原因在于 noetic 版本的对应目录下没有 python 而是 python3（之前的版本中有 python2 和 python3，其中 python2 默认为 python）.而如果配置了 cmake 则会自动找到 python3。</p>
+<p><strong>解决：</strong></p>
+<pre><code>1. 直接声明解释器为python3（不建议使用，因为之后使用别人的代码时往往不能去直接修改）
+    ![1](https://pic2.imgdb.cn/item/645c99660d2dde5777a6ed04.jpg)
+2. 通过软链接将 python 链接到 python3，控制台输入指令：
+
+    <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s /usr/bin/python3 /usr/bin/python</span><br></pre></td></tr></table></figure>
+</code></pre><h3 id="package-xml"><a href="#package-xml" class="headerlink" title="package.xml"></a>package.xml</h3><p>package.xml主要的部分是用于确定编译使用的工具和相关依赖包，包括它们的导出执行语句。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/astronauting-rbr.top/2023/06/07/record-orangepi/" data-toggle="tooltip" data-placement="top" title="基于yolov5及香橙派5的视觉识别项目记录">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/astronauting-rbr.top/2023/05/10/ros3/" data-toggle="tooltip" data-placement="top" title="ros学习记录（3）——ROS通信机制之服务通信与参数服务器">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/astronauting-rbr.top/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/astronauting-rbr.top/tags/#linux" title="linux">linux</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#ros" title="ros">ros</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/astronauting-rbr.top/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/astronauting-rbr.top/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/astronauting-rbr.top/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/astronauting-rbr.top/img/favicon.ico">
+
+    <title>
+        
+          ros学习记录（2）——ROS通信机制之话题通信 - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/astronauting-rbr.top/2023/05/09/ros2/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/astronauting-rbr.top/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/astronauting-rbr.top/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/astronauting-rbr.top/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#linux" title="linux">linux</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#ros" title="ros">ros</a>
+                        
+                    </div>
+                    <h1>ros学习记录（2）——ROS通信机制之话题通信</h1>
+                    <h2 class="subheading">通信机制学习过程记录，ROS核心部分</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-05-09
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>ROS 通信机制是 ros 的核心机制，各种数据的交互、节点之间的协作都要依靠通讯机制。本篇从话题的发布订阅、服务、参数等方面讲述通讯机制，以小乌龟为例，尽可能理解这一概念。</p>
+<p>机器人是一种高度复杂的系统性实现，在机器人上可能集成各种传感器(雷达、摄像头、GPS…)以及运动控制实现，为了解耦合，在ROS中每一个功能点都是一个单独的进程，每一个进程都是独立运行的。<strong>更确切的讲，ROS是进程（也称为Nodes节点）的分布式框架。</strong> 因为这些进程甚至还可分布于不同主机，不同主机协同工作，从而分散计算压力。不过随之也有一个问题: 不同的进程是如何通信的？也即不同进程间如何实现数据交换的？在此我们就需要介绍一下ROS中的通信机制了。</p>
+<p>ROS 中的基本通信机制主要有如下三种实现策略:</p>
+<pre><code>* 话题通信(发布订阅模式)
+* 服务通信(请求响应模式)
+* 参数服务器(参数共享模式)
+</code></pre><p>本章的主要内容就是是介绍各个通信机制的应用场景、理论模型、代码实现以及相关操作命令，需要通过学习完成模型理解及实操。</p>
+<h2 id="话题通信"><a href="#话题通信" class="headerlink" title="话题通信"></a>话题通信</h2><p>话题通信是ROS中使用频率最高的一种通信模式，话题通信是基于<strong>发布订阅模式</strong>的，也即:一个节点发布消息，另一个节点订阅该消息。</p>
+<ul>
+<li>以项目为例，在机械臂运行的过程中，在ROS中有一个节点需要实时的发布相机采集到的数据，对应的识别模块中会有节点订阅并解析图像数据。</li>
+<li>在过程中的运动控制方面，识别模块中根据对应的图像数据计算出运动控制信息并发布到机械臂，机械臂也有节点订阅这个运动信息，从而转换成控制机械臂运动的信号。</li>
+</ul>
+<p>总而言之，话题通信要更加适用于不断更新的数据传输相关的应用场景，通过对这个模块的学习，要求能够实现最基本的发布订阅模型，能够对自定义消息进行发布订阅。</p>
+<h3 id="话题通信理论模型"><a href="#话题通信理论模型" class="headerlink" title="话题通信理论模型"></a>话题通信理论模型</h3><p>话题通信实现模型是比较复杂的，该模型如下图所示,该模型中涉及到三个角色:ROS Master (管理者)、Talker (发布者)、Listener (订阅者)</p>
+<p>ROS Master 负责保管 Talker 和 Listener 注册的信息，并匹配话题相同的 Talker 与 Listener，帮助 Talker 与 Listener 建立连接，连接建立后，Talker 可以发布消息，且发布的消息会被 Listener 订阅。<br><img src="https://pic2.imgdb.cn/item/6459e60c0d2dde5777e96642.jpg" alt="1"><br>以下为基本流程：</p>
+<ul>
+<li>Talker注册<br>  Talker启动后，会通过RPC在 ROS Master 中注册自身信息，其中包含所发布消息的话题名称。ROS Master 会将节点的注册信息加入到注册表中。</li>
+<li>Listener注册<br>  Listener启动后，也会通过RPC在 ROS Master 中注册自身信息，包含需要订阅消息的话题名。ROS Master 会将节点的注册信息加入到注册表中。</li>
+<li>ROS Master实现信息匹配<br>  ROS Master 会根据注册表中的信息匹配Talker 和 Listener，并通过 RPC 向 Listener 发送 Talker 的 RPC 地址信息。</li>
+<li>Listener向Talker发送请求<br>  Listener 根据接收到的 RPC 地址，通过 RPC 向 Talker 发送连接请求，传输订阅的话题名称、消息类型以及通信协议(TCP/UDP)。</li>
+<li>Talker确认请求<br>  Talker 接收到 Listener 的请求后，也是通过 RPC 向 Listener 确认连接信息，并发送自身的 TCP 地址信息。</li>
+<li>Listener与Talker建立连接<br>  Listener 根据步骤4 返回的消息使用 TCP 与 Talker 建立网络连接。</li>
+<li>Talker向Listener发送消息<br>  连接建立后，Talker 开始向 Listener 发布消息。</li>
+</ul>
+<p>注意：上述流程中前五步使用的是RPC协议，最后两步使用的是TCP协议，TCP协议我做过相关学习，但RPC协议的具体内容还不太清楚，这里先挂起之后进行专门的学习。Talker 与 Listener 的启动无先后顺序要求并且可以多个存在，连接建立后，不再需要 ROS Master。也即，即便关闭ROS Master，Talker 与 Listern 照常通信。</p>
+<h3 id="话题通信基本操作-Python"><a href="#话题通信基本操作-Python" class="headerlink" title="话题通信基本操作(Python)"></a>话题通信基本操作(Python)</h3><p><strong>需求：</strong>编写发布订阅实现，要求发布方以10HZ(每秒10次)的频率发布文本消息，订阅方订阅消息并将消息内容打印输出。<br><strong>分析：</strong>在模型实现中，ROS master 不需要实现，而连接的建立也已经被封装了，需要关注的关键点有三个:发布方、接收方和数据（此处传输数据为普通文本）<br><strong>流程：</strong>编写发布方实现——编写订阅方实现——为python文件添加可执行权限——编辑配置文件——编译并执行</p>
+<ol>
+<li><p>发布方：</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">    需求: 实现基本的话题通信，一方发布数据，一方接收数据，</span></span><br><span class="line"><span class="string">        实现的关键点:</span></span><br><span class="line"><span class="string">        1.发送方</span></span><br><span class="line"><span class="string">        2.接收方</span></span><br><span class="line"><span class="string">        3.数据(此处为普通文本)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        PS: 二者需要设置相同的话题</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    消息发布方:</span></span><br><span class="line"><span class="string">        循环发布信息:HelloWorld 后缀数字编号</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    实现流程:</span></span><br><span class="line"><span class="string">        1.导包 </span></span><br><span class="line"><span class="string">        2.初始化 ROS 节点:命名(唯一)</span></span><br><span class="line"><span class="string">        3.实例化 发布者 对象</span></span><br><span class="line"><span class="string">        4.组织被发布的数据，并编写逻辑发布数据</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="comment">#1.导包 </span></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"><span class="keyword">from</span> std_msgs.msg <span class="keyword">import</span> String</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment">#2.初始化 ROS 节点:命名(唯一)</span></span><br><span class="line">    rospy.init_node(<span class="string">"talker_p"</span>)</span><br><span class="line">    <span class="comment">#3.实例化 发布者 对象</span></span><br><span class="line">    pub = rospy.Publisher(<span class="string">"chatter"</span>,String,queue_size=<span class="number">10</span>)</span><br><span class="line">    <span class="comment">#4.组织被发布的数据，并编写逻辑发布数据</span></span><br><span class="line">    msg = String()  <span class="comment">#创建 msg 对象</span></span><br><span class="line">    msg_front = <span class="string">"hello 你好"</span></span><br><span class="line">    count = <span class="number">0</span>  <span class="comment">#计数器 </span></span><br><span class="line">    <span class="comment"># 设置循环频率</span></span><br><span class="line">    rate = rospy.Rate(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> rospy.is_shutdown():</span><br><span class="line"></span><br><span class="line">        <span class="comment">#拼接字符串</span></span><br><span class="line">        msg.data = msg_front + <span class="built_in">str</span>(count)</span><br><span class="line"></span><br><span class="line">        pub.publish(msg)</span><br><span class="line">        rate.sleep()</span><br><span class="line">        rospy.loginfo(<span class="string">"写出的数据:%s"</span>,msg.data)</span><br><span class="line">        count += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>订阅方:</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">    需求: 实现基本的话题通信，一方发布数据，一方接收数据，</span></span><br><span class="line"><span class="string">        实现的关键点:</span></span><br><span class="line"><span class="string">        1.发送方</span></span><br><span class="line"><span class="string">        2.接收方</span></span><br><span class="line"><span class="string">        3.数据(此处为普通文本)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    消息订阅方:</span></span><br><span class="line"><span class="string">        订阅话题并打印接收到的消息</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    实现流程:</span></span><br><span class="line"><span class="string">        1.导包 </span></span><br><span class="line"><span class="string">        2.初始化 ROS 节点:命名(唯一)</span></span><br><span class="line"><span class="string">        3.实例化 订阅者 对象</span></span><br><span class="line"><span class="string">        4.处理订阅的消息(回调函数)</span></span><br><span class="line"><span class="string">        5.设置循环调用回调函数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="comment">#1.导包 </span></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"><span class="keyword">from</span> std_msgs.msg <span class="keyword">import</span> String</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doMsg</span>(<span class="params">msg</span>):</span><br><span class="line">    rospy.loginfo(<span class="string">"I heard:%s"</span>,msg.data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment">#2.初始化 ROS 节点:命名(唯一)</span></span><br><span class="line">    rospy.init_node(<span class="string">"listener_p"</span>)</span><br><span class="line">    <span class="comment">#3.实例化 订阅者 对象</span></span><br><span class="line">    sub = rospy.Subscriber(<span class="string">"chatter"</span>,String,doMsg,queue_size=<span class="number">10</span>)</span><br><span class="line">    <span class="comment">#4.处理订阅的消息(回调函数)</span></span><br><span class="line">    <span class="comment">#5.设置循环调用回调函数</span></span><br><span class="line">    rospy.spin()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加可执行权限：</p>
+<p> 终端下进入 scripts 执行:<strong>chmod +x *.py</strong></p>
+</li>
+<li><p>配置 CMakeLists.txt</p>
+ <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">catkin_install_python(PROGRAMS</span><br><span class="line">scripts/talker_p.py</span><br><span class="line">scripts/listener_p.py</span><br><span class="line">DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行：<br> 启动roscore——启动发布——启动订阅（这里按照前面实现hello world那一套流程来，编译、注册、执行）<br> <img src="https://pic2.imgdb.cn/item/6459ec460d2dde5777f1adff.jpg" alt=""></p>
+</li>
+</ol>
+<p><em>疑惑点记录：bash文件是什么？python文件中的指令内容含义？CMakelist怎么去编辑？有没有更简便的方法？</em></p>
+<h3 id="话题通信自定义msg"><a href="#话题通信自定义msg" class="headerlink" title="话题通信自定义msg"></a>话题通信自定义msg</h3><p>在 ROS 通信协议中，数据载体是一个较为重要组成部分，ROS 中通过 std_msgs 封装了一些原生的数据类型,比如:String、Int32、Int64、Char、Bool、Empty…. 但是，这些数据一般只包含一个 data 字段，结构的单一意味着功能上的局限性，当传输一些复杂的数据，比如: 激光雷达的信息… std_msgs 由于<strong>描述性较差</strong>而显得力不从心，这种场景下可以使用自定义的消息类型，即msg文件。</p>
+<p><em>上面的意思就是说std_msgs中定义的数据只包含数据本身，如果你想做个备注说这段数据表示什么，下一段又表示其它的含义，那就无法实现了，这就需要自定义类型。</em></p>
+<p>msg只是简单的文本文件，每行具有字段类型和字段名称，可以使用的字段类型有：<br><img src="https://pic2.imgdb.cn/item/6459f9400d2dde57770250a7.jpg" alt=""></p>
+<p>ROS中还有一种特殊类型：Header，标头包含时间戳和ROS中常用的坐标帧信息。会经常看到msg文件的第一行具有Header标头。</p>
+<p><strong>需求：</strong>创建自定义消息，该消息包含人的信息:姓名、身高、年龄等。<br><strong>流程：</strong><br>    1.按照固定格式创建 msg 文件<br>    2.编辑配置文件<br>    3.编译生成可以被 Python 或 C++ 调用的中间文件</p>
+<ol>
+<li><p>定义msg文件</p>
+<p> 功能包下新建 msg 目录，添加文件 Person.msg</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string name</span><br><span class="line">uint16 age</span><br><span class="line">float64 height</span><br></pre></td></tr></table></figure></li>
+<li><p>编辑配置文件</p>
+<p> package.xml 中添加编译依赖与执行依赖</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build_depend</span>&gt;</span>message_generation<span class="tag">&lt;/<span class="name">build_depend</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">exec_depend</span>&gt;</span>message_runtime<span class="tag">&lt;/<span class="name">exec_depend</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">exce_depend 以前对应的是 run_depend 现在非法</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">## 配置 msg 源文件</span><br><span class="line">add_message_files(</span><br><span class="line">FILES</span><br><span class="line">Person.msg</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 生成消息时依赖于 std_msgs</span><br><span class="line">generate_messages(</span><br><span class="line">DEPENDENCIES</span><br><span class="line">std_msgs</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#执行时依赖</span><br><span class="line">catkin_package(</span><br><span class="line">#  INCLUDE_DIRS include</span><br><span class="line">#  LIBRARIES demo02_talker_listener</span><br><span class="line">CATKIN_DEPENDS roscpp rospy std_msgs message_runtime</span><br><span class="line">#  DEPENDS system_lib</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>3.编译</p>
+<pre><code>编译后的中间文件查看:
+Python 需要调用的中间文件(.../工作空间/devel/lib/python3/dist-packages/包名/msg)
+![](https://pic2.imgdb.cn/item/6459fc640d2dde57770586cf.jpg)
+后续调用相关 msg 时，是从这些中间文件调用的
+</code></pre><p><em>这里编译出错大概率是因为复制粘贴的内容在txt里面已经存在，产生了重复，要注意检查，同时仔细阅读报错信息。嫌麻烦可以直接删除所有注释及自带内容然后复制粘贴（注意保留之前的内容）</em></p>
+<h3 id="话题通信自定义msg调用-Python"><a href="#话题通信自定义msg调用-Python" class="headerlink" title="话题通信自定义msg调用(Python)"></a>话题通信自定义msg调用(Python)</h3><p><strong>需求：</strong>编写发布订阅实现，要求发布方以1HZ(每秒1次)的频率发布自定义消息，订阅方订阅自定义消息并将消息内容打印输出。<br><strong>分析：</strong>在模型实现中，ROS master 不需要实现，而连接的建立也已经被封装了，需要关注的关键点有三个:需要关注的关键点有三个:发布方、接收方和数据（此处传输数据为自定义消息）<br><strong>流程：</strong>编写发布方实现——编写订阅方实现——为python文件添加可执行权限——编辑配置文件——编译并执行</p>
+<ul>
+<li><p>vscode配置</p>
+<p>  为了方便代码提示以及误抛异常，需要先配置 vscode，将前面生成的 python 文件路径配置进 settings.json</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"python.autoComplete.extraPaths"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">"/opt/ros/noetic/lib/python3/dist-packages"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"/xxx/yyy工作空间/devel/lib/python3/dist-packages"</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>发布方</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">    发布方:</span></span><br><span class="line"><span class="string">        循环发送消息</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"><span class="keyword">from</span> demo02_talker_listener.msg <span class="keyword">import</span> Person</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment">#1.初始化 ROS 节点</span></span><br><span class="line">    rospy.init_node(<span class="string">"talker_person_p"</span>)</span><br><span class="line">    <span class="comment">#2.创建发布者对象</span></span><br><span class="line">    pub = rospy.Publisher(<span class="string">"chatter_person"</span>,Person,queue_size=<span class="number">10</span>)</span><br><span class="line">    <span class="comment">#3.组织消息</span></span><br><span class="line">    p = Person()</span><br><span class="line">    p.name = <span class="string">"葫芦瓦"</span></span><br><span class="line">    p.age = <span class="number">18</span></span><br><span class="line">    p.height = <span class="number">0.75</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#4.编写消息发布逻辑</span></span><br><span class="line">    rate = rospy.Rate(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> rospy.is_shutdown():</span><br><span class="line">        pub.publish(p)  <span class="comment">#发布消息</span></span><br><span class="line">        rate.sleep()  <span class="comment">#休眠</span></span><br><span class="line">        rospy.loginfo(<span class="string">"姓名:%s, 年龄:%d, 身高:%.2f"</span>,p.name, p.age, p.height)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>订阅方</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">    订阅方:</span></span><br><span class="line"><span class="string">        订阅消息</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"><span class="keyword">from</span> demo02_talker_listener.msg <span class="keyword">import</span> Person</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doPerson</span>(<span class="params">p</span>):</span><br><span class="line">    rospy.loginfo(<span class="string">"接收到的人的信息:%s, %d, %.2f"</span>,p.name, p.age, p.height)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment">#1.初始化节点</span></span><br><span class="line">    rospy.init_node(<span class="string">"listener_person_p"</span>)</span><br><span class="line">    <span class="comment">#2.创建订阅者对象</span></span><br><span class="line">    sub = rospy.Subscriber(<span class="string">"chatter_person"</span>,Person,doPerson,queue_size=<span class="number">10</span>)</span><br><span class="line">    rospy.spin() <span class="comment">#4.循环</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>权限设置</p>
+<p>  终端下进入 scripts 执行:<strong>chmod +x *.py</strong></p>
+</li>
+<li><p>配置 CMakeLists.txt</p>
+  <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">catkin_install_python(PROGRAMS</span><br><span class="line">scripts/talker_p.py</span><br><span class="line">scripts/listener_p.py</span><br><span class="line">scripts/person_talker.py</span><br><span class="line">scripts/person_listener.py</span><br><span class="line">DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行： 启动roscore——启动发布——启动订阅（这里按照前面实现hello world那一套流程来，编译、注册、执行）</p>
+</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>一定要跟着去尝试，后面会逐渐简化前面已经讲过的流程，这样给了一定的自由度，能够更有效的去领会整个编译执行流程。xml以及cmake文件都是一些定义性的文件，可以适当阅读一下，后期要想自己熟练掌握ros，还是要学会这两种文件的书写，json文件也是。对于python文件更应该主要研究，不需要去记忆，但一定要会用，用着用着自然而然的就记住了。</p>
+<p>学ros涉及的范围太广了，先学会主要脉络，再不断扩展延申学习。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/astronauting-rbr.top/2023/05/10/ros3/" data-toggle="tooltip" data-placement="top" title="ros学习记录（3）——ROS通信机制之服务通信与参数服务器">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/astronauting-rbr.top/2023/05/08/ros1/" data-toggle="tooltip" data-placement="top" title="ros学习记录（1）——ROS概述与环境搭建">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/astronauting-rbr.top/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/astronauting-rbr.top/tags/#linux" title="linux">linux</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#ros" title="ros">ros</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/astronauting-rbr.top/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/astronauting-rbr.top/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/astronauting-rbr.top/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

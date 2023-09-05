@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/astronauting-rbr.top/img/favicon.ico">
+
+    <title>
+        
+          C#学习笔记（1） - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/astronauting-rbr.top/2023/03/03/csharp1/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/astronauting-rbr.top/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/astronauting-rbr.top/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/astronauting-rbr.top/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/astronauting-rbr.top/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/astronauting-rbr.top/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#C#" title="C#">C#</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#基础编程" title="基础编程">基础编程</a>
+                        
+                    </div>
+                    <h1>C#学习笔记（1）</h1>
+                    <h2 class="subheading">对C#语言进行一个系统性的学习，内容上会更偏向于WPF应用，内容只是个人学习过程的记录，copy了很多网站内容，不具有原创性。</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-03-03
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近项目上遇到了很多使用 C# 的地方，上位机程序是 C# ，相机SDK示例程序也是 C#，但每次打开 vs 时都是一头雾水，看不懂的语言、项目文件甚至报错。因此决定从头开始细细的过一遍 C#，倒不是说要买本书从每个语句、函数的用法开始学，现在当务之急是在短时间内能看懂并处理好 C# 程序。pycharm 的使用让我对于 vs 的使用一窍不通，它的界面设置、模块添加方式以及插件等完全搞不懂。此次学习，也是为了能彻底用好 vs，毕竟 pycharm 只是能方便 python 语言的开发，要想以后多接触其他类型的语言，vs 是绝对避不开的一环。</p>
+<h2 id="C-环境"><a href="#C-环境" class="headerlink" title="C#环境"></a>C#环境</h2><p><strong>.NET 框架</strong>主要用于编写 windows 应用程序、web 应用程序以及 web 服务，框架的设计方式使它适用于下列各种语言：C#、C++、Visual Basic、Jscript、COBOL 等等。所有这些语言可以访问框架，彼此之间也可以互相交互。.Net 框架由一个巨大的代码库组成，用于 C# 等客户端语言。下面列出一些 .Net 框架的组件：</p>
+<ul>
+<li>公共语言运行库（Common Language Runtime - CLR）</li>
+<li>.Net 框架类库（.Net Framework Class Library）</li>
+<li>公共语言规范（Common Language Specification）</li>
+<li>通用类型系统（Common Type System）</li>
+<li>元数据（Metadata）和组件（Assemblies）</li>
+<li>Windows 窗体（Windows Forms）</li>
+<li>ASP.Net 和 ASP.Net AJAX</li>
+<li>ADO.Net</li>
+<li>Windows 工作流基础（Windows Workflow Foundation - WF）</li>
+<li>Windows 显示基础（Windows Presentation Foundation）</li>
+<li>Windows 通信基础（Windows Communication Foundation - WCF）</li>
+<li>LINQ</li>
+</ul>
+<h2 id="C-程序结构"><a href="#C-程序结构" class="headerlink" title="C#程序结构"></a>C#程序结构</h2><p>一个 C# 程序主要包括以下部分（大部分语言的结构都是十分相似的）：</p>
+<ul>
+<li>命名空间声明（Namespace declaration）</li>
+<li>一个 class</li>
+<li>Class 方法</li>
+<li>Class 属性</li>
+<li>一个 Main 方法</li>
+<li>语句（Statements）&amp; 表达式（Expressions）</li>
+<li>注释<br>“hello world”示例如下所示：</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">namespace</span> <span class="title">HelloWorldApplication</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">class</span> <span class="title">HelloWorld</span></span><br><span class="line">   &#123;</span><br><span class="line">      <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line"><span class="function">      <span class="comment">//static 一般用于修饰局部变量、全局变量</span></span></span><br><span class="line">      &#123;</span><br><span class="line">         <span class="comment">/* 我的第一个 C# 程序*/</span></span><br><span class="line">         Console.WriteLine(<span class="string">&quot;Hello World&quot;</span>);</span><br><span class="line">         Console.ReadKey();</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="C-基本语法"><a href="#C-基本语法" class="headerlink" title="C# 基本语法"></a>C# 基本语法</h2><p>C# 是一种面向对象的编程语言。在面向对象的程序设计方法中，程序由各种相互交互的对象组成。相同种类的对象通常具有相同的类型，或者说，是在相同的 class 中。例如，以 Rectangle（矩形）对象为例。它具有 length 和 width 属性。根据设计，它可能需要接受这些属性值、计算面积和显示细节。</p>
+<p>让我们来看看一个 Rectangle（矩形）类的实现，并借此讨论 C# 的基本语法：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">namespace</span> <span class="title">RectangleApplication</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title">Rectangle</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 成员变量</span></span><br><span class="line">        <span class="built_in">double</span> length;</span><br><span class="line">        <span class="built_in">double</span> width;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Acceptdetails</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            length = <span class="number">4.5</span>;    </span><br><span class="line">            width = <span class="number">3.5</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">double</span> <span class="title">GetArea</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> length * width;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Display</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Length: &#123;0&#125;&quot;</span>, length);</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Width: &#123;0&#125;&quot;</span>, width);</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Area: &#123;0&#125;&quot;</span>, GetArea());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">class</span> <span class="title">ExecuteRectangle</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            Rectangle r = <span class="keyword">new</span> Rectangle();<span class="comment">//实例化</span></span><br><span class="line">            r.Acceptdetails();</span><br><span class="line">            r.Display();</span><br><span class="line">            Console.ReadLine();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先对以上程序中基础关键字进行简要介绍：</p>
+<ul>
+<li>using 关键字用于在程序中包含命名空间。一个程序可以包含多个 using 语句。</li>
+<li>class 关键字用于声明一个类。</li>
+<li>成员变量：变量是类的属性或数据成员，用于存储数据。在上面的程序中，Rectangle 类有两个成员变量，名为 length 和 width。</li>
+<li>成员函数：函数是一系列执行指定任务的语句。类的成员函数是在类内声明的。我们举例的类 Rectangle 包含了三个成员函数： AcceptDetails、GetArea 和 Display。</li>
+<li>实例化：在上面的程序中，类 ExecuteRectangle 是一个包含 Main() 方法和实例化 Rectangle 类的类。</li>
+</ul>
+<p>另外引入变量名的相关规范：<br><strong>全是英文单词，不要用拼音</strong><br>驼峰命名法：<br>大驼峰（每个单词的首字母大写，其余字母小写）：MyHeroDamage、HeroAttack<br>小驼峰（第一个单词首字母不大写，后面每个单词的首字母大写，其余字母小写）：myHeroDamage、heroAttack【目前阶段都用小驼峰】</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>C#中变量分为三种类型：值类型、引用类型以及指针类型。<br><strong>值类型</strong>：<br>值类型变量可以直接分配给一个值。它们是从类 System.ValueType 中派生的。<br>值类型直接包含数据。比如 int、char、float，它们分别存储数字、字符、浮点数。当您声明一个 int 类型时，系统分配内存来存储值。</p>
+<p>下表列出了 C# 2010 中可用的值类型：<br><img src="https://pic.imgdb.cn/item/64059927f144a0100717126a.png" alt="值类型"></p>
+<p>如需得到一个类型或一个变量在特定平台上的准确尺寸，可以使用 sizeof 方法。表达式 sizeof(type) 产生以字节为单位存储对象或类型的存储尺寸。下面举例获取任何机器上 int 类型的存储尺寸：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">DataTypeApplication</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">   &#123;</span><br><span class="line">      <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">      &#123;</span><br><span class="line">         Console.WriteLine(<span class="string">&quot;Size of int: &#123;0&#125;&quot;</span>, <span class="keyword">sizeof</span>(<span class="built_in">int</span>));</span><br><span class="line">         Console.ReadLine();</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>引用类型</strong>：<br>引用类型不包含存储在变量中的实际数据，但它们包含对变量的引用。换句话说，它们指的是一个内存位置。使用多个变量时，引用类型可以指向一个内存位置。如果内存位置的数据是由一个变量改变的，其他变量会自动反映这种值的变化。内置的引用类型有：object、dynamic 和 string。</p>
+<ul>
+<li>对象（Object）类型： 对象（Object）类型是 C# 通用类型系统（Common Type System - CTS）中所有数据类型的终极基类。Object 是 System.Object 类的别名。所以对象（Object）类型可以被分配任何其他类型（值类型、引用类型、预定义类型或用户自定义类型）的值。<strong>但是，在分配值之前，需要先进行类型转换。</strong><br> 当一个值类型转换为对象类型时，则被称为装箱；另一方面，当一个对象类型转换为值类型时，则被称为拆箱。</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">object</span> obj;</span><br><span class="line">obj = <span class="number">100</span>; <span class="comment">// 这是装箱</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>动态（Dynamic）类型: 您可以存储任何类型的值在动态数据类型变量中,这些变量的类型检查是在运行时发生的。<br> 声明动态类型的语法： </li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dynamic</span> &lt;variable_name&gt; = <span class="keyword">value</span>;</span><br><span class="line"><span class="comment">//例如：</span></span><br><span class="line"><span class="built_in">dynamic</span> d = <span class="number">20</span>;</span><br></pre></td></tr></table></figure>
+<p>   动态类型与对象类型相似，但是对象类型变量的类型检查是在编译时发生的，而动态类型变量的类型检查是在运行时发生的。</p>
+<ul>
+<li>字符串（String）类型: 字符串（String）类型允许您给变量分配任何字符串值。字符串（String）类型是 System.String 类的别名。它是从对象（Object）类型派生的。字符串（String）类型的值可以通过两种形式进行分配：引号和 @引号。</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> str = <span class="string">&quot;runoob.com&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>指针类型（Pointer types）</strong>:<br>指针类型变量存储另一种类型的内存地址。C# 中的指针与 C 或 C++ 中的指针有相同的功能。指针这一概念比较绕，留到后面详细探讨。<br>声明指针类型的语法：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type* identifier;</span><br></pre></td></tr></table></figure>
+<h2 id="C-类型转换"><a href="#C-类型转换" class="headerlink" title="C#类型转换"></a>C#类型转换</h2><p>类型转换从根本上说是类型铸造，或者说是把数据从一种类型转换为另一种类型。在 C# 中，类型铸造有两种形式：</p>
+<ul>
+<li>隐式类型转换 - 这些转换是 C# 默认的以安全方式进行的转换, 不会导致数据丢失。例如，从小的整数类型转换为大的整数类型，从派生类转换为基类。</li>
+<li>显式类型转换 - 显式类型转换，即强制类型转换。显式转换需要强制转换运算符，而且强制转换会造成数据丢失。<br>以下为显式类型转换：</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">TypeConversionApplication</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title">ExplicitConversion</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">double</span> d = <span class="number">5673.74</span>;</span><br><span class="line">            <span class="built_in">int</span> i;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 强制转换 double 为 int</span></span><br><span class="line">            i = (<span class="built_in">int</span>)d;</span><br><span class="line">            Console.WriteLine(i);</span><br><span class="line">            Console.ReadKey();</span><br><span class="line">           </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>C#中提供有内置的类型转换方法，形式为ToXXXX，以下为不同类型的ToString应用：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title">TypeConversionApplication</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title">StringConversion</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">int</span> i = <span class="number">75</span>;</span><br><span class="line">            <span class="built_in">float</span> f = <span class="number">53.005f</span>;</span><br><span class="line">            <span class="built_in">double</span> d = <span class="number">2345.7652</span>;</span><br><span class="line">            <span class="built_in">bool</span> b = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">            Console.WriteLine(i.ToString());</span><br><span class="line">            Console.WriteLine(f.ToString());</span><br><span class="line">            Console.WriteLine(d.ToString());</span><br><span class="line">            Console.WriteLine(b.ToString());</span><br><span class="line">            Console.ReadKey();</span><br><span class="line">           </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="关键字简要分析"><a href="#关键字简要分析" class="headerlink" title="关键字简要分析"></a>关键字简要分析</h2><ul>
+<li><strong>抽象方法</strong>: 用 abstract 修饰的方法，可以用于指示某个类，但不能被实例化，只能通过继承实现。抽象方法只起着声明作用，不能带实现部分。abstract 可以和类、方法、属性、索引器及事件一起使用，标识一个可以扩展但不能被实体化的、必须被实现的类或方法。</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">Practice</span>()</span>; </span><br><span class="line"><span class="comment">//由于抽象方法声明不提供实际的实现，因此没有方法主体；方法声明仅以分号结尾，且签名后没有大括号 (&#123; &#125;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>try</strong>: 异常处理代码块的组成部分之一。try 语句提供一种机制，用于捕捉在块的执行期间发生的各种异常。此外，try 语句还能指定一个代码块，并保证当控制离开 try 语句时，总是先执行该代码，try 有三种语句形式如下所示：<br>一个 try 块后接一个或多个 catch 块。<br>一个 try 块后接一个 finally 块。<br>一个 try 块后接一个或多个 catch 块，后面再跟一个 finally 块。<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/img_Guo/article/details/86611560?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167806837316800227444768%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=167806837316800227444768&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-86611560-null-null.142^v73^control,201^v4^add_ask,239^v2^insert_chatgpt&amp;utm_term=catch%20C%23&amp;spm=1018.2226.3001.4187">异常捕获</a>**是一个完整的流程，其中包括 try、catch、finally以及throw。这里只作简单介绍，详细探讨有着很大的空间，之后应用熟练后可以再讲述。<br>catch：程序通过异常处理程序捕获异常。catch 关键字表示异常的捕获，可以列出多个 catch 语句捕获不同类型的异常，以防 try 块在不同的情况下生成多个异常。<br>finally：finally 块用于执行给定的语句，不管异常是否被抛出都会执行。例如，如果您打开一个文件，不管是否出现异常文件都要被关闭。<br>throw：当问题出现时，程序抛出一个异常。使用 throw 关键字来完成。</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>-statement:</span><br><span class="line">	<span class="keyword">try</span>   block   <span class="keyword">catch</span>-clauses</span><br><span class="line">	<span class="keyword">try</span>   block   <span class="keyword">finally</span>-clause</span><br><span class="line">	<span class="keyword">try</span>   block   <span class="keyword">catch</span>-clauses   <span class="keyword">finally</span>-clause<span class="comment">//你可以有多个cach子句,但只能有一个finally子句</span></span><br><span class="line"><span class="keyword">catch</span>-clauses:</span><br><span class="line">	specific-<span class="keyword">catch</span>-clauses   general-<span class="keyword">catch</span>-clauseopt</span><br><span class="line">	specific-<span class="keyword">catch</span>-clausesopt   general-<span class="keyword">catch</span>-clause</span><br><span class="line">specific-<span class="keyword">catch</span>-clauses:</span><br><span class="line">	specific-<span class="keyword">catch</span>-clause</span><br><span class="line">	specific-<span class="keyword">catch</span>-clauses   specific-<span class="keyword">catch</span>-clause</span><br><span class="line">specific-<span class="keyword">catch</span>-clause:</span><br><span class="line">	<span class="keyword">catch</span>   (   <span class="keyword">class</span>-<span class="title">type</span>   <span class="title">identifieropt</span>   )   <span class="title">block</span></span><br><span class="line"><span class="title">general</span>-<span class="title">catch</span>-<span class="title">clause</span>:</span><br><span class="line">	<span class="title">catch</span>   <span class="title">block</span></span><br><span class="line"><span class="title">finally</span>-<span class="title">clause</span>:</span><br><span class="line">	<span class="title">finally</span>   <span class="title">block</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 引起异常的语句</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>( ExceptionName e1 )</span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 错误处理代码</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>( ExceptionName e2 )</span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 错误处理代码</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>( ExceptionName eN )</span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 错误处理代码</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">finally</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 要执行的语句</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>namespace</strong>:命名空间的设计目的是提供一种让一组名称与其他名称分隔开的方式。在一个命名空间中声明的类的名称与另一个命名空间中声明的相同的类的名称不冲突,同时一个命名空间中会包含一系列的类。命名空间的定义是以关键字 namespace 开始，后跟命名空间的名称，如下所示：</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title">namespace_name</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 代码声明</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了调用支持命名空间版本的函数或变量，会把命名空间的名称置于前面，如下所示：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">namespace_name.item_name;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>using 关键字</strong>表明程序使用的是给定命名空间中的名称。例如，我们在程序中使用 System 命名空间，其中定义了类 Console。我们可以只写：</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Console.WriteLine (<span class="string">&quot;Hello there&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>也可以写完全限定名称如下：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.Console.WriteLine(<span class="string">&quot;Hello there&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>若使用 using 命名空间指令，在使用的时候就不用在前面加上命名空间名称，该指令告诉编译器随后的代码使用了指定命名空间中的名称。</p>
+<ul>
+<li><strong>static</strong>可以修饰类、字段、属性、方法等。如一个方法前加上static修饰后要对其进行调用可以直接通过类名点出来，不用再对类进行实例化。</li>
+</ul>
+<p>对于<strong>全局变量</strong>来说，全局变量的作用域是整个源程序，当一个源程序由多个源文件组成时，全局变量在所有的源文件中都是有效的；而通过在全局变量上加 static ，可以使全局变量被定义成一个静态全局变量。这样就可以避免其他源文件使用该变量、避免其他源文件因为该变量引起的错误，起到了对其他源文件隐藏该变量和隔离错误的作用。（静态函数同理）</p>
+<p>对于<strong>局部变量</strong>来说， 有时候我们希望函数中局部变量的值在函数调用结束之后不会消失，仍然保留函数调用结束的值。这时，应该将该局部变量用关键字static声明为静态局部变量。当局部变量被声明为静态局部变量的时候，也就改变了局部变量的存储位置，从原来的栈中存放改为静态存储区存放，全局变量也存放在静态存储区，<strong>静态局部变量与全局变量的主要区别就在于可见性，静态局部变量只在其被声明的代码块中是可见的。</strong></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/astronauting-rbr.top/2023/03/06/csharp2/" data-toggle="tooltip" data-placement="top" title="C#学习笔记（2）">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/astronauting-rbr.top/2023/03/01/mqtt2/" data-toggle="tooltip" data-placement="top" title="基于python与mqtt的传输代码及其文件传输应用(下)">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/astronauting-rbr.top/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/astronauting-rbr.top/tags/#C#" title="C#">C#</a>
+                        
+                          <a class="tag" href="/astronauting-rbr.top/tags/#基础编程" title="基础编程">基础编程</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/astronauting-rbr.top/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/astronauting-rbr.top/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/astronauting-rbr.top/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
