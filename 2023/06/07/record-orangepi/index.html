@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="keyword"  content="">
-    <link rel="shortcut icon" href="/astronauting-rbr.top/img/favicon.ico">
+    <link rel="shortcut icon" href="/master/img/favicon.ico">
 
     <title>
         
@@ -17,21 +17,21 @@
         
     </title>
 
-    <link rel="canonical" href="https://astronauting-rbr.top/astronauting-rbr.top/2023/06/07/record-orangepi/">
+    <link rel="canonical" href="https://github.com/astronauting/astronauting.github.io/master/master/2023/06/07/record-orangepi/">
 
     <!-- Bootstrap Core CSS -->
     
-<link rel="stylesheet" href="/astronauting-rbr.top/css/bootstrap.min.css">
+<link rel="stylesheet" href="/master/css/bootstrap.min.css">
 
 
     <!-- Custom CSS -->
     
-<link rel="stylesheet" href="/astronauting-rbr.top/css/hux-blog.min.css">
+<link rel="stylesheet" href="/master/css/hux-blog.min.css">
 
 
     <!-- Pygments Highlight CSS -->
     
-<link rel="stylesheet" href="/astronauting-rbr.top/css/highlight.css">
+<link rel="stylesheet" href="/master/css/highlight.css">
 
 
     <!-- Custom Fonts -->
@@ -73,7 +73,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/astronauting-rbr.top/">R&#39;s Blog</a>
+            <a class="navbar-brand" href="/master/">R&#39;s Blog</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -86,7 +86,7 @@
             <div class="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="/astronauting-rbr.top/">Home</a>
+                        <a href="/master/">Home</a>
                     </li>
 
                     
@@ -96,21 +96,21 @@
 
                         
                         <li>
-                            <a href="/astronauting-rbr.top/archives/">时</a>
+                            <a href="/master/about/">知</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/astronauting-rbr.top/about/">知</a>
+                            <a href="/master/archives/">时</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/astronauting-rbr.top/tags/">类</a>
+                            <a href="/master/tags/">类</a>
                         </li>
                         
                     
@@ -155,13 +155,13 @@
     <!-- Main Content -->
     
 <!-- Image to hack wechat -->
-<!-- <img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="https://github.com/astronauting/astronauting.github.io/master/master/img/icon_wechat.png" width="0" height="0"> -->
 <!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
 
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/astronauting-rbr.top/img/home-bg.jpg')
+        background-image: url('/master/img/home-bg.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -171,11 +171,11 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/astronauting-rbr.top/tags/#linux" title="linux">linux</a>
+                          <a class="tag" href="/master/tags/#linux" title="linux">linux</a>
                         
-                          <a class="tag" href="/astronauting-rbr.top/tags/#yolo" title="yolo">yolo</a>
+                          <a class="tag" href="/master/tags/#yolo" title="yolo">yolo</a>
                         
-                          <a class="tag" href="/astronauting-rbr.top/tags/#香橙派" title="香橙派">香橙派</a>
+                          <a class="tag" href="/master/tags/#香橙派" title="香橙派">香橙派</a>
                         
                     </div>
                     <h1>基于yolov5及香橙派5的视觉识别项目记录</h1>
@@ -203,12 +203,12 @@
 
                 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近两周一来一直在做视觉识别圆环工件的项目，深度学习训练以及识别实现并不是重点，重点在于如何不卡顿的在香橙派5开发板上实现。过程中走了许多弯路，并且经过试错找到了合适的解决方案，在此处把加速的方案进行记录。</p>
 <h2 id="过程记录"><a href="#过程记录" class="headerlink" title="过程记录"></a>过程记录</h2><p>模型训练的过程不作说明，从得到.pt模型文件开始进行记录，项目使用的瑞芯微RK3588是一款搭载了NPU的国产开发板，NPU是为了嵌入式神经网络和边缘计算量身定制的，但若想调用RK3588的NPU单元进行推理加速，则需要首先将模型转换为.rknn格式的模型，否则无法使用。</p>
-<p>首先官方的<a target="_blank" rel="noopener" href="https://github.com/rockchip-linux">github仓库</a>下有三个需要用的项目，分别是rknn-toolkit 、rknn-toolkit2以及rknpu2，这三个项目最好现在电脑中保存下来以便后续进行处理。</p>
+<p>首先官方的<a href="https://github.com/rockchip-linux">github仓库</a>下有三个需要用的项目，分别是rknn-toolkit 、rknn-toolkit2以及rknpu2，这三个项目最好现在电脑中保存下来以便后续进行处理。</p>
 <ul>
 <li><p>win端步骤：</p>
 <p>  先使用anaconda创建一个rknn虚拟环境，配成3.6的python环境，再通过pip指令进行依赖包安装，安装时可以切到rknn-toolkit2-master\rknn-toolkit2-master\doc目录下运行如下指令实现大量安装，速度过慢记得换源。</p>
   <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements_cp36-<span class="number">1</span>.<span class="number">5</span>.<span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p>  要从yolov5的工程目录中运行export.py将pt模型转换成onnx模型，可以参考<a target="_blank" rel="noopener" href="https://github.com/rockchip-linux/rknn-toolkit/tree/master/examples/pytorch/yolov5">官方网址</a>中对后处理部分进行修改，注意只参考修改的部分即可，其它部分并不适用于win端操作。然后将权重.pt文件复制到export.py的同一级目录下，在虚拟环境中运行指令：</p>
+<p>  要从yolov5的工程目录中运行export.py将pt模型转换成onnx模型，可以参考<a href="https://github.com/rockchip-linux/rknn-toolkit/tree/master/examples/pytorch/yolov5">官方网址</a>中对后处理部分进行修改，注意只参考修改的部分即可，其它部分并不适用于win端操作。然后将权重.pt文件复制到export.py的同一级目录下，在虚拟环境中运行指令：</p>
   <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python export.py --weights best.pt --img <span class="number">640</span> --batch <span class="number">1</span> --include onnx</span><br></pre></td></tr></table></figure>
 <p>  不同版本的yolo中export的参数指令可能有所不同，有报错的话打开改文件进行查看，修改上述指令的先后顺序。<br>  比如在我的export.py中就没有include参数：</p>
 <p>  <img src="https://pic.imgdb.cn/item/648039701ddac507ccbbf856.jpg" alt="1"></p>
@@ -261,12 +261,12 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/astronauting-rbr.top/2023/06/12/calibrate/" data-toggle="tooltip" data-placement="top" title="手眼标定学习记录">&larr; Previous Post</a>
+                            <a href="/master/2023/06/12/calibrate/" data-toggle="tooltip" data-placement="top" title="手眼标定学习记录">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/astronauting-rbr.top/2023/05/11/ros4/" data-toggle="tooltip" data-placement="top" title="ros学习记录（4）——ROS基本流程、命令总结及视频内容补充">Next Post &rarr;</a>
+                            <a href="/master/2023/05/11/ros4/" data-toggle="tooltip" data-placement="top" title="ros学习记录（4）——ROS基本流程、命令总结及视频内容补充">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -290,14 +290,14 @@
                 
                 <section>
                     <!-- no hr -->
-                    <h5><a href="/astronauting-rbr.top/tags/">FEATURED TAGS</a></h5>
+                    <h5><a href="/master/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/astronauting-rbr.top/tags/#linux" title="linux">linux</a>
+                          <a class="tag" href="/master/tags/#linux" title="linux">linux</a>
                         
-                          <a class="tag" href="/astronauting-rbr.top/tags/#yolo" title="yolo">yolo</a>
+                          <a class="tag" href="/master/tags/#yolo" title="yolo">yolo</a>
                         
-                          <a class="tag" href="/astronauting-rbr.top/tags/#香橙派" title="香橙派">香橙派</a>
+                          <a class="tag" href="/master/tags/#香橙派" title="香橙派">香橙派</a>
                         
                     </div>
                 </section>
@@ -359,17 +359,17 @@
 
 <!-- jQuery -->
 
-<script src="/astronauting-rbr.top/js/jquery.min.js"></script>
+<script src="/master/js/jquery.min.js"></script>
 
 
 <!-- Bootstrap Core JavaScript -->
 
-<script src="/astronauting-rbr.top/js/bootstrap.min.js"></script>
+<script src="/master/js/bootstrap.min.js"></script>
 
 
 <!-- Custom Theme JavaScript -->
 
-<script src="/astronauting-rbr.top/js/hux-blog.min.js"></script>
+<script src="/master/js/hux-blog.min.js"></script>
 
 
 
@@ -408,7 +408,7 @@
 <script>
     // only load tagcloud.js in tag.html
     if($('#tag_cloud').length !== 0){
-        async("https://astronauting-rbr.top/astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+        async("https://github.com/astronauting/astronauting.github.io/master/master/js/jquery.tagcloud.js",function(){
             $.fn.tagcloud.defaults = {
                 //size: {start: 1, end: 1, unit: 'em'},
                 color: {start: '#bbbbee', end: '#0085a1'},
@@ -442,7 +442,7 @@
 
 
 <!-- Image to hack wechat -->
-<img src="https://astronauting-rbr.top/astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<img src="https://github.com/astronauting/astronauting.github.io/master/master/img/icon_wechat.png" width="0" height="0" />
 <!-- Migrate from head to bottom, no longer block render and still work -->
 
 </body>
