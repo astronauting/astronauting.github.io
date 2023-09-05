@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="任博容，rbr,astronauting,blog">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          博客搭建过程详细记录 - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/2023/09/05/record-blog/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">类</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">时</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#前端" title="前端">前端</a>
+                        
+                          <a class="tag" href="/tags/#博客搭建" title="博客搭建">博客搭建</a>
+                        
+                    </div>
+                    <h1>博客搭建过程详细记录</h1>
+                    <h2 class="subheading">搭建方式为 hexo 和 github pages,没有服务器的静态博客</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-09-05
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>注意：过程中使用了 Github 相关功能，需要科学上网，因此自行斟酌可行性。</strong></p>
+<p>之前兴致冲冲的搭建了一回博客网站，但是动态元素太多，加载起来比较慢，整体风格也不是很喜欢。</p>
+<p>新学期趁着总结文档的机会，花了两天的时间把整个流程重新走了一遍，此外还上了点难度，下狠心去找一个自己很喜欢的风格，也就是现在在用的 hux blog 模板。hexo 下的作者是 <a target="_blank" rel="noopener" href="https://github.com/Kaijun">kaijun</a>，原作者是 <a target="_blank" rel="noopener" href="https://github.com/Huxpro">黄玄</a>，都是非常顶级的大佬，据我所找的信息来看是这个模板已经不在更新了（至少 hexo 下的是这样的），所以建议去 hexo 官网下找自己喜欢的主题，这会省非常多的力气。</p>
+<p>我目前使用的模板是大佬直接改了一些框架文件，不是单纯在主题文件夹中进行修改，因此不建议刚上手就使用这个。</p>
+<p>当然以上这些都是后话，下面一步步从域名开始讲，争取能达到预期的细致效果。</p>
+<h2 id="整体框架介绍"><a href="#整体框架介绍" class="headerlink" title="整体框架介绍"></a>整体框架介绍</h2><p>博客相当于是个人网站，但又不同于正式的网站，正式个人网站相当于动态博客，需要自己购买域名和服务器，还要走审批流程，成本实在是太高了，服务器的成本一年就很贵，还要定期的去维护它，对于大多数人来说，实在是得不偿失。</p>
+<p>当然现在市面上的博客也很多，如CSDN，博客园，简书等平台，可以直接注册账号进行发表，并且收获点赞与关注。但是平台本身的存在限制了我们的自由性，可能是审核问题，也可能是美观问题，所以我们找到了第三种选择——静态博客。</p>
+<p>静态博客就是直接在 GitHub 上对博客进行托管，创作者只需要专注于创作本身，省去了维护的过程，并且 hexo 的存在使得博客搭建非常容易，不需要去手撕 html 或者是 css。</p>
+<p>Hexo 是基于 Node.js 的静态博客框架，在该框架下写 markdown 文件，配置 yml 文件，就可以直接运行命令生成静态网页，再将静态网页放到 GitHub 上就可以了。</p>
+<p>详细内容可以进入<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">Hexo官网</a>进行查看，框架作者是台湾人，因此 Hexo 对中文是十分友好的。</p>
+<h2 id="搭建流程"><a href="#搭建流程" class="headerlink" title="搭建流程"></a>搭建流程</h2><h3 id="1-安装-Git"><a href="#1-安装-Git" class="headerlink" title="1. 安装 Git"></a>1. 安装 Git</h3><p>首先需要安装 git,是世界上最先进的分布式版本控制系统，具体的功能是十分强大的，建议每个学习编程的哥们都或多或少学一点。</p>
+<p>在这里，我们把 git 用于管理博客文章，充当上传到 GitHub 的工具。windows 下到 <a target="_blank" rel="noopener" href="https://gitforwindows.org/">git 官网</a>进行下载，下载后会有一个叫 Git bash 的命令行工具，后续指令的执行就是在这个里面进行。</p>
+<p>安装后在桌面右击选择 Opem Git Bash here 进入 Git 命令行界面，用 <code>git --version</code> 指令可以查看版本。</p>
+<h3 id="2-安装-nodeJS"><a href="#2-安装-nodeJS" class="headerlink" title="2. 安装 nodeJS"></a>2. 安装 nodeJS</h3><p>Hexo 是基于 nodeJS 编写的，所以需要安装 nodeJS 以及其对应的 npm 工具，windows 下到<a target="_blank" rel="noopener" href="https://nodejs.org/en/download">官网</a>进行下载。</p>
+<p>这个具体功能是什么，我查了一下是一个 javascript 的运行环境，所以我想应该是和 hexo 生成网页的过程有关系，因为不太了解 Java 前端，所以就此先打住，下载安装就完事了。</p>
+<h3 id="3-安装-hexo-及初始化"><a href="#3-安装-hexo-及初始化" class="headerlink" title="3. 安装 hexo 及初始化"></a>3. 安装 hexo 及初始化</h3><p>下面的指令其实打开<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">Hexo官网</a>就可以看到，用的是官方安装流程，因此不作太多讲解。</p>
+<p>先在一个合适的地方创建你的存放博客项目的文件夹，然后点进去这个文件夹，右击选择 Opem Git Bash here 进入 Git 命令行界面。</p>
+<p>输入命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p>用 <code>hexo -v</code> 查看一下版本确保安装成功。</p>
+<p>接下来进行初始化：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init myblog</span><br></pre></td></tr></table></figure>
+<p>再安装 npm：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<p>以上命令执行完成后，文件目录如下所示：</p>
+<p><img src="https://pic.imgdb.cn/item/64f6f1de661c6c8e54a938df.jpg" alt="1"></p>
+<p>其中：</p>
+<ul>
+<li>node_modules: 依赖包</li>
+<li>public：存放生成的页面（此处还没有生成）</li>
+<li>scaffolds：生成文章的一些模板</li>
+<li>source：用来存放你的文章</li>
+<li>themes：存放主题</li>
+<li>_config.yml: 博客的配置文件</li>
+</ul>
+<p>运行命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<p>然后按住 Ctrl 点击生成的网址即可进入本地预览界面，以后需要预览都可以这样操作。 <code>hexo g</code> 用来生成页面文件， <code>hexo s</code> 用来获取本地预览链接，在命令行界面使用 ctrl+c 可以把预览服务关掉。</p>
+<h3 id="4-Github-仓库设置"><a href="#4-Github-仓库设置" class="headerlink" title="4. Github 仓库设置"></a>4. Github 仓库设置</h3><p>GitHub 账号注册这一块儿可能需要科学上网，具体注册流程也不需要过多赘述，因此不作讲解。</p>
+<p>登录 Github 账号，界面应该如下所示：</p>
+<p><img src="https://pic.imgdb.cn/item/64f6f53b661c6c8e54aa02d3.jpg" alt="2"></p>
+<p>左上方点击绿色按钮新建仓库，下图所示区域中添加仓库名字为和你用户名相同的仓库，后面加 <code>.github.io</code> 例如我的仓库名字为 <code>astronauting.github.io</code>。</p>
+<p>其他不用管，直接创建即可。</p>
+<p>回到 git bash 命令行中，执行如下命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;yourname&quot;</span><br><span class="line">git config --global user.email &quot;youremail&quot;</span><br></pre></td></tr></table></figure>
+<p>这里的 yourname 输入你的 GitHub 用户名，youremail 输入你 GitHub 的邮箱。这样 GitHub 才能知道你是不是对应它的账户。</p>
+<p>执行完以后通过以下指令检查是否输对：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config user.name</span><br><span class="line">git config user.email</span><br></pre></td></tr></table></figure>
+<p>然后执行下列命令创建 ssh，执行后一路回车：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;youremail&quot;</span><br></pre></td></tr></table></figure>
+<p>程序会显示.ssh的文件夹，在你的电脑中找到它。</p>
+<p><img src="https://pic.imgdb.cn/item/64f6f76a661c6c8e54aaa293.jpg" alt="3"></p>
+<p>ssh 就是密钥，<code>id_rsa</code> 是私人密钥，<code>id_rsa.pub</code> 是公共密钥，我们在这里使用公共密钥，把这个公钥放在 GitHub 上，这样当你链接 GitHub 自己的账户时，它就会根据公钥匹配你的私钥，当能够相互匹配时，才能够顺利的通过 git 上传你的文件到 GitHub 上。</p>
+<p>打开 Github 的 setting 页面（注意不是你仓库的设置界面），找到 SSH keys 的设置选项，点击 New SSH key，把你的 id_rsa.pub 里面的信息复制进去。（ id_rsa.pub 直接用记事本打开就可以看到里面的东西）</p>
+<p><img src="https://pic.imgdb.cn/item/64f6f875661c6c8e54aadba8.jpg" alt="4"></p>
+<p><img src="https://pic.imgdb.cn/item/64f6f8fa661c6c8e54aaf9e1.jpg" alt="5"></p>
+<p>运行如下命令查看是否成功：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<h3 id="5-将-hexo-部署到-GitHub"><a href="#5-将-hexo-部署到-GitHub" class="headerlink" title="5. 将 hexo 部署到 GitHub"></a>5. 将 hexo 部署到 GitHub</h3><p>打开站点配置文件 <code>_config.yml</code>，移动到最后一行，修改如下(注意 YourgithubName 就是你的 GitHub 账户)：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/YourgithubName/YourgithubName.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<p>这个时候需要先安装 deploy-git ，也就是部署的命令,这样你才能用命令部署到 GitHub：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>然后：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<p><code>hexo clean</code> 清除了之前生成的页面文件，可以不加。<code>hexo g</code> 生成页面，<code>hexo d</code> 部署页面，也可以在部署前通过 <code>hexo s</code> 预览你即将部署的东西。</p>
+<p>部署时第一次可能会要求输入账号和密码（GitHub），正常输入就行。</p>
+<p>出现如下文字表明部署成功：</p>
+<p><img src="https://pic.imgdb.cn/item/64f6fb4d661c6c8e54ab8fae.jpg" alt="6"></p>
+<p>在 <code>http://yourname.github.io</code> 这个网站就可以看到你的博客了。</p>
+<h3 id="6-设置个人域名"><a href="#6-设置个人域名" class="headerlink" title="6. 设置个人域名"></a>6. 设置个人域名</h3><p>上面的网址其实相当于是 Github 的页面托管网址，如果你想要自己的，注册一个阿里云，在阿里云上购买域名，选择小众点的域名其实很便宜，一年也就几十块钱。不同后缀的价格是不一样的，我的 top 后缀在里面就算是便宜的后缀，不影响其他，纯粹看个人喜好。</p>
+<p>购买完成以及实名认证后，域名控制台中就可以看到购买的域名，点击解析进去添加解析。</p>
+<p><img src="https://pic.imgdb.cn/item/64f6fe2f661c6c8e54ac8dbb.jpg" alt="7"></p>
+<p><img src="https://pic.imgdb.cn/item/64f6fffd661c6c8e54ad912e.jpg" alt="8"></p>
+<p>直接从我们的域名解析到 GitHub 仓库就行。</p>
+<p>然后在 GitHub 中进入之前创建的仓库界面，点击 setting &gt;&gt; pages ，custom domain 部分添加自己域名点击 save 即可。</p>
+<p><img src="https://pic.imgdb.cn/item/64f7018f661c6c8e54adf7e3.jpg" alt="9"></p>
+<p>在你的博客文件夹下的 source 中创建一个名为 CNAME 文件，不要加后缀，写上你的域名。</p>
+<p><img src="https://pic.imgdb.cn/item/64f70205661c6c8e54ae172d.jpg" alt="10"></p>
+<p>重新 hexo clean、hexo g、hexo d 即可，不用多久进入你的网址就可以看到你的博客了。</p>
+<p>运行如下命令新建博文：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new XXX</span><br></pre></td></tr></table></figure>
+<h2 id="一些后话"><a href="#一些后话" class="headerlink" title="一些后话"></a>一些后话</h2><p>主题可以在官网里面进行选择想要的，然后下载下来把文件夹放到 theme 下，再在项目文件 <code>_config.yml</code> 中下述部分进行修改，把名字改成你的主题名就好啦。</p>
+<p><img src="https://pic.imgdb.cn/item/64f70383661c6c8e54ae7368.jpg" alt="11"></p>
+<p>配置文件中 url 的部分记得改成自己的网址，否则可能会有定向问题。</p>
+<p><img src="https://pic.imgdb.cn/item/64f703f9661c6c8e54ae8afb.jpg" alt="12"></p>
+<p>页面中所有的外观、部件等参数的调整都在主题文件夹下的 <code>_config.yml</code> 中，而主页面的一些必要调整则在项目文件夹下的 <code>_config.yml</code> 中，修改这两个配置文件就可以修改几乎全部的外观设置。</p>
+<p>至于每篇博文一些要素的添加（例如数学公式、标签分类等）可以看 hexo 的官方文档，写博文时注意要用 markdown 语法去写，这个可以直接找到<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43863919/article/details/124648510?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169390371816800188572283%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169390371816800188572283&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-124648510-null-null.142^v93^koosearch_v1&amp;utm_term=markdown%20%E8%AF%AD%E6%B3%95&amp;spm=1018.2226.3001.4187">相关教程</a>。</p>
+<p>markdown 文件的书写并不难，只需要用到的时候搜对应的功能即可，其对代码书写记录十分友好，强烈建议使用这种语法写文档。</p>
+<p>过程中可能出现 hexo d 报错情况，出现这种情况先在控制台中输入 <code>ping github.com</code> 确定是不是网络的原因，之后可<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/636418854">参考此处</a>进行解决。</p>
+<p>如果本地部署预览看起来好好的，到了线上发现完全不一样，可以看看<a target="_blank" rel="noopener" href="https://shijivk.cn/2021/07/23/hexo-deploy-issue/">这篇文章</a>。</p>
+<p>还有很多深入的功能没有去研究，但我目前的方向并不打算往前端去靠，所以到达目前这个满足自己使用的阶段就好，希望跟着这篇教程，每个感兴趣的人都可以顺畅自如的学会部署自己的个人博客。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2023/06/15/cpp1/" data-toggle="tooltip" data-placement="top" title="c++上手记录">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#前端" title="前端">前端</a>
+                        
+                          <a class="tag" href="/tags/#博客搭建" title="博客搭建">博客搭建</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
