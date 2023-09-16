@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="任博容，rbr,astronauting,blog">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          C++ 学习记录（一） - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/2023/09/07/cpp/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">类</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">知</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#基础编程" title="基础编程">基础编程</a>
+                        
+                    </div>
+                    <h1>C++ 学习记录（一）</h1>
+                    <h2 class="subheading">C++ 学习过程中的程序及每章个人总结，此处梳理一到四章，重点在于后面两章中的数据类型。</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-09-07
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>打算好好学学 C++，一方面是因为 C++ 和视觉结合的相关代码是很多的，另一方面它和底层硬件也有很强的联系，因此打算深入学学底层基础性的语言，最好能够达到自如书写代码的目标。</p>
+<p>主要学习途径是买了《C++ Primer Plus》，也是调查了一些领域内的书买下来的，很厚共有 18 章，但是内容很详实很细致，非常适合学习。</p>
+<p>书里面的例程一个个在电脑里复现一遍，这样实际操作感觉学起来进步很快，并且能发现一些光看看不出来的知识点。</p>
+<p>但是还存在的问题是这个过程中的个人体会、想要记忆的点都是散乱的分布在书里的每一页，时间长了很容易忘。遂开一篇文章专门进行记录，方便以后回来进行查阅，也更有利于学习提升。</p>
+<h2 id="第一、二章：入门及函数"><a href="#第一、二章：入门及函数" class="headerlink" title="第一、二章：入门及函数"></a>第一、二章：入门及函数</h2><h3 id="起始流程"><a href="#起始流程" class="headerlink" title="起始流程"></a>起始流程</h3><p>第一章主要是一些预备知识，我并不了解一个 c++ 程序应该如何编译、调试，因此着重看了这些内容。</p>
+<p>Linux 下的编译主要使用 g++ 进行编译，使用指令如下：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ mycode.cxx</span><br></pre></td></tr></table></figure>
+<p>windows 下如果要在命令行同样是使用上述命令，编译成功会生成可执行文件。</p>
+<p><strong>此前在 Linux 下对 c++ 进行编译时使用了 Cmake，具体怎么个原理还不太懂，之后专门去研究研究。</strong></p>
+<p>当然 Windows 下一般都是用其特有的编译器去进行编译要更方便，这便引出了 Microsoft Visual C++。软件提供了很多类型的 IDE，在创建项目前需明确。</p>
+<p>软件中，<code>Build 和 Make</code> 表示编译所有源代码文件中的代码，<code>Link</code> 表示将编译后的源代码与库代码进行组合，<code>Run</code> 是运行程序，如果没有执行编译等步骤，<code>Run</code> 会在运行前先完成这些，另外 <code>Debug</code> 表示以步进方式进行调试。</p>
+<h3 id="函数练习及基本语句"><a href="#函数练习及基本语句" class="headerlink" title="函数练习及基本语句"></a>函数练习及基本语句</h3><p>C++ 中是不能省略分号的，每个语句都是以分号作为结束标志，而不是以换行作为标志。</p>
+<p>一个函数 <code>int main()</code> 开头 <code>int</code> 规定的是函数返回值类型，而括号中规定函数接受的参数，为空表示不接受任何参数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;hello world!&quot;</span>;</span><br><span class="line">    cout &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;to learn,to practice,and to improve&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="头文件、名称空间"><a href="#头文件、名称空间" class="headerlink" title="头文件、名称空间"></a>头文件、名称空间</h4><p><code>iostream</code> 相当于是定义一些“流”的头文件，及“in/out stream”，使用 <code>cin</code> 和 <code>cout</code> 进行输入输出的程序必须包含 <code>iostream</code>。</p>
+<p>旧式 C++ 及 C 使用的头文件均为 .h 文件，新式 C++ 不带任何拓展名，不带任何拓展名的头文件在使用时需要规定名称空间 <code>namespace</code>。</p>
+<p>关于名称空间，我现有的理解是有两个人名是相同的，都叫 Chandler，你在叫其中一个人的时候就无法准确叫到。这时候名称空间相当于规定一个“姓氏”，一个叫 Chandler Bing，另一个叫 Chandler John，这样就可以准确叫到你要找的人。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br></pre></td></tr></table></figure>
+<p>上面语句引入名称空间，相当于声明后面的相关函数都使用这个名称空间下的，放到例子里面就是你声明你之后喊得 Chandler 都是姓 Bing 的，如果不声明，后面要使用某个函数时就要带上名称空间，如 cout 就变成了：<code>std::endl</code>。</p>
+<h4 id="消息显示与传递"><a href="#消息显示与传递" class="headerlink" title="消息显示与传递"></a>消息显示与传递</h4><p>前面提到的 <code>cin</code> 和 <code>cout</code> 分别代表输入输出，注意这个输入输出时说外部程序到代码的输入输出，<code>cin &gt;&gt; val</code> 表示将用户输入的某个值传给变量 val，<code>cout &lt;&lt; &quot;hello world!&quot;</code> 则表示将这句话输出到程序中显示。</p>
+<p>而这里的 <code>&lt;&lt;</code> 和 <code>&gt;&gt;</code> 都是插入运算符，输入和输出时流式传输的，是一个完整的信息流，与其说这两个符号让信息显示或储存，倒不如说他们只是在输入和输出流中“插入”了一段信息，这样的表述更加确切。</p>
+<p>endl表示换行，使用传统的“\n”也可，看喜好。</p>
+<h4 id="声明语句和变量"><a href="#声明语句和变量" class="headerlink" title="声明语句和变量"></a>声明语句和变量</h4><p>c++ 中所使用的任何变量都需要进行声明，如 project 的声明语句可以为：<code>int project;</code>，这一规则的引入主要是为了防止错误拼写变量名。另外，c++ 中可以连续使用赋值运算符，且运算符从右往左进行。</p>
+<p>cout 指令可以使程序输出打印字符串这点功能是和 printf()相当的，但是 printf()更笨一点，需要声明函数的各个类型。</p>
+<h4 id="类简介"><a href="#类简介" class="headerlink" title="类简介"></a>类简介</h4><p>类的使用是语言面向对象编程的核心概念之一，之前在学习 python 的时候就有点迷惑这个概念要表达的意思，现在慢慢向着基础方向挪动，才逐渐理解了一些。</p>
+<p>类定义的是某一类别的整体概念，比如它可能会定义程序员有哪些功能，可以写 C++ 代码、 python 代码等等。而对象就具体化到了实体，比如程序员 XXX 就是一个实体，他有类所规定的功能，你也可以让他去写 c++ 代码，也可以让他写 python 代码，这就具体了起来。你可以某个程序员做一件事，但不可以让程序员这个概念本身去做事，这也就是类的实例化过程。</p>
+<h4 id="函数补充"><a href="#函数补充" class="headerlink" title="函数补充"></a>函数补充</h4><p>函数需要有函数原型，就像变量需要有变量声明，函数原型就是将函数输入及返回值作出定义。</p>
+<p>名称空间的声明可以放在函数外面，让所有函数都能够使用这一名称空间中的所有元素，也可以放在函数里面，让某个特定函数才能使用。</p>
+<h2 id="第三章：c-基本类型"><a href="#第三章：c-基本类型" class="headerlink" title="第三章：c++基本类型"></a>第三章：c++基本类型</h2><p>基本类型、复合类型合称为 c++ 的数据类型，基本类型有整型、浮点型，复合类型则包括数组、字符串、指针、结构以及相关的一些变体，数据类型是一切的起点，也是最贴合底层逻辑的所在，需要非常非常清晰的掌握。</p>
+<h3 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h3><h4 id="类型、初始化、声明"><a href="#类型、初始化、声明" class="headerlink" title="类型、初始化、声明"></a>类型、初始化、声明</h4><p>整形包括 short、int、long、long long 以及 char，各自有各自的无符号类型。</p>
+<p>简单的变量初始化有三点，类型、名称以及值，如：<code>int var = 1;</code>，这其中 <code>int var;</code> 可以单独写开，他是前面提到的变量声明。但一般情况下需要在变量声明的同时进行赋值，防止出现忘记赋值的情况。</p>
+<p>无符号类型的声明只需要在声明前再加上 unsigned 即可，如：<code>unsigned int var;</code>，<strong>如果整形变量发生溢出，就会在另一端开始取值，在使用较大的数据时，需要注意选择适当数据类型</strong>。</p>
+<h4 id="字面值、进制"><a href="#字面值、进制" class="headerlink" title="字面值、进制"></a>字面值、进制</h4><p>整型字面值是显式的书写常量，此处介绍十进制 dec(decimal)、十六进制 hex(hexadecimal)、八进制 oct(octal)以及二进制 bin(binary)。</p>
+<p>第一位为 0 ，第二位为 1-7 时，是八进制表示，此时基数为 8；前两位为 0x 或 0X，则基数为十六（十六进制），其中 A-F 表示十六进制位（小写同样）；十进制则是正常的书写规范。示例如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> chest = <span class="number">42</span>;<span class="comment">//表示十进制42</span></span><br><span class="line"><span class="type">int</span> waist = <span class="number">0x42</span>;<span class="comment">//表示十六进制，转换为十进制是66</span></span><br><span class="line"><span class="type">int</span> inseam = <span class="number">042</span>;<span class="comment">//表示八进制，转换为十进制是34</span></span><br></pre></td></tr></table></figure>
+<h4 id="char-类型"><a href="#char-类型" class="headerlink" title="char 类型"></a>char 类型</h4><p>char 类型是用来处理单字符（字母或数字）的类型，在程序及存储中，这些字符是以 ASCII 值的形式存储的，只有在输出到 cout 或从 cin 输入时会根据类型进行转换，这也是为什么 char 类型属于整型的一类。</p>
+<p><strong>单字符在书写时需要用单引号引起，而不能像字符串一样用双引号。</strong></p>
+<p>另外还有一种 bool 类型属于布尔变量，字面值用 true 或者 false 表示。</p>
+<h3 id="const-限定符"><a href="#const-限定符" class="headerlink" title="const 限定符"></a>const 限定符</h3><p>const 限定符的作用就是放在声明变量前，通过限定声明来确定常量，不同于变量声明，常量声明过程中必须有初始化，并且后面值不能被改变。</p>
+<h3 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h3><p>在计算机进行表示时，浮点数分为两部分，一部分将浮点数表示为同一形式，另一部分用于对值进行放大或缩小，及缩放因子。缩放因子的作用就是移动小数点的位置，这也是浮点数名称的由来。</p>
+<p>浮点数表示方法有两种，一种是标准小数点表示法，及正常情况下的小数点表示法；另一种则是 E 表示法，格式为： <code>5.98e24</code>、<code>8.33E-3</code>，e、E 皆可，后面跟着指数位，同样正负皆可，表示的是 10 的几次方。</p>
+<p>浮点数有三种类型，float、double 和 long double，区别在于它们可以表示的有效位数，<strong>注意有效位数不依赖于小数点位置</strong>。</p>
+<p>一般情况下，默认类型是 double 类型，希望常量为 float 类型则使用 f 或 F 后缀，对于 long double 类型使用 L 后缀。</p>
+<h3 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h3><p>算术运算符包括 + 、— 、* 、/ 、%，加减乘除不用多描述，% 表示取余。</p>
+<p><strong>int 类型的计算中仅保留整数位，小数部分直接舍弃，并非四舍五入，因此可以和取余进行搭配使用。</strong></p>
+<p>强制类型转化通用表达格式为 <code>(typeName) value</code> 或 <code>typeName (value)</code>，如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="type">long</span>) <span class="function">thorn</span></span><br><span class="line"><span class="function"><span class="title">long</span> <span class="params">(thorn)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>这些基本类型的存在有其特定的意义，在我看来，刚开始只需要明白存在的类型进行选择即可，等到实际引用时再去根据数据范围限制找对应的类型进行更改，这样的学习效率会高很多。</p>
+<h2 id="第四章：c-复合类型"><a href="#第四章：c-复合类型" class="headerlink" title="第四章：c++ 复合类型"></a>第四章：c++ 复合类型</h2><p>复合类型中，数组可以存储同种类型的多个值（或者存储字符串）。结构可以存储不同类型的不同值。指针则是将数据地址告诉计算机的变量。他们之间互有关联，甚至在某些情况下可以互相代替，了解这一点是最重要的。</p>
+<p>指针相关操作直接影响系统内存，这给了操作者极大权限的同时也产生了不小的变成隐患，同时这也是 c++ 编程中不容忽视的一大问题，因此需要对内存这部分进行深度理解。</p>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><h4 id="基本定义"><a href="#基本定义" class="headerlink" title="基本定义"></a>基本定义</h4><p>数组声明指定三点信息，元素类型、数组名、元素数，声明数组通用格式如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> months[<span class="number">12</span>];</span><br><span class="line"><span class="comment">//typeName arrayName[arraySize];//</span></span><br></pre></td></tr></table></figure>
+<p>声明中所有的值需要已知，即元素数不可以变化，需要事先确定好。</p>
+<p>数组从 0 开始编号，因此数组中最后一个元素的索引比数组长度小 1。</p>
+<h4 id="初始化（初始化-声明-赋值）"><a href="#初始化（初始化-声明-赋值）" class="headerlink" title="初始化（初始化=声明+赋值）"></a>初始化（初始化=声明+赋值）</h4><p>只有在定义数组时可以进行初始化，并且不能将一个数组值赋给另一个数组，也可以之后一个元素一个元素的进行赋值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> cards[<span class="number">4</span>] = &#123;<span class="number">3</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h4><p>字符串可以按 char 数组的方式进行定义（及上方数组初始化方法进行定义），也可以使用双引号字符串常量进行初始化。<strong>需要注意空字符也占一个元素位</strong>，在声明元素数量时必须考虑在内。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> cat[<span class="number">4</span>] = &#123;<span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;t&#x27;</span>,<span class="string">&#x27;\0&#x27;</span>&#125;;</span><br><span class="line"><span class="type">char</span> dog[<span class="number">4</span>] = <span class="string">&quot;dog&quot;</span>;</span><br><span class="line"><span class="comment">//两种方式都可以，但不要忽略空字符所占的一位，省去不写系统会自动补上，但要预留空间//</span></span><br></pre></td></tr></table></figure>
+<p>cin 使用空白（空格、制表符、换行符）确定字符串结束位置。需要读取一句话时，往往会有空格出现，这是需要引入新的函数：<code>getline()</code> 或  <code>get()</code>。<code>getline()</code> 遇到换行符时停止读取（即回车），并且不保存换行符到字符串中。但 <code>get()</code> 不会丢弃换行符，而是留在输入队列中，不带参数的情况下，<code>get()</code> 则可以读取下一个字符。因此两种函数通常的使用如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cin.<span class="built_in">getline</span>(name,arrSize);</span><br><span class="line"><span class="comment">//or//</span></span><br><span class="line">cin.<span class="built_in">get</span>(name,arrSize);</span><br><span class="line">cin.<span class="built_in">get</span>();</span><br><span class="line">cin.<span class="built_in">get</span>(name1,arrSize);</span><br></pre></td></tr></table></figure>
+<h4 id="string-类简介"><a href="#string-类简介" class="headerlink" title="string 类简介"></a>string 类简介</h4><p>string 类的导入需要直接引入 <code>#include&lt;string&gt;</code>，引入后可以将字符串视为和 int 等类型差不多的类型，以初始化为例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string str = <span class="string">&quot;string&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>包括不同字符串之间的赋值、相加，这些字符串数组无法完成的功能，字符串类都可以像 int 等类型一般直接使用 = 、+ 完成。</p>
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>创建结构有两步：首先定义结构模板，其次按模板描述定义结构变量。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">str_name</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> name[<span class="number">20</span>];</span><br><span class="line">    <span class="type">float</span> volume;</span><br><span class="line">    <span class="type">double</span> price;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上述是结构模板创建的例子，规定结构内有哪些类型，以及对应的名字。<code>str_name</code> 是这种结构类型的名字，下面为结构变量声明：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str_name myname;</span><br></pre></td></tr></table></figure>
+<p>这里的 <code>myname</code> 就是结构，<code>myname.name</code> 或 <code>myname.volume</code> 就是此结构下的结构变量。</p>
+<p>结构模板声明需要放到所有函数外部，结构声明可以根据适用范围自行选择。</p>
+<h4 id="结构数组"><a href="#结构数组" class="headerlink" title="结构数组"></a>结构数组</h4><p>要创建 100 个 str_name 结构的数组，可以：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str_name gifts[<span class="number">100</span>];</span><br></pre></td></tr></table></figure>
+<p>这样数组中的每一个元素都是 str_name 结构的对象，可以与成员运算符一起使用。</p>
+<h3 id="共用体"><a href="#共用体" class="headerlink" title="共用体"></a>共用体</h3><p>共用体声明示例如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="title class_">one4all</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> int_val;</span><br><span class="line">    <span class="type">long</span> long_val;</span><br><span class="line">    <span class="type">double</span> double_val;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">one4all pail;</span><br><span class="line">pail.int_val = <span class="number">15</span>;</span><br><span class="line">pail.double_val = <span class="number">1.38</span>;</span><br></pre></td></tr></table></figure>
+<p>pail 有时可以是 int 变量，有时又是 double 变量，但它一次只能存储一个值，为的就是节省空间，相当于简洁版 struct。</p>
+<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>指针变量和存储数据的变量是一枚硬币的两面，指针指出数据地址，根据数据地址可以获取数据值；数据变量存放着数据值，根据相关运算符同样可以获得数据值的存放地址。使用常规变量时，值是指定的量，地址是派生量；使用指针变量时，地址是指定的量，值是派生的量。</p>
+<h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>如果 <code>home</code> 是一个变量，那么 <code>&amp;home</code> 就是它的地址。</p>
+<p>指针存在的概念是为了使得内存能够动态分配，常规情况下定义某个数组，它的大小、存储空间都是确定的，运行过程中无论它有没有赋值，它所占的内存永远在。但指针存在的目的使得数组能够动态的去调整，实际运行时需要多少就给多少，并且能在使用结束后删去这一部分内存。这种策略是指针的核心。</p>
+<p>指针也是变量，它存储值的地址。*运算符被称为间接值或解除引用运算符，应用于指针可以获得指针地址处所存储的值。</p>
+<p>若 <code>mainly</code> 是一个表示地址的指针变量，则 <code>*mainly</code> 和常规变量等效，这就可以用声明常规变量的方式去声明 <code>*mainly</code>，而 <code>*mainly</code> 的声明就相当于声明了指针变量 <code>mainly</code>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> var;</span><br><span class="line"><span class="type">int</span> * mainly;</span><br><span class="line">mainly = &amp;var;</span><br><span class="line"><span class="comment">//则在值上，* mainly = var//</span></span><br></pre></td></tr></table></figure>
+<p><strong>每个指针变量的声明都需要一个 *，如 <code>int* p1,* p2</code></strong>。</p>
+<p>可以在声明语句中初始化指针，这种情况下初始化的是指针，而不是其指向的值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> * pt = &amp;var;</span><br></pre></td></tr></table></figure>
+<p><strong>一定要在使用解除引用计算 * 之前，将指针初始化为一个确定且适当的地址。</strong></p>
+<h4 id="分配（new）与释放（delete）内存"><a href="#分配（new）与释放（delete）内存" class="headerlink" title="分配（new）与释放（delete）内存"></a>分配（new）与释放（delete）内存</h4><p>指针真正的运用在于，在运行阶段分配未命名的内存以存储值，分配内存使用 <code>new</code> 运算符，其通用格式及示例如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">typeName * pointer_name = <span class="keyword">new</span> typeName;</span><br><span class="line"><span class="type">int</span> * pn = <span class="keyword">new</span> <span class="type">int</span>;</span><br></pre></td></tr></table></figure>
+<p><code>new</code> 分配的内存块通常与常规变量声明分配的内存块不同，变量的值都存储在成为“栈”的内存区域中，而 <code>new</code> 从被称为“堆”或者“自由存储区”的内存区域分配内存。</p>
+<p><code>new</code> 对内存进行分配后，在使用结束时需要进行内存释放，不释放则可能会引发内存泄漏等严重后果，因此需要配对使用 <code>new</code> 和 <code>delete</code>。</p>
+<p>使用 <code>delete</code> 时，后面要加上指向内存块的指针，如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> * ps = <span class="keyword">new</span> <span class="type">int</span>;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">delete</span> <span class="type">int</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>注意，不要尝试释放已经释放的内存，也不要使用 <code>delete</code> 来释放声明变量所获得的内存（不在同一内存区），其只能用于释放 <code>new</code> 分配的内存。</strong></p>
+<h4 id="动态数组的创建"><a href="#动态数组的创建" class="headerlink" title="动态数组的创建"></a>动态数组的创建</h4><p>事先为数组分配内存被称为静态联编。但在使用  <code>new</code> 时，如果运行时需要数组，则创建空间；不需要，则不创建。这样创建数组的过程叫做动态联编。</p>
+<p>动态数组的创建与释放：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> * pt = <span class="keyword">new</span> <span class="type">int</span>[<span class="number">10</span>];</span><br><span class="line"><span class="keyword">delete</span> [] pt;</span><br></pre></td></tr></table></figure>
+<p>方括号告诉程序需要删除的是整个数组，而不是指针指向的元素。（指针指向的是数组第一个元素的地址）</p>
+<p>若指针指向的是第一个元素的地址，那应该如何访问其它元素？只需要将指针当作数组名使用即可，如 <code>pt[1]</code> 、<code>pt[2]</code> 等。</p>
+<p>在很多情况下，指针和数组基本是等价的（除了数组名不能修改，指针值能修改这一点）。</p>
+<h4 id="指针与数组"><a href="#指针与数组" class="headerlink" title="指针与数组"></a>指针与数组</h4><p>c++ 将数组名解释为地址，数组第一个元素的地址，数组指针也同样指向第一个元素地址。</p>
+<p>若指针变量加 1，其实际值是增加其对应类型的占用字节数，如指针指向 short 类型，而 short 占用两个字节，将指针加 1 时，指针的值将加 2。</p>
+<p>大多数情况下可以用相同的方式使用指针名和数组名，两者的区别之一在于指针值可修改，数组名不可修改；之二在于对数组应用 sizeof 运算符得到的时数组长度，对指针使用则获得的是指针长度。</p>
+<p><strong>指针概念性要点：</strong>指针声明、赋值与解除引用，指针算数，数组动态联编与静态联编，数组表示法与指针表示法。</p>
+<h4 id="指针与字符串"><a href="#指针与字符串" class="headerlink" title="指针与字符串"></a>指针与字符串</h4><p>在 c++ 大多数情况下，char 数组名、char 指针以及用引号括起的字符串常量都被解释为字符串第一个字符的地址。</p>
+<p>指针如果被声明为 const，则编译器将禁止改变 bird 指向的位置中的内容。</p>
+<p><strong>不可以使用字符串常量或者未被初始化的指针来接受输入，一个是因为常量无法被修改，另一个是因为不知道应该存储在哪里，都会引起错误。</strong></p>
+<p>一般来说，如果给 cout 提供一个指针，它将打印地址。但如果指针的类型是 char<em>，则 cout 将显示指向的字符串。如果需要显示地址，则要对指针类型进行强制转换，如 `int</em><code>。（注意此处的</code>int*<code>是规定的指针类型，规定指针指向 int，而不是像</code>int`，因为地址本身并不是整型数据。</p>
+<p>要将字符串复制到数组中需要用到 <code>strlen()</code>、<code>strcpy(ps,str)</code> 。<code>strlen()</code> 可以获得字符串的长度，<code>strcpy(ps,str)</code> 第一个参数是目标地址，第二个参数是要复制的字符串的地址。</p>
+<p>再改进一点的话还有<code>strncpy(ps,str,19)</code>，增加了第三个参数限制长度，防止由于错误赋值导致最后一位不是空字符的情况发生。</p>
+<h4 id="动态结构的创建"><a href="#动态结构的创建" class="headerlink" title="动态结构的创建"></a>动态结构的创建</h4><p>将 new 用于创建动态结构由两个步骤组成，创建结构和访问其成员。</p>
+<p>创建的步骤比较简单，如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_struct * ps = <span class="keyword">new</span> my_struct;</span><br></pre></td></tr></table></figure>
+<p>比较困难的地方在于访问成员，创建结构时，不能将成员运算符句点用于结构名，因为只有地址，没有名称。</p>
+<p>对此提出了专门的运算符：箭头成员运算符(-&gt;)。例如，如果指针 ps 指向一个 my_struct 结构，则 ps-&gt;name 是被指向结构的 name 成员。</p>
+<p>还有另一种方法，如果指针 ps 指向一个 my_struct 结构，则 <em>ps 就是被指向的值，也就是结构本身。因此 (\</em> ps).name 本身就是该结构的 name 成员，c++ 的运算符优先规则要求使用括号。</p>
+<h4 id="自动存储、静态存储和动态存储"><a href="#自动存储、静态存储和动态存储" class="headerlink" title="自动存储、静态存储和动态存储"></a>自动存储、静态存储和动态存储</h4><p>函数内部定义的常规变量使用自动存储空间，它们在函数被调用时自动产生，在该函数结束时消亡，通常存储在栈中。</p>
+<p>静态存储则是整个程序执行期间都存在的存储方式，使变量成为静态有两种方式：一种是定义在函数外面；另一种是在声明变量时使用关键字 static。</p>
+<p>动态存储则时 new 和 delete 操纵的内存池，被称为自由存储空间或堆。内存池用于静态变量和自动变量的内存时分开的，数据的生命周期不完全受程序或函数的生存时间控制。</p>
+<h3 id="数组、vector、array"><a href="#数组、vector、array" class="headerlink" title="数组、vector、array"></a>数组、vector、array</h3><p>模板类 vector 和 array 是数组的替代品，vector 声明形式如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">vector&lt;<span class="type">int</span>&gt; vi;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line">cin &gt;&gt; n;</span><br><span class="line"><span class="function">vector&lt;<span class="type">double</span>&gt; <span class="title">vd</span><span class="params">(n)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>vector 对象可以在插入或者添加值时自动调整长度，下面的声明创建一个名为 vt 的 vector 对象，可以存储 n_elem 个类型为 typeName 的元素：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vector&lt;typeName&gt; <span class="title">vt</span><span class="params">(n_elem)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>其中 n_elem 可以为整型常量，也可以为整型变量，vector 就相当于动态数组，功能比数组更加强大，但是效率稍低。</p>
+<p>array 类长度固定，效率与数组相同，但是更加方便安全。其创建示例如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;array&gt;</span></span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">array&lt;<span class="type">int</span>,5&gt; ai;</span><br><span class="line">array&lt;dpuble,4&gt; ad = &#123;<span class="number">1.2</span>, <span class="number">2.1</span>, <span class="number">3.43</span>, <span class="number">4.3</span>&#125;;</span><br><span class="line"><span class="comment">//array&lt;typeName,n_elem&gt; arr;</span></span><br></pre></td></tr></table></figure>
+<p>与 vector 不同的点就在于 n_elem 不能是变量。</p>
+<p>综上，vector 将 new、delete 的部分写成模板可以直接应用，简化了创建动态数组的过程；array 与数组则好似 string 与字符串数组，赋值、运算等功能比数组要更容易实现。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>整体来看，数据类型这两章的概念十分贴合计算机运行的底层逻辑，也可以感觉出 c++ 相对于 C 作出的许多改进（string、vector、array）。但是学的过程仍旧从数组基本类型入手，在日后处理错误时会更加明了，也可以更加了解这许多类的运行机制原理，毕竟之后还需要对 stl 进行学习。指针存在的意义我认为就是增加运行效率，节省运行过程中不必要的内存，这也是日后各种高级算法需要实现的核心目标。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2023/09/07/calibrate-new/" data-toggle="tooltip" data-placement="top" title="手眼标定全过程梳理">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#基础编程" title="基础编程">基础编程</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
