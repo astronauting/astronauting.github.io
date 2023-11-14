@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="任博容，rbr,astronauting,blog">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          无人船项目总结 - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/2023/11/02/program1/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#树莓派" title="树莓派">树莓派</a>
+                        
+                          <a class="tag" href="/tags/#linux" title="linux">linux</a>
+                        
+                          <a class="tag" href="/tags/#ros" title="ros">ros</a>
+                        
+                    </div>
+                    <h1>无人船项目总结</h1>
+                    <h2 class="subheading">主要涉及 frp 内网穿透部署、树莓派串口设置以及 ros2 下的部署过程。</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2023-11-02
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>比赛涉及到用 ros 去控制无人船运动，完成传感器采集等任务，从编程的角度讲难度不高，但有很多内容以前从来没做过。包括 ros 也是第一次实际运用，因此值得拿出来记录一下，有很多不足的地方需要去改进，也有很多空间可以得到进一步的开发，放在记录最后进行总结。</p>
+<h2 id="frp-内网穿透"><a href="#frp-内网穿透" class="headerlink" title="frp 内网穿透"></a>frp 内网穿透</h2><h3 id="一点唠叨"><a href="#一点唠叨" class="headerlink" title="一点唠叨"></a>一点唠叨</h3><p>整体构思是先打通通讯，再去细致化的部署具体的功能。通讯要实现远程通讯的目的，可以通过天线信号进行收发，但是要实现这种效果首先天线需要对准，很有可能出现断连的情况。其次在部署过程中还要学习很多东西，包括通讯协议等，这些内容复杂且没有一个比较理想的效果，因此我排除掉这种选择。</p>
+<p>如果利用网络传输，那么这些问题就更容易解决，网络传输保证了你的协议不需要自己去研究，也更加稳定（无人船的范围是有信号覆盖的）。但是，无论是远程控制树莓派还是通过 ros 进行分布式通信，都需要在同一网络下及局域网下进行，这极大的限制了无人船的范围。解决这一问题的办法就是内网穿透。</p>
+<p>这个概念我之前已经有过了解，当时想着有没有办法远程操控公司配好的 ubuntu 电脑，或是自己研究个树莓派的小东西放在家里，即使在学校也能远程操控。然后搜集了很多资料，就找到了内网穿透这个东西，当时的了解是内网穿透需要公网 ip，需要你自己去联系运营商要，还要在你已有一个自己的宽带及路由器的情况下。</p>
+<p>这对于学生来说是很麻烦的一件事情，再加上这个想法并没有很急切很成熟，很多相关的概念也含糊不清，于是就放弃了对于内网穿透的进一步调研。直到这次比赛项目再次走到这个概念面前，我觉得可以试一试，如果这个能解决，那么比赛之后的一些功能都很好去做，对于以后很多方面的编程部署都要有很大的好处。</p>
+<p>简单来说，这解锁了一片空间，给了你更大的自由性，掌握内网穿透的步骤，可以在任何时间地点去对相隔万里外的一个设备或服务器去作出操作，而不用局限于局域网的限制（开发板远程开发很突出的一个痛点）。</p>
+<h3 id="从概念讲起"><a href="#从概念讲起" class="headerlink" title="从概念讲起"></a>从概念讲起</h3><p>首先，什么是 frp，什么又是内网穿透？</p>
+<p>frp 是一个内网穿透的工具，这里需要讲一下，公网就是指可以在互联网上直接抵达的地址，无论是淘宝、百度或者 csdn，它们的地址都是可以直接抵达的。如果你有一个公网地址，那意味着你不但可以访问别人，别人也可以访问你。</p>
+<p>而内网是不可以直接上网的，属于私有 IP（这里面具体的原理我也不是很清楚，需要学习网络编程才能详细了解），我们平时通过移动、电信之类的运营商上网，路由器分出来的 ip 都是私有的局域网 IP。但是为什么私有的也可以上网？那是因为运营商买了公有 IP，把这些公有 IP 分出来给用户使用，一片区域的用户使用的基本上是同一个 IP。</p>
+<p>因此，公网是无法直接访问内网的设备的，因为从公网到内网的这个过程是运营商在管理的，绕过运营商，从公网直接到内网设备的这个过程，就叫内网穿透。</p>
+<p>frp 是开源的内网穿透工具，可以让外部用户通过公网访问内网中的服务，而不需要暴露内网的IP地址和端口号。FRP的主要原理是通过一个中转服务器，在公网与内网之间建立一个反向代理通道，将公网用户的请求转发到内网中的服务。</p>
+<p>也就是说 frp 充当了中间人的角色，外部用户要访问内网的设备，只需要给 frp 发送请求，frp 则通过端口映射等使得两者建立联系。</p>
+<p>FRP 支持多种协议，包括 TCP、UDP、HTTP 和 HTTPS 等。它可以在不同的操作系统上运行，包括 Windows、Linux、Mac OS 等。FRP 有两个主要组件：服务器端和客户端。服务器端需要在公网上运行，用来转发公网用户的请求；客户端需要在内网中运行，用来将内网服务映射到公网上。</p>
+<p>简单来说，处于内网的客户端通过 frp 的端口映射摇身一变，变成了公网 IP 地址和端口号，这样谁都可以通过互联网访问到客户端了。</p>
+<h3 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h3><p>首先提前声明，frp 的服务端需要部署在有公网 ip 的服务器上，要么是云服务器，要么是有你自己的宽带公网 ip 服务器（ip 需要和运营商申请）。在这里我选择了云服务器，如果对网速没有太大要求，只是想实现一些命令的传输（如 ssh 控制），那么云服务器只需要选择轻量级的即可，价格相对便宜并且学生有免费试用期。</p>
+<p>我是在腾讯云进行申请了一个月免费的轻量级云服务器，规格如下所示，安装 Ubuntu 22.04 系统。</p>
+<p><img src="https://pic.imgdb.cn/item/6544719ec458853aef308e09.jpg" alt="1"></p>
+<p>申请到以后会有对应的公网 ip 地址，可以直接通过 putty、xshell 等远程访问，密码设置等都有对应引导项，此处不再赘述。</p>
+<h4 id="服务端安装部署"><a href="#服务端安装部署" class="headerlink" title="服务端安装部署"></a>服务端安装部署</h4><p>远程登陆到云服务器，运行如下命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/fatedier/frp/releases/download/v0.<span class="number">42</span>.<span class="number">0</span>/frp_0.<span class="number">42</span>.<span class="number">0</span>_linux_amd64.tar.gz</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，下载版本客户端服务端需要统一，确定好版本一致。</p>
+<p>下载完成后在服务器上使用如下命令进行解压：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf frp_0.<span class="number">42</span>.<span class="number">0</span>_linux_amd64.tar.gz</span><br></pre></td></tr></table></figure>
+<p>进入解压目录，无桌面操作可以通过命令 <code>ll</code> 来查询目录下的文件，有四个文件需要注意，分别是 <code>frpc\frpc.ini\frps\frps.ini</code>，对应的是客户端部署文件以及服务端部署文件。</p>
+<p>此时我们部署的是服务端，可以将 frpc、frpc.ini 删掉，整个配置过程只需修改 frps.ini。</p>
+<p>编辑 frps.ini，添加以下内容：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">bind_port = 7000 # 必用：frp的默认监听端口,也可以自行修改，对应防火墙端口需要开放。</span><br><span class="line"></span><br><span class="line"># 选用：frp监测后台配置，三个选项结合使用</span><br><span class="line">dashboard_port = 7500 # 监测frp状态的端口</span><br><span class="line">token = ***** # 用于客户端和服务端连接的口令</span><br><span class="line">dashboard_user = *** # 登录frp监测网页的用户名</span><br><span class="line">dashboard_pwd = ******* # 登录frp监测网页的密码</span><br></pre></td></tr></table></figure>
+<p>保存以后在该目录下运行 frps 服务端：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./frps -c frps.ini</span><br></pre></td></tr></table></figure>
+<p>同时需要注意在云服务器防火墙配置中开启对应的端口。</p>
+<p><img src="https://pic.imgdb.cn/item/6544abf3c458853aefd7ad37.jpg" alt="2"></p>
+<p>这里我的7000和7500端口就是为 frp 而打开的。运行输出如下内容表面运行正常。</p>
+<p><img src="https://pic.imgdb.cn/item/6544ac77c458853aefd8fe2e.jpg" alt="3"></p>
+<p>此时访问云服务器的 ip 地址加端口号（<strong><em>**</em></strong>：7500）即可看到端口监控界面，此后各种数据的收发状况都可在此看到。</p>
+<p><img src="https://pic.imgdb.cn/item/6544ad53c458853aefdb40eb.jpg" alt="4"></p>
+<p>此时服务端仍属于前台工作，若关闭终端或远程窗口，frps 便会停止运行，因此使用 nohup 命令将其运行在后台。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./frps -c frps.ini &amp;</span><br></pre></td></tr></table></figure>
+<p>进入后台后若要关闭 frp 需要先找到 frp 进程：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -<span class="built_in">aux</span>|grep frp| grep -v grep</span><br></pre></td></tr></table></figure>
+<p>确定进程号后用 kill 命令关闭对应进程。</p>
+<p>也可以使用 <code>systemctl</code> 来对 frps 进行控制，首先创建 frps.service:</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /lib/systemd/system/frps.service</span><br></pre></td></tr></table></figure>
+<p>在 frps.service 里添加以下内容：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=frps service</span><br><span class="line">After=network.target syslog.target</span><br><span class="line">Wants=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line"><span class="built_in">Type</span>=simple</span><br><span class="line">#启动服务的命令（此处写你的frps的实际安装目录）</span><br><span class="line">ExecStart=/root/frp/frps -c /root/frp/frps.ini</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<p><strong>注意”ExecStart=”之后的路径要填写你的frps安装路径(本文以安装到/root/frp/为例)</strong>。</p>
+<p>然后即可使用 systemctl 命令来控制 frps：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 设置开机自启动</span><br><span class="line">sudo systemctl enable frps</span><br><span class="line"># 启动</span><br><span class="line">sudo systemctl <span class="built_in">start</span> frps </span><br><span class="line"># 关闭</span><br><span class="line">sudo systemctl stop frps</span><br><span class="line"># 重启</span><br><span class="line">sudo systemctl restart frps</span><br><span class="line"># 查看状态</span><br><span class="line">sudo systemctl status frps</span><br></pre></td></tr></table></figure>
+<p>至此，整个服务端部署流程便完成了。</p>
+<h4 id="客户端安装部署"><a href="#客户端安装部署" class="headerlink" title="客户端安装部署"></a>客户端安装部署</h4><p>客户端可以是 Windows、Linux 或者 macos，此处出于项目部署在树莓派上，介绍的是 Linux 下的配置过程，其他系统也是大同小异。</p>
+<p>首先和此前一样的步骤，下载、解压，注意版本号一定要保持一致，如果由于外网的缘故无法连接到 github，建议在电脑上下下来再用优盘拷过去进行解压。</p>
+<p>此处我们需要关注的则变成了 frpc、frpc.ini 两个文件，对 frpc.ini 进行修改：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="comment"># frp路由配置</span></span><br><span class="line"><span class="attr">server_addr</span> = *.*.*.* <span class="comment"># 服务端机器的ip</span></span><br><span class="line"><span class="attr">server_port</span> = <span class="number">7000</span> <span class="comment"># 服务端frp监听端口</span></span><br><span class="line"><span class="attr">token</span> = ****** <span class="comment"># 连接口令</span></span><br><span class="line"><span class="comment"># 使用tls加密，tls是一种加密协议，可以避免信息被过滤掉</span></span><br><span class="line"><span class="attr">tls_enable</span> = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[ssh]</span> <span class="comment"># 穿透标签</span></span><br><span class="line"><span class="attr">type</span> = tcp <span class="comment"># 连接类型</span></span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span> <span class="comment"># 客服端ip</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="number">22</span> <span class="comment"># 客户端端口</span></span><br><span class="line"><span class="attr">remote_port</span> = <span class="number">4071</span> <span class="comment"># 服务端端口，可以自定义，但是注意防火墙开放对应端口</span></span><br><span class="line"></span><br><span class="line"><span class="section">[http]</span> </span><br><span class="line"><span class="attr">type</span> = tcp</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="number">407</span></span><br><span class="line"><span class="attr">remote_port</span> = <span class="number">4072</span></span><br><span class="line"><span class="attr">custom_domains</span> = <span class="number">43.143</span>.<span class="number">177.241</span></span><br></pre></td></tr></table></figure>
+<p>如果只打算通过 ssh 访问的话，http 是可以不配置的，这里需要注意 remote_port 是指远程端口，需要在云服务器防火墙设置中打开（前面有提到），local_port 是本地端口，需要在本地即树莓派中打开。</p>
+<p>配置完成后可以和前面的服务端流程一样设置开机自启动以及 systemctl 指令控制。</p>
+<h3 id="相关报错及对应解决办法"><a href="#相关报错及对应解决办法" class="headerlink" title="相关报错及对应解决办法"></a>相关报错及对应解决办法</h3><p><strong>连接失败</strong>的问题一般是出在端口上，先确定防火墙规则是否正确添加。如果添加正确仍然无法连接，问题可能出在客户端也就是树莓派上，对应的本地端口可能没有打开（一般情况下22端口是不会有这种问题的），具体调试可参考以下：</p>
+<ul>
+<li><p>方式一：</p>
+<p>  开启防火墙：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">start</span> firewalld</span><br></pre></td></tr></table></figure>
+<p>  开放指定端口：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">firewall-<span class="built_in">cmd</span> --zone=public --add-port=<span class="number">1935</span>/tcp --permanent</span><br><span class="line">命令含义：</span><br><span class="line">--zone #作用域</span><br><span class="line">--add-port=<span class="number">1935</span>/tcp  #添加端口，格式为：端口/通讯协议</span><br><span class="line">--permanent  #永久生效，没有此参数重启后失效</span><br></pre></td></tr></table></figure>
+<p>  重启防火墙：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-<span class="built_in">cmd</span> --reload</span><br></pre></td></tr></table></figure>
+<p>  查看端口号：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -ntlp   //查看当前所有tcp端口</span><br><span class="line">netstat -ntulp |grep <span class="number">1935</span>   //查看所有<span class="number">1935</span>端口使用情况·</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方式二：</p>
+<p>  直接开放对应端口：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/sbin/iptables -I INPUT -p tcp --dport <span class="number">8080</span> -j ACCEPT</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>首次连接成功，后面突然无法连接</strong>的情况是由于校园网封禁了云服务器的端口，大概是这么个意思，只要用热点或者连其他网就可以解决了，如何让校园网不去封禁云服务器，这点就不太清楚了。</p>
+<h2 id="树莓派串口通讯"><a href="#树莓派串口通讯" class="headerlink" title="树莓派串口通讯"></a>树莓派串口通讯</h2><p>串口通讯包括硬件串口和 USB 串口的配置，在此次项目中分别对应了单片机通讯和传感器 arduino 板的通讯，在这部分一概并述。</p>
+<h3 id="硬件串口通讯"><a href="#硬件串口通讯" class="headerlink" title="硬件串口通讯"></a>硬件串口通讯</h3><p>串口通讯的基本原理我搞的并不是很清楚，暂时没有深入研究的打算，所以就不去详细描述。在这里只需要明白，按正确的方式连接后，树莓派可以通过串口线发送信息，单片机也同样可以反馈信息。</p>
+<h4 id="GPIO扩展口定义"><a href="#GPIO扩展口定义" class="headerlink" title="GPIO扩展口定义"></a>GPIO扩展口定义</h4><p>树莓派上的引脚有着三种编码方式，分别有 Board 编码、BCM 编码、wiringPi 编码，其中 Board 编码对应的是实际物理插槽，BCM 编码基本和 GPIO 的名字对应，wiringPi 编码则是wiringPi 库所使用的引脚编码方式。</p>
+<p><img src="https://pic.imgdb.cn/item/6552e613c458853aefed3bd0.jpg" alt="1"></p>
+<p>另外，在进行串口通信时，两个设备间的 TXD、RXD 要交错连接。</p>
+<h4 id="串口设置"><a href="#串口设置" class="headerlink" title="串口设置"></a>串口设置</h4><p>树莓派包含两个串口，这里指的应该是两类，但是具体还是不太清楚，先按两个来讲。</p>
+<p>一种是硬件串口（/dev/ttyAMA0），硬件串口是由硬件结构实现的，有单独的波特率时钟源，可靠，一般优先选择这个使用。</p>
+<p>另一种是mini串口（/dev/ttyS0），mini串口时钟源是由CPU内核时钟提供，波特率受到内核时钟的影响，不稳定。（自己认为可以理解成软串口，但是应该和 arduino 的软硬串口不是一回事）</p>
+<p>使用串口通信自然是需要稳定的进行通信，这就需要修改串口的映射关系。</p>
+<h4 id="串口映射关系修改"><a href="#串口映射关系修改" class="headerlink" title="串口映射关系修改"></a>串口映射关系修改</h4><p>serial0 是 GPIO 引脚对应的串口，srial1 是蓝牙对应的串口，默认未启用 serial0。首先使用 <code>ls -l /dev/serial*</code> 查看当前的映射关系：</p>
+<p><img src="https://pic.imgdb.cn/item/6552ea06c458853aeff6b1a9.jpg" alt="2"></p>
+<p>这表明蓝牙串口 serial1 使用硬件串口 ttyAMA0。</p>
+<ul>
+<li><p>树莓派系统（或 Ubuntu 安装 raspi-config）下操作：</p>
+<p>  修改映射关系这里树莓派使用 raspi-config 比较方便，鉴于我所使用的不是树莓派系统而是 Ubuntu，因此在这里将两种方法都讲一讲以便参考。</p>
+<p>  首先安装 raspi-config，前往官网下载最新版安装包 下载地址：<a target="_blank" rel="noopener" href="http://archive.raspberrypi.org/debian/pool/main/r/raspi-config/">点击连接</a>，选择最新版deb格式安装包下载。</p>
+<p>  提取下载链接，使用 wget 直接下载到树莓派中，或者也可以电脑上下载完传过去。</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://archive.raspberrypi.org/debian/pool/main/r/raspi-config/raspi-config_20200504_all.deb</span><br></pre></td></tr></table></figure>
+<p>  然后执行安装命令：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg -i raspi-config_20200504_all.deb</span><br></pre></td></tr></table></figure>
+<p>  根据提示安装所需依赖：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install lua</span><br></pre></td></tr></table></figure>
+<p>  如果还有其他问题就缺啥装啥即可，依赖安装完成后重新执行如上安装命令。</p>
+<p>  安装完成使用 <code>sudo raspi-config</code> 进入配置图形界面，选择 Interfacing Options，再点击 Serial 选项。</p>
+<p>  第一个选项（would you like a login shell to be accessible over serial?）选择 NO，第二个选项（would you like the serial port hardware to be enabled?）选择 YES。</p>
+<p>  保存后重启，查看映射关系会发现多了一个 gpio 串口 serial0 ，并且使用的是 ttyS0。</p>
+<p>  <img src="https://pic.imgdb.cn/item/6552ef08c458853aef036da9.jpg" alt="3"></p>
+<p>  以上步骤相当于是开启了 GPIO 的串口功能，但是使用的还是软件串口，不是硬件串口。</p>
+<p>  下面先禁用蓝牙功能：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl disable hciuart</span><br></pre></td></tr></table></figure>
+<p>  在 /boot/config.txt 文件末尾添加一行代码 dtoverlay=pi3-miniuart-bt。</p>
+<p>  保存后重启查看映射关系，若调换成功如下所示：</p>
+<p>  <img src="https://pic.imgdb.cn/item/6552f01fc458853aef0633bc.jpg" alt="4"></p>
+</li>
+<li><p>Ubuntu下操作：</p>
+<p>  通过命令查看支持的串口数：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dtoverlay -a | grep uart</span><br></pre></td></tr></table></figure>
+<p>  配置串口：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /boot/firmware/usercfg.txt</span><br></pre></td></tr></table></figure>
+<p>  添加如下内容，保存，重启：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dtoverlay=uart2</span><br><span class="line">dtoverlay=uart3</span><br><span class="line">dtoverlay=uart4</span><br><span class="line">dtoverlay=uart5</span><br></pre></td></tr></table></figure>
+<p>  如果没有enable_uart = 1这行代码，也要加上，并且如果有enable_uart = 0这行代码，需要注释掉。</p>
+<p>  输入指令 <code>ls /dev/ttyAMA*</code>，若出现以下内容说明配置成功：</p>
+  <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dev/ttyAMA0         /dev/ttyAMA1          /dev/ttyAMA2          /dev/ttyAMA3        /dev/ttyAMA4</span><br></pre></td></tr></table></figure>
+<p>  以上是开启串口的操作，改变映射关系还和上面树莓派系统下的操作相同。</p>
+</li>
+</ul>
+<h4 id="禁用串口的控制台功能"><a href="#禁用串口的控制台功能" class="headerlink" title="禁用串口的控制台功能"></a>禁用串口的控制台功能</h4><p>前面已经对映射关系进行了修改，但是现在还不能用树莓派与电脑进行通信（和单片机好像可以），因为树莓派 gpio 口引出串口默认是用来做控制台使用的，即是为了用串口控制树莓派，而不是通信。所以我们要禁用此默认设置。</p>
+<p>首先执行命令如下：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl stop serial-getty@ttyAMA0.service</span><br><span class="line">sudo systemctl disable serial-getty@ttyAMA0.service</span><br></pre></td></tr></table></figure>
+<p>然后执行命令修改文件：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /boot/cmdline.txt</span><br></pre></td></tr></table></figure>
+<p>并删除语句 <code>console=serial0,115200</code>。（没有则不需要）</p>
+<h4 id="测试检验"><a href="#测试检验" class="headerlink" title="测试检验"></a>测试检验</h4><p>首先安装以下开发工具：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install wiringpi</span><br><span class="line">sudo apt-get install python-serial</span><br><span class="line">sudo apt-get install minicom</span><br></pre></td></tr></table></figure>
+<p>c语言下使用 wiringPi 库， python语言下使用 serial 包，最后命令行使用 minicom 工具。</p>
+<ul>
+<li><p>minicom 调试：</p>
+<p>  使用 <code>minicom -b 115200 -D /dev/ttyAMA0</code> 进入串口调试界面，这里将一直等待接收，直到用户手动退出。退出时 ctrl+A，再按键 X 退出。<br>  minicom 调试界面默认是不显示用户输入，使用 cttl+A，再按 E 即可开启（会捕获换行）。</p>
+</li>
+<li><p>c 语言调试：</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;wiringPi.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;wiringSerial.h&gt;</span></span></span><br><span class="line">  </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="keyword">if</span>(wiringPiSetup()&lt;<span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//if((fd=serialOpen(&quot;/dev/ttyS0&quot;,115200))&lt;0) &#123; // gpio 使用mini串口</span></span><br><span class="line">    <span class="keyword">if</span>((fd=serialOpen(<span class="string">&quot;/dev/ttyAMA0&quot;</span>,<span class="number">115200</span>))&lt;<span class="number">0</span>) &#123; <span class="comment">// gpio 使用硬件串口</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;serial test output ...\n&quot;</span>);</span><br><span class="line">    serialPrintf(fd,<span class="string">&quot;1234567890abcdef&quot;</span>);</span><br><span class="line"> </span><br><span class="line">    serialClose(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译 <code>gcc test.c -o test -lwiringPi</code>，运行 <code>sudo ./test</code>。</p>
+<ul>
+<li>python 调试：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*</span></span><br><span class="line"><span class="keyword">import</span> serial</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">ser = serial.Serial(<span class="string">&quot;/dev/ttyAMA0&quot;</span>,<span class="number">115200</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> ser.isOpen():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;open failed&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;open success: &quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(ser)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        count = ser.inWaiting()</span><br><span class="line">        <span class="keyword">if</span> count &gt; <span class="number">0</span>:</span><br><span class="line">            recv = ser.read(count)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;recv: &quot;</span> + recv)</span><br><span class="line">            ser.write(recv)</span><br><span class="line">        sleep(<span class="number">0.05</span>) </span><br><span class="line"><span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">    <span class="keyword">if</span> ser != <span class="literal">None</span>:</span><br><span class="line">        ser.close()</span><br></pre></td></tr></table></figure>
+<h4 id="一些要点"><a href="#一些要点" class="headerlink" title="一些要点"></a>一些要点</h4><p>最基础的发送数据的方式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> serial</span><br><span class="line">ser = serial.Serial(<span class="string">&quot;/dev/ttyUSB0&quot;</span>, <span class="number">115200</span>)</span><br><span class="line">ser.flushInput()    <span class="comment"># 清除缓存</span></span><br><span class="line">ser.write(<span class="string">&quot;LightningMaster\r\n&quot;</span>.encode())    <span class="comment"># 发送数据  \r\n可以实现换行  encode()默认是&#x27;utf-8&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>发送中文：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> serial</span><br><span class="line">ser = serial.Serial(<span class="string">&quot;/dev/ttyUSB0&quot;</span>, <span class="number">115200</span>)</span><br><span class="line">ser.flushInput()    <span class="comment"># 清除缓存</span></span><br><span class="line">ser.write(<span class="string">&quot;你好\r\n&quot;</span>.encode(<span class="string">&#x27;gb2312&#x27;</span>))    <span class="comment"># 发送数据  \r\n可以实现换行</span></span><br></pre></td></tr></table></figure>
+<p>发送十六进制：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> serial</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line">ser = serial.Serial(<span class="string">&quot;/dev/ttyUSB0&quot;</span>, <span class="number">115200</span>)</span><br><span class="line">ser.flushInput()    <span class="comment"># 清除缓存</span></span><br><span class="line">pack = struct.pack(<span class="string">&#x27;BBBB&#x27;</span>, <span class="number">0xaa</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">0x55</span>)    <span class="comment"># 将数据打包 格式是unsigned char</span></span><br><span class="line">ser.write(pack)</span><br></pre></td></tr></table></figure>
+<p>接收数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">ser.read(num)    # 读取收到的num个字节的数据</span></span><br><span class="line"><span class="string">ser.inWaiting()    # 可以获取还未读出的数据</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> serial</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">ser = serial.Serial(<span class="string">&quot;/dev/ttyUSB0&quot;</span>, <span class="number">115200</span>)</span><br><span class="line">ser.flushInput()    <span class="comment"># 清除缓存</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    count = ser.inWaiting()    <span class="comment"># 获取还有多少字符未读</span></span><br><span class="line">    <span class="keyword">if</span> count != <span class="number">0</span>:</span><br><span class="line">        data = ser.read(count)    <span class="comment"># 读取数据存到data中</span></span><br><span class="line">        <span class="built_in">print</span>(data)    <span class="comment"># 打印接受到的数据</span></span><br><span class="line">    time.sleep(<span class="number">0.1</span>)    <span class="comment"># 系统等待</span></span><br></pre></td></tr></table></figure>
+<p>如下内容可以把 b’’ 去掉：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(data.decode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>接收中文需要使用下面的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(data.decode(<span class="string">&#x27;gb2312&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="USB-串口通讯"><a href="#USB-串口通讯" class="headerlink" title="USB 串口通讯"></a>USB 串口通讯</h3><p>USB 串口通讯理论上来说是插上就能发送的，但是大概是由于系统问题，搭载 Ubuntu 的树莓派在刚插上 USB 串口时无法使用，为此进行了很多查阅，大致得出了结论：是 brltty 占用了 USB 的设备号，至于 brltty，貌似是什么驱动盲文显示器程序，总之运行 <code>sudo apt remove brltty</code> 删掉就可以。</p>
+<p><code>lsusb</code> 可以查看连在本机的 USB 设备列表，如果这里有 CH-340 那就证明系统可以正确识别，不用担心是驱动的问题。</p>
+<p>然后通过输入命令 <code>ls /dev/tty*</code> 以及插拔判断哪个串口号，如果没有变化，就是前面的占用问题。</p>
+<p>注意先在 minicom 里面进行调试，调试好再去程序里验证，因为程序有可能会出错，进而导致对错误原因的误判。</p>
+<p>如果发现只能发送不能接收，那是权限的问题，更改对应串口权限如下指令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod <span class="number">777</span> /dev/ttyUSB0</span><br></pre></td></tr></table></figure>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>至此，关于内网穿透及串口配置的全部内容就记录完毕，当然过程中可能还有其他的问题没有涉及，绝大多数内容都是在部署过程查得资料的一个总体汇总，并非原创。</p>
+<p>过程中有许多问题是我无法解决的，都需要查询相关指令进行解决，大部分的时间也浪费在这上面，但是我觉得如果能够对操作系统和通信编程有更深入的学习，这些问题解决起来就要快很多。</p>
+<p>知道问题发生的原因或者可能的解决方向远比知道具体某个问题对应的指令是什么重要，只能说要学的很多，现在还只是照猫画虎。</p>
+<p>关于 ros2 的部分算是自己写的，但是程序很简便，并且没有很成熟，就暂时不放在记录里，等到以后熟练掌握以后在对 ros2 进行记录。</p>
+<h2 id="文章参考来源（非全部）"><a href="#文章参考来源（非全部）" class="headerlink" title="文章参考来源（非全部）"></a>文章参考来源（非全部）</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_18677445/article/details/131191383?spm=1001.2014.3001.5506">树莓派4B安装CH340驱动</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39851127/article/details/125988455?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169996783316800186581637%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169996783316800186581637&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-3-125988455-null-null.142^v96^pc_search_result_base9&amp;utm_term=brltty&amp;spm=1018.2226.3001.4187">ubuntu22.04的 brltty 导致 USB 转串口连接失败</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43231904/article/details/130134788?spm=1001.2014.3001.5506">树莓派固定ttyUSB*端口</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ZhuanShangNiDeXin/article/details/113791250?spm=1001.2014.3001.5506">树莓派使用USB串口通信 CH340</a></p>
+<p><a target="_blank" rel="noopener" href="https://lightningleader.github.io/posts/5.html">树莓派串口通信 USB串口通信</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lsllll44/article/details/122703139?spm=1001.2014.3001.5506">腾讯云frp连接失败</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/hesongzefairy/article/details/105543161?spm=1001.2014.3001.5506">阿里云服务器实现frp内网穿透</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/nlcwdl/article/details/126813705?spm=1001.2014.3001.5506">使用frp配置内网穿透</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43922901/article/details/109261700?spm=1001.2014.3001.5506">使用frp配置内网访问（穿透）教程（超详细，简单）</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44696500/article/details/124681300?spm=1001.2014.3001.5506">Raspberry树莓派+服务器+frp实现内网穿透进行远程实时视频</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2023/11/14/sentence/" data-toggle="tooltip" data-placement="top" title="种种">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2023/09/18/cpp2/" data-toggle="tooltip" data-placement="top" title="C++ 学习记录（二）">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#树莓派" title="树莓派">树莓派</a>
+                        
+                          <a class="tag" href="/tags/#linux" title="linux">linux</a>
+                        
+                          <a class="tag" href="/tags/#ros" title="ros">ros</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2023 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
