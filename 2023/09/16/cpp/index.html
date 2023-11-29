@@ -96,14 +96,14 @@
 
                         
                         <li>
-                            <a href="/archives/">时</a>
+                            <a href="/about/">知</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">知</a>
+                            <a href="/archives/">时</a>
                         </li>
                         
                     
@@ -289,7 +289,7 @@
 <p><code>new</code> 分配的内存块通常与常规变量声明分配的内存块不同，变量的值都存储在成为“栈”的内存区域中，而 <code>new</code> 从被称为“堆”或者“自由存储区”的内存区域分配内存。</p>
 <p><code>new</code> 对内存进行分配后，在使用结束时需要进行内存释放，不释放则可能会引发内存泄漏等严重后果，因此需要配对使用 <code>new</code> 和 <code>delete</code>。</p>
 <p>使用 <code>delete</code> 时，后面要加上指向内存块的指针，如：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> * ps = <span class="keyword">new</span> <span class="type">int</span>;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">delete</span> <span class="type">int</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> * ps = <span class="keyword">new</span> <span class="type">int</span>;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">delete</span> ps;</span><br></pre></td></tr></table></figure>
 <p><strong>注意，不要尝试释放已经释放的内存，也不要使用 <code>delete</code> 来释放声明变量所获得的内存（不在同一内存区），其只能用于释放 <code>new</code> 分配的内存。</strong></p>
 <h4 id="动态数组的创建"><a href="#动态数组的创建" class="headerlink" title="动态数组的创建"></a>动态数组的创建</h4><p>事先为数组分配内存被称为静态联编。但在使用  <code>new</code> 时，如果运行时需要数组，则创建空间；不需要，则不创建。这样创建数组的过程叫做动态联编。</p>
 <p>动态数组的创建与释放：</p>
@@ -304,7 +304,7 @@
 <h4 id="指针与字符串"><a href="#指针与字符串" class="headerlink" title="指针与字符串"></a>指针与字符串</h4><p>在 c++ 大多数情况下，char 数组名、char 指针以及用引号括起的字符串常量都被解释为字符串第一个字符的地址。</p>
 <p>指针如果被声明为 const，则编译器将禁止改变 bird 指向的位置中的内容。</p>
 <p><strong>不可以使用字符串常量或者未被初始化的指针来接受输入，一个是因为常量无法被修改，另一个是因为不知道应该存储在哪里，都会引起错误。</strong></p>
-<p>一般来说，如果给 cout 提供一个指针，它将打印地址。但如果指针的类型是 char<em>，则 cout 将显示指向的字符串。如果需要显示地址，则要对指针类型进行强制转换，如 `int</em><code>。（注意此处的</code>int*<code>是规定的指针类型，规定指针指向 int，而不是像</code>int`，因为地址本身并不是整型数据。</p>
+<p>一般来说，如果给 cout 提供一个指针，它将打印地址。但如果指针的类型是 char<em>，则 cout 将显示指向的字符串。如果需要显示地址，则要对指针类型进行强制转换，如 int</em> 。（注意此处的 <code>int*</code> 是规定的指针类型，规定指针指向 int，而不是像 <code>int</code>，因为地址本身并不是整型数据。</p>
 <p>要将字符串复制到数组中需要用到 <code>strlen()</code>、<code>strcpy(ps,str)</code> 。<code>strlen()</code> 可以获得字符串的长度，<code>strcpy(ps,str)</code> 第一个参数是目标地址，第二个参数是要复制的字符串的地址。</p>
 <p>再改进一点的话还有<code>strncpy(ps,str,19)</code>，增加了第三个参数限制长度，防止由于错误赋值导致最后一位不是空字符的情况发生。</p>
 <h4 id="动态结构的创建"><a href="#动态结构的创建" class="headerlink" title="动态结构的创建"></a>动态结构的创建</h4><p>将 new 用于创建动态结构由两个步骤组成，创建结构和访问其成员。</p>

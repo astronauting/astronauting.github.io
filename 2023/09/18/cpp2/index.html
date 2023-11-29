@@ -96,14 +96,14 @@
 
                         
                         <li>
-                            <a href="/archives/">时</a>
+                            <a href="/about/">知</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">知</a>
+                            <a href="/archives/">时</a>
                         </li>
                         
                     
@@ -199,7 +199,100 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                
+                <p>五六章的学习结束以后对于程序的各个部分结构就基本上清晰明确了，同时 c++ 的功能庞大性也在这两章陡然明显起来，此外对于文件 I/O 等的操作简单明确，对于输入输出具体函数的功能也越发详细起来。可以说，学到这两章结束，已经达到登堂标准，入室还需要后面两章关于函数的详细理解才可以达到。</p>
+<p>对于 c++ 而言个人感觉这两章最重要的是掌握 cin 如何处理字符输入。</p>
+<h2 id="第五章：循环和关系表达式"><a href="#第五章：循环和关系表达式" class="headerlink" title="第五章：循环和关系表达式"></a>第五章：循环和关系表达式</h2><h3 id="for-循环"><a href="#for-循环" class="headerlink" title="for 循环"></a>for 循环</h3><h4 id="基本结构及步骤"><a href="#基本结构及步骤" class="headerlink" title="基本结构及步骤"></a>基本结构及步骤</h4><p>for 循环所完成的基本步骤：<strong>初始值&gt;&gt;测试&gt;&gt;循环操作&gt;&gt;更新值</strong>。</p>
+<p>基本结构如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">&#123;</span><br><span class="line">    xxxxxx;</span><br><span class="line">    xxxxxx;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (初始化；测试部分;更新操作)</span><br><span class="line">    循环体</span><br></pre></td></tr></table></figure>
+<p>其中，测试部分将结果强制转换为 bool 类型，更新操作在整个循环体完成后进行。</p>
+<p>for 语句的控制部分由三个表达式构成，C++ 中表达式都有值，无论是赋值表达式还是运算表达式，诸如 <code>int i = 0</code>、<code>a + 3</code>、<code>x = y = 0</code> 这些都是表达式，并且只要表达式加上分号就是语句。<strong>但是并不是语句去掉分号就是表达式。</strong>如：<code>int i</code> 没有值，就不是表达式。</p>
+<p>另外还有一点需要注意，在初始化表达式中声明的变量只存在于 for 语句中，循环结束就消失。（针对的是新式的 C++）</p>
+<h4 id="递增运算符和递减运算符"><a href="#递增运算符和递减运算符" class="headerlink" title="递增运算符和递减运算符"></a>递增运算符和递减运算符</h4><p>++i 表示先将 i 的值加 1 再计算表达式，而 i++ 表示先计算表达式再将 i 的值加 1，这是针对表达式而言。</p>
+<p>顺序点是指程序执行过程中的一个点，再 C++ 中语句的分号就是一个顺序点，完整的表达式末尾也是一个顺序点。这意味着在执行下一个语句时，所有的运算符修改都会完成。</p>
+<p>关于递增/减运算符和指针的问题，前缀和解除引用运算符优先级相同，而后缀优先级高于解除引用运算符，因此当递增/减运算符和指针搭配到一起时，结合方式上前缀右到左，后缀左到右。</p>
+<h4 id="逗号运算符"><a href="#逗号运算符" class="headerlink" title="逗号运算符"></a>逗号运算符</h4><p>逗号运算符允许将两个表达式放到 C++ 句法只允许放一个的地方，也就是在 for 的更新操作部分同时让两个数更新十分方便。</p>
+<p>逗号表达式的值是第二部分的值，同时逗号运算符的优先级最低。</p>
+<p>算术运算符优先级 &gt; 关系运算符 &gt; 逗号运算符</p>
+<h4 id="C-风格字符串比较"><a href="#C-风格字符串比较" class="headerlink" title="C 风格字符串比较"></a>C 风格字符串比较</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">word == <span class="string">&quot;mate&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>要想知道 word 中的字符串是不是数组，不能像上面一样直接进行比较，数组名是数组的地址，如上的比较也只是在确定它们是否存储在相同的地址上，应该使用 <code>strcmp()</code> 来比较，<em>若字符串相同则返回零，第一个字符串排在第二个前返回负数，否则返回正数</em>。</p>
+<p>虽然不能用关系运算符比较字符串，但是用来比较字符是可以的，因为字符属于整型。</p>
+<h3 id="while-循环"><a href="#while-循环" class="headerlink" title="while 循环"></a>while 循环</h3><h4 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h4><p>while 循环的结构中只有测试条件和循环体：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (测试条件)</span><br><span class="line">    循环体</span><br></pre></td></tr></table></figure>
+<p>因此循环体中的代码必须完成某种影响测试条件表达式的操作。</p>
+<h4 id="for-与-while"><a href="#for-与-while" class="headerlink" title="for 与 while"></a>for 与 while</h4><p>for 循环与 while 循环存在三个差别。首先，在 for 循环中省略了测试条件时，将认为条件为 true；其次，在 for 循环中，可使用初始化语句声明一个变量，但 while 不可以；最后，如果循环体中包括 continue 语句，continue 语句执行后，while 中后面可能存在的更新语句会被跳过，而 for 则一定会执行更新操作。</p>
+<p>一般情况下，使用 for 为循环计数。在无法预先知道循环将执行的次数时，使用 while 循环。</p>
+<p>在设计循环时，有几条指导原则：</p>
+<ul>
+<li>指定循环终止的条件</li>
+<li>在首次测试之前初始化条件</li>
+<li>在条件被再次测试之前更新条件</li>
+</ul>
+<h4 id="延时循环相关"><a href="#延时循环相关" class="headerlink" title="延时循环相关"></a>延时循环相关</h4><p><code>clock()</code>返回程序开始执行后所用的系统时间。</p>
+<p>头文件 <code>ctime</code> 定义符号常量 <code>CLOCKS_PER_SEC</code>,该常量等于每秒钟包含的系统时间单位数。并且 <code>ctime</code> 将 <code>clock_t</code> 作为 <code>clock()</code>返回类型的别名，省去了无法明确 <code>clock()</code>返回类型的麻烦。</p>
+<p>如下是使用 <code>ctime</code> 和 <code>clock()</code>创建延迟循环的例程：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">waiting</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Enter the delay time,in seconds: &quot;</span>;</span><br><span class="line">    <span class="type">float</span> secs;</span><br><span class="line">    cin &gt;&gt; secs;</span><br><span class="line">    <span class="type">clock_t</span> delay = secs * CLOCKS_PER_SEC;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;starting\a\n&quot;</span>;</span><br><span class="line">    <span class="type">clock_t</span> start = <span class="built_in">clock</span>();</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">clock</span>() - start &lt; delay);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;done \a\n&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>类型别名：</p>
+<p>  类型别名就是为类型建立别的名字，本质上还是这种类型。为 int 起一个 zheng 的类型别名，实际上还是在调用 int，但是这样可以优化一些潜在问题。</p>
+<p>  一种方法是使用预处理器：</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BYTE char</span></span><br></pre></td></tr></table></figure>
+<p>  预处理器将在编译程序时用 char 替换所有的 BYTE，就是说 BYTE 成为了 char 的另一个名字。</p>
+<p>  另一种方法是使用关键字 <code>typedef</code>：</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">char</span> BYTE;</span><br></pre></td></tr></table></figure>
+<p>  但是 <code>typedef</code> 可以处理更复杂的类型别名，这使得其成为一种更合适的选择。</p>
+</li>
+</ul>
+<h3 id="do-while-循环"><a href="#do-while-循环" class="headerlink" title="do while 循环"></a>do while 循环</h3><p>该循环首先执行循环体，再判定测试表达式，决定是否应该继续执行循环：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">    循环体</span><br><span class="line"><span class="keyword">while</span> (测试条件)；</span><br></pre></td></tr></table></figure>
+<h3 id="循环和文本输入"><a href="#循环和文本输入" class="headerlink" title="循环和文本输入"></a>循环和文本输入</h3><h4 id="cin-相关输入操作"><a href="#cin-相关输入操作" class="headerlink" title="cin 相关输入操作"></a>cin 相关输入操作</h4><p>读取文本操作，最关键的就是 cin 的部分，忽略空格与否，如何衔接、组合，这些都是问题。</p>
+<p><code>cin &gt;&gt; ch</code>（假设 ch 是 char 数组类型）在读取时会自动忽略空格和换行符，并且在换行符处停止。如果需要检查<strong>包括空格、制表符、换行符在内的所有字符</strong>，<code>cin.get(ch)</code>可以出手，即使是空格它也会读取并且赋值给 ch。（此情况下 ch 是 char 类型）</p>
+<p>针对 ch 是 char 数组的情况，<code>cin.get()</code>接受两个参数，数组名和 int 类型的长度，这一特征成为函数重载，也就是说同一个函数可能接受不同个参数，针对对应的参数有着不同的执行任务。<code>cin.get()</code>不接受任何参数，<code>cin.get(ch)</code>接受一个参数，<code>cin.get(ch,Arsize)</code>接受两个参数，它们各自的执行方式均不同。</p>
+<p>相似的还有<code>cin.getline()</code>以及 <code>cin.getline(ch,Arsize)</code>，对于以上种种有如下的一个简短总结：</p>
+<p>在选择使用哪种输入方式时，要根据你的需求来决定。如果你需要读取整行文本并且可能包含空格，可以使用 <code>getline()</code>(getline 不需要指定最大字符数，会一直读取到换行符。)。如果你只需要读取一个特定类型的值，可以使用 <code>cin &gt;&gt;</code>。如果你需要逐字符读取，包括空格和换行符，可以使用 <code>cin.get()</code>。 <code>cin.getline()</code> 则是一种用于读取整行文本到字符数组的方式，通常在需要 C 风格字符串时使用。</p>
+<h4 id="文件尾条件"><a href="#文件尾条件" class="headerlink" title="文件尾条件"></a>文件尾条件</h4><p>这里需要讲明 <code>ch = cin.get()</code> 与 <code>cin.get(ch)</code> 的区别，前者是将 <code>cin.get()</code> 的值赋给了 ch，后者则是将 cin 对象的引用返回给了 ch。以例子为证，前者 <code>cin.get()</code>读取字符时会将对应字符的 ASCLL 值赋给 ch，也就是 int 类型；后者则是将字符存储在 ch 中。</p>
+<p>EOF 表示一个文件的末尾，检测到 EOF 后，cin 将两位 eofbit 和 failbit 都设置为1，可以通过成员函数 <code>eof()</code> 来查看 eofbit 是否被设置；若检测到 EOF，<code>cin.eof()</code>将会返回 true，否则为 false。若 eofbit 或者 failbit 被设置为1，则 <code>fail()</code>返回 true。应该将 <code>cin.eof()</code>和 <code>cin.fail()</code>放在读取后。</p>
+<p><code>cin.clear()</code> 方法可以清除 EOF 标记，使输入继续进行。</p>
+<h4 id="嵌套循环和二维数组"><a href="#嵌套循环和二维数组" class="headerlink" title="嵌套循环和二维数组"></a>嵌套循环和二维数组</h4><p>二维数组声明格式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> arr[<span class="number">4</span>][<span class="number">5</span>]</span><br></pre></td></tr></table></figure>
+<p>二维数组其实就相当于两层数组的嵌套，arr[0] 相当于 arr 数组的第一个元素，而 arr[0] 本身又是一个由 5 个 int 组成的数组，因此产生了行和列的概念，如下图所示：</p>
+<p><img src="https://pic.imgdb.cn/item/6566ba49c458853aef624a42.jpg" alt="1"></p>
+<p>初始化二维数组可以如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> arr[<span class="number">4</span>][<span class="number">5</span>] =</span><br><span class="line">&#123;</span><br><span class="line">    &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;,</span><br><span class="line">    &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;,</span><br><span class="line">    &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;,</span><br><span class="line">    &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>关于 char 二维数组和 char 指针数组：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>* cities[Cities] =</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;Gribble City&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Gribbletown&quot;</span>,</span><br><span class="line">    <span class="string">&quot;New Gribble&quot;</span>,</span><br><span class="line">    <span class="string">&quot;San Gribble&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Gribble Vista&quot;</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">char</span> cities[Cities][<span class="number">25</span>] =</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;Gribble City&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Gribbletown&quot;</span>,</span><br><span class="line">    <span class="string">&quot;New Gribble&quot;</span>,</span><br><span class="line">    <span class="string">&quot;San Gribble&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Gribble Vista&quot;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>指针数组只存储了5个字符串的地址，而二维数组将字符串复制了进来，内存上指针数组更具优势，但是如果考虑修改其中的字符串，二维数组是更好的选择。当然，string 对象数组是更方便的选择。</p>
+<h2 id="第六章：分支语句和逻辑运算符"><a href="#第六章：分支语句和逻辑运算符" class="headerlink" title="第六章：分支语句和逻辑运算符"></a>第六章：分支语句和逻辑运算符</h2><h3 id="if-语句"><a href="#if-语句" class="headerlink" title="if 语句"></a>if 语句</h3><p>if 语句的基本结构就是测试条件加执行语句，如果有多个语句则用{}括起来，测试条件同样会被强制转换为 bool 值。</p>
+<p>else if 语句只有在 if 或其他 else if 测试未通过的情况下才会执行，所以在某些情况下不用考虑会不会都执行的问题。</p>
+<h3 id="逻辑表达式"><a href="#逻辑表达式" class="headerlink" title="逻辑表达式"></a>逻辑表达式</h3><p>or —— ||，and —— &amp;&amp;，not —— ！，两种表达式均可应用。</p>
+<h3 id="cctype-字符函数库"><a href="#cctype-字符函数库" class="headerlink" title="cctype 字符函数库"></a>cctype 字符函数库</h3><p>字符函数库简化了确定字符是否为大写字母、数字、标点符号等工作。</p>
+<p><img src="https://pic.imgdb.cn/item/6566f5a8c458853aef1f3e75.jpg" alt="2"></p>
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="?: 运算符"></a>?: 运算符</h3><p>该运算符被称为条件运算符，是 C++ 中唯一一个需要3个操作数的运算符，通用格式如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expression1 ? expression2 : expression3</span><br></pre></td></tr></table></figure>
+<p>如果分表达式1为 true，则整个表达式的值为分表达式2的值，反之则为分表达式3的值。</p>
+<h3 id="switch-语句"><a href="#switch-语句" class="headerlink" title="switch 语句"></a>switch 语句</h3><p>switch 语句的通用格式如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> (integer-expression)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">case</span> label1 : <span class="built_in">statement</span>(s)</span><br><span class="line">    <span class="keyword">case</span> label2 : <span class="built_in">statement</span>(s)</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">default</span> : <span class="built_in">statement</span>(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，integer-expression 必须是一个结果为整数值的表达式，int、char、枚举量均可。如果表达式不与任何标签匹配，则程序将跳转到标签为 default 的一行。此外，<strong>case 只是行标签，而不是选项之间的界线，</strong>也就是说执行完一个 case 后，程序不会在下一个 case 前自动停止，而是会顺序执行接下来的 case，如果想避免这种情况需要加入 break 语句。</p>
+<p>语句中每个标签都是单独的值，涉及取值范围以及浮点测试等情况，应该使用 if else 语句。</p>
+<h3 id="break、continue-以及-错误处理"><a href="#break、continue-以及-错误处理" class="headerlink" title="break、continue 以及 错误处理"></a>break、continue 以及 错误处理</h3><p>break 用于 switch 或循环中，使用 break 语句使得程序跳到 switch 或循环后面的语句处执行。</p>
+<p>continue 用于循环中，让程序跳过剩下的语句，执行下次新的循环。（注意 for 和 while 在此处的区别）</p>
+<p>程序发现用户输入错误内容时应该采取3个步骤：</p>
+<ul>
+<li>重置 cin 以接受新的输入</li>
+<li>删除错误输入</li>
+<li>提示用户再输入</li>
+</ul>
+<p>重置 cin 时使用 <code>clear()</code> 语句，可以重置错误输入标记，同时也重置文件尾。错误处理例程如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (!(cin &gt;&gt; golf[i]))</span><br><span class="line">&#123;</span><br><span class="line">    cin.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="keyword">while</span> (cin.<span class="built_in">get</span>() != <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Please enter a number: &quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="简单文件输入与输出"><a href="#简单文件输入与输出" class="headerlink" title="简单文件输入与输出"></a>简单文件输入与输出</h3><p>完成文件的输入输出需要包含头文件 fstream，使用其中的 ofstream 类和 ifstream 类，声明对象后使用 open() 方法将对象与实际文件关联起来。</p>
+<p>文件输出主要步骤如下：</p>
+<ul>
+<li>包含头文件 fstream</li>
+<li>创建一个 ofstream 对象</li>
+<li>将该 ofstream 对象同一个文件关联起来</li>
+<li>就像使用 cout 一样使用 ofstream 对象</li>
+</ul>
+<p>文件输入同理，但是文件输入的过程中有个步骤是检查文件是否被成功打开，使用的方法是 is_open()。</p>
+
 
                 <hr>
 
