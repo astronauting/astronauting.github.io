@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="任博容，rbr,astronauting,blog">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          嵌入式软件面试问题汇总 - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/2024/03/18/interview/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#面试" title="面试">面试</a>
+                        
+                          <a class="tag" href="/tags/#嵌入式" title="嵌入式">嵌入式</a>
+                        
+                    </div>
+                    <h1>嵌入式软件面试问题汇总</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by R on
+                        2024-03-18
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="C-方面"><a href="#C-方面" class="headerlink" title="C++方面"></a>C++方面</h2><h3 id="继承和多态"><a href="#继承和多态" class="headerlink" title="继承和多态"></a>继承和多态</h3><h3 id="vector-和-list-的区别"><a href="#vector-和-list-的区别" class="headerlink" title="vector 和 list 的区别"></a>vector 和 list 的区别</h3><h3 id="常用的-STL-容器"><a href="#常用的-STL-容器" class="headerlink" title="常用的 STL 容器"></a>常用的 STL 容器</h3><h3 id="面向对象的三大特性"><a href="#面向对象的三大特性" class="headerlink" title="面向对象的三大特性"></a>面向对象的三大特性</h3><h3 id="重载和重写（覆盖）的区别"><a href="#重载和重写（覆盖）的区别" class="headerlink" title="重载和重写（覆盖）的区别"></a>重载和重写（覆盖）的区别</h3><h3 id="多继承的优先级"><a href="#多继承的优先级" class="headerlink" title="多继承的优先级"></a>多继承的优先级</h3><h3 id="知道程序分成那几个段吗？"><a href="#知道程序分成那几个段吗？" class="headerlink" title="知道程序分成那几个段吗？"></a>知道程序分成那几个段吗？</h3><ul>
+<li>代码段（Code Segment）：也称为文本段（Text Segment），用于存放可执行指令的二进制代码。这部分代码通常是只读的，并且多个进程可以共享同一个代码段。</li>
+<li>数据段（Data Segment）：也称为静态数据段或初始化数据段，用于存放全局变量和静态变量等在程序运行时被初始化的数据。该数据是可读写的。</li>
+<li>BSS 段（Block Started by Symbol）：用于存放未经初始化的全局变量和静态变量等，在程序加载时会自动清零。BSS 段节省了可执行文件大小，因为它不需要保存每个未初始化变量的初始值。</li>
+<li>堆（Heap）：堆是动态分配内存的区域，用于存储通过函数如 malloc() 或 new 分配的内存块。堆中的内存需要手动释放，否则可能导致内存泄漏。</li>
+<li>栈（Stack）：栈用于管理函数调用和局部变量等临时性数据。当函数被调用时，栈会分配一定空间给该函数使用，包括函数参数、返回地址、局部变量等。每个线程都有自己独立的栈空间。</li>
+<li>其他特殊段：还有其他一些特殊段，如动态链接库段、共享内存段等，用于特定的需求或操作系统机制。</li>
+</ul>
+<h3 id="堆和栈有什么区别？"><a href="#堆和栈有什么区别？" class="headerlink" title="堆和栈有什么区别？"></a>堆和栈有什么区别？</h3><ul>
+<li>分配方式：堆是由程序员手动分配和释放的，而栈是自动分配和释放的。在堆中，我们可以使用像 malloc() 或 new 这样的函数来申请内存，并使用 free() 或 delete 来释放内存。而在栈中，变量的分配和释放是随着函数的调用和返回自动进行的。</li>
+<li>管理方式：堆由程序员显式地管理，需要手动进行内存的申请与释放；而栈由编译器自动管理，会自动跟踪函数调用、局部变量等信息，并在不需要时进行自动回收。</li>
+<li>空间大小：堆的空间通常比较大，可以容纳更多数据；而栈的空间相对较小，在一般情况下有限制。</li>
+<li>空间分配方式：堆采用动态分配内存，因此可灵活地为对象或数据分配任意大小的内存空间；而栈采用静态分配内存，在编译期确定每个变量所需空间大小。</li>
+<li>访问速度：从性能上来看，访问栈上的变量通常比访问堆上的变量更快速。这是因为栈上的数据是连续存储的，可以直接通过指针进行访问；而堆上的数据可能是离散的，需要通过间接寻址来获取。</li>
+</ul>
+<h2 id="嵌入式通信协议"><a href="#嵌入式通信协议" class="headerlink" title="嵌入式通信协议"></a>嵌入式通信协议</h2><h3 id="你了解整个SPI的通信过程吗？SPI有几根线，分别是什么？你使用SPI的时候速率配置的是多少？"><a href="#你了解整个SPI的通信过程吗？SPI有几根线，分别是什么？你使用SPI的时候速率配置的是多少？" class="headerlink" title="你了解整个SPI的通信过程吗？SPI有几根线，分别是什么？你使用SPI的时候速率配置的是多少？"></a>你了解整个SPI的通信过程吗？SPI有几根线，分别是什么？你使用SPI的时候速率配置的是多少？</h3><p>SPI通信需要四根线，分别是：</p>
+<ul>
+<li>SCLK（Serial Clock）：时钟线，由主设备生成，用于同步数据传输。</li>
+<li>MOSI（Master Out Slave In）：主设备输出从设备输入的数据线。</li>
+<li>MISO（Master In Slave Out）：主设备输入从设备输出的数据线。</li>
+<li>SS（Slave Select）：从设备选择线，由主设备控制，用于选中特定的从设备进行通信。</li>
+</ul>
+<p>SPI速率配置取决于所使用的硬件和系统。典型的SPI速率可以在几百 kHz 到数十 MHz 之间。具体速率应根据硬件规格和应用需求进行配置。</p>
+<h3 id="网络通信框架原理与实现"><a href="#网络通信框架原理与实现" class="headerlink" title="网络通信框架原理与实现"></a>网络通信框架原理与实现</h3><h3 id="7层网络模型以及对应举个协议的例子"><a href="#7层网络模型以及对应举个协议的例子" class="headerlink" title="7层网络模型以及对应举个协议的例子"></a>7层网络模型以及对应举个协议的例子</h3><h3 id="TCP-和-UDP-的区别及其应用"><a href="#TCP-和-UDP-的区别及其应用" class="headerlink" title="TCP 和 UDP 的区别及其应用"></a>TCP 和 UDP 的区别及其应用</h3><h3 id="三次握手的过程"><a href="#三次握手的过程" class="headerlink" title="三次握手的过程"></a>三次握手的过程</h3><h3 id="socket-编程、通信过程、全部函数"><a href="#socket-编程、通信过程、全部函数" class="headerlink" title="socket 编程、通信过程、全部函数"></a>socket 编程、通信过程、全部函数</h3><h2 id="linux操作系统知识"><a href="#linux操作系统知识" class="headerlink" title="linux操作系统知识"></a>linux操作系统知识</h2><h3 id="进程和线程的区别"><a href="#进程和线程的区别" class="headerlink" title="进程和线程的区别"></a>进程和线程的区别</h3><h3 id="互斥锁和自旋锁的应用及区别"><a href="#互斥锁和自旋锁的应用及区别" class="headerlink" title="互斥锁和自旋锁的应用及区别"></a>互斥锁和自旋锁的应用及区别</h3><h3 id="常用的锁和同步机制"><a href="#常用的锁和同步机制" class="headerlink" title="常用的锁和同步机制"></a>常用的锁和同步机制</h3><ul>
+<li>互斥锁（Mutex）：用于保护临界区资源，只允许一个进程或线程访问。</li>
+<li>信号量（Semaphore）：用于控制同时访问共享资源的进程或线程数量。</li>
+<li>条件变量（Condition Variable）：用于在满足特定条件时进行等待或唤醒其他进程或线程。</li>
+<li>屏障（Barrier）：用于在所有参与者都达到某个点之前进行等待，然后同时继续执行。</li>
+<li>读写锁（Read-Write Lock）：允许多个读操作并发进行，但只有一个写操作可以进行。</li>
+</ul>
+<h3 id="linux-是在用户态开发还是内核态开发？"><a href="#linux-是在用户态开发还是内核态开发？" class="headerlink" title="linux 是在用户态开发还是内核态开发？"></a>linux 是在用户态开发还是内核态开发？</h3><p>Linux是一个开源的操作系统，它的核心部分是内核。内核是操作系统的核心组件，负责管理计算机硬件资源，并提供给用户态程序运行所需的服务和接口。因此，Linux操作系统包括用户态和内核态两个部分。用户态开发主要指的是在应用程序层面进行开发，而内核态开发则涉及到对Linux内核的修改、扩展或驱动程序的编写。</p>
+<h3 id="有使用过DMA吗？解释一下什么是DMA？"><a href="#有使用过DMA吗？解释一下什么是DMA？" class="headerlink" title="有使用过DMA吗？解释一下什么是DMA？"></a>有使用过DMA吗？解释一下什么是DMA？</h3><p>DMA是一种数据传输技术，用于在外设和内存之间直接进行数据传输，而无需CPU的干预。传统情况下，CPU负责控制数据传输过程，但这会占用CPU的时间和资源。而通过使用DMA，可以减轻CPU的负担，提高系统性能。</p>
+<p>DMA通常由一个专门的控制器或硬件模块管理。它具有自己的地址寄存器、计数器和状态寄存器，并能够与主存储器和外设进行直接交互。DMA的操作流程如下：</p>
+<ul>
+<li>配置DMA控制器：设置源地址、目标地址、数据长度等参数。</li>
+<li>请求DMA传输：外设向DMA控制器发送请求信号，启动数据传输。</li>
+<li>DMA传输：DMA控制器根据配置信息自动从源地址读取数据，并将其写入目标地址。</li>
+<li>完成中断：当DMA传输完成后，DMA控制器会触发一个中断信号给CPU，通知传输完成。</li>
+</ul>
+<p>通过使用DMA，在某些场景下可以实现高速、高效的数据传输，并且减少了对CPU资源的依赖。</p>
+<h2 id="数据结构与算法"><a href="#数据结构与算法" class="headerlink" title="数据结构与算法"></a>数据结构与算法</h2><h3 id="算法的时间复杂度和空间复杂度"><a href="#算法的时间复杂度和空间复杂度" class="headerlink" title="算法的时间复杂度和空间复杂度"></a>算法的时间复杂度和空间复杂度</h3><p>时间复杂度推导方法：</p>
+<ul>
+<li>用常数1取代运行时间中的所有加法常数</li>
+<li>在修改后的函数中只保留最高阶项</li>
+<li><p>如果最高阶项存在且其系数不是1，则去除与这个项相乘的系数，得到的结果就是复杂度阶数。</p>
+<p>常见时间复杂度耗费时间顺序：</p>
+<p>常数阶 &lt; 对数阶 &lt; 线性阶 &lt; nlogn阶 &lt; 平方阶 &lt; 立方阶 &lt; 指数阶</p>
+<p>空间复杂度通过计算算法所需的存储空间实现，计算算法执行时所需的辅助空间。</p>
+</li>
+</ul>
+<h3 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h3><p>线性表就是零个或者多个具有相同数据类型的数据元素的有限序列。</p>
+<h4 id="线性表顺序存储结构、链式存储结构"><a href="#线性表顺序存储结构、链式存储结构" class="headerlink" title="线性表顺序存储结构、链式存储结构"></a>线性表顺序存储结构、链式存储结构</h4><p>线性表顺序存储结构在插入和删除操作时需要移动大量元素，而单链表只需要赋值移动指针，对于插入和删除数据越频繁的操作，单链表的效率优势就越明显。如果需要频繁查找，很少进行插入和删除操作时，适宜采用顺序存储结构。另外，不知道元素个数有多少或变化较大时适宜采用单链表。</p>
+<h4 id="链式存储结构"><a href="#链式存储结构" class="headerlink" title="链式存储结构"></a>链式存储结构</h4><p>单链表、静态链表、循环链表、双向链表。<br>静态链表通过数组代替指针来描述单链表，但没有解决连续存储分配带来的表长难以确定的问题，失去了链式存储结构随机存取的特性。<br>循环链表使得单链表首尾相连形成一个环，双向链表在单链表的每个节点中再设置了一个指向前驱节点的指针域。</p>
+<h3 id="栈与队列"><a href="#栈与队列" class="headerlink" title="栈与队列"></a>栈与队列</h3><p>栈是限定仅在表尾进行插入和删除操作的线性表。<br>队列是只允许在一端进行插入操作，而在另一端进行删除操作的线性表。</p>
+<h2 id="机考题库知识点"><a href="#机考题库知识点" class="headerlink" title="机考题库知识点"></a>机考题库知识点</h2><p>判断字符大小写的 <code>isupper()</code> 和 <code>islower()</code>，以及大小写转换的 <code>toupper</code> 和 <code>tolower</code>。字符串处理的相关函数，<code>cin</code>、<code>cin.get</code>、<code>cin.getline</code>、<code>getline</code> 等的不同情况下用法，判断是否为某个字符的函数为 <code>isalpha()</code>。</p>
+<p><code>sstream</code>是string类型转换的头文件，在由string转换为其他类型时很好用（进制转换）。</p>
+<p><code>substr(位置、长度)</code>能够截取 string 类型数据。</p>
+<p><code>itoa(数、进制)</code>十进制转任意进制函数。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2024/05/08/record-opencv/" data-toggle="tooltip" data-placement="top" title="opencv 文档学习记录（非整理）">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2024/02/26/cpp3/" data-toggle="tooltip" data-placement="top" title="C++ 学习记录（三）">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#面试" title="面试">面试</a>
+                        
+                          <a class="tag" href="/tags/#嵌入式" title="嵌入式">嵌入式</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2024 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

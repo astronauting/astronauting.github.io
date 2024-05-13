@@ -302,6 +302,76 @@ mjx-container[display="true"] + br {
 
 <div class="post-preview">
 
+    <a href="/2023/06/07/record-orangepi/">
+        <h2 class="post-title">
+            基于yolov5及香橙派5的视觉识别项目记录
+        </h2>
+        <h3 class="post-subtitle">
+            本篇重点在于总结项目进展与调错记录，主要记录部署过程以及基于rk3588的NPU加速实现。
+        </h3>
+        <div class="post-content-preview">
+            前言近两周一来一直在做视觉识别圆环工件的项目，深度学习训练以及识别实现并不是重点，重点在于如何不卡顿的在香橙派5开发板上实现。过程中走了许多弯路，并且经过试错找到了合适的解决方案，在此处把加速的方案进行记录。
+过程记录模型训练的过程不作说明，从得到.pt模型文件开始进行记录，项目使用的瑞芯微RK3588是一款搭载了NPU的国产开发板，NPU是为了嵌入式神经网络和边缘计算量身定制的，但若想调用......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by R on
+        2023-06-07
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2023/05/11/ros4/">
+        <h2 class="post-title">
+            ros学习记录（4）——ROS基本流程、命令总结及视频内容补充
+        </h2>
+        <h3 class="post-subtitle">
+            对ros通信、服务、功能包相关流程进行梳理，顺便对视频教学内容扩展的地方进行补充
+        </h3>
+        <div class="post-content-preview">
+            前言到现在ros最基本的流程已经预备了，一些常用的命令也可以梳理总结出来供于参考。另外前几篇笔记均是一边实操一边看书面教程记录的，在教学视频中还有一些我没注意的细节点，打算把视频过一遍，梳理梳理知识点把流程变成自己的东西。
+ros 基本流程功能包及源码创建、编译
+创建工作空间并初始化
+ 123mkdir -p 自定义空间名称/srccd 自定义空间名称catkin_make
+
+ros包创建及......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by R on
+        2023-05-11
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2023/05/10/ros3/">
+        <h2 class="post-title">
+            ros学习记录（3）——ROS通信机制之服务通信与参数服务器
+        </h2>
+        <h3 class="post-subtitle">
+            通信机制学习过程记录，ROS核心部分
+        </h3>
+        <div class="post-content-preview">
+            前言接上一章，对ros的服务通信机制进行学习，服务通信和话题通信是ros通信机制的两大块，熟练掌握这两块内容才能更好的使用ros。后半部分对参数服务器进行了介绍，参数服务器作为数据存储的公共容器，同样具有着不可替代的重要性。关于流程指令和各个模块常用命令的梳理，之后会有一章进行比较详细的介绍。
+服务通信服务通信也是ROS中一种极其常用的通信模式，服务通信是基于请求响应模式的，是一种应答机制。......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by R on
+        2023-05-10
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/2023/05/09/ros2/">
         <h2 class="post-title">
             ros学习记录（2）——ROS通信机制之话题通信
@@ -455,71 +525,6 @@ mjx-container[display="true"] + br {
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/2023/03/06/winform/">
-        <h2 class="post-title">
-            Winform基础学习及项目开发
-        </h2>
-        <h3 class="post-subtitle">
-            在对C#语言进行初步学习后，研究开发Winform应用程序，本文从基本概念入手进行讲解
-        </h3>
-        <div class="post-content-preview">
-            前言我有一个习惯，在学一个东西的时候总想着尽量详细的掌握和它相关的所有概念，再用简单的话来描述它。好处在于了解的确实多，感觉什么都懂一点，但是太容易忘，也太费劲了。还有一点在于，牵扯出来的东西我似乎永远无法全部掌握，总有新的名词、新的技术冒出来，像窗台上的灰尘，或是反复出现的胡子渣。我想从当前的状态里挪出去几步，尽可能深入的去了解一个领域、一项技能，多而不精很容易，专精则要难很多。这不表示着......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by R on
-        2023-03-06
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2023/03/06/csharp2/">
-        <h2 class="post-title">
-            C#学习笔记（2）
-        </h2>
-        <h3 class="post-subtitle">
-            对C#语言进行一个系统性的学习，内容上会更偏向于WPF应用，内容只是个人学习过程的记录，copy了很多网站内容，不具有原创性。
-        </h3>
-        <div class="post-content-preview">
-            C#变量一个变量只不过是一个供程序操作的存储区的名字。在 C# 中，每个变量都有一个特定的类型，类型决定了变量的内存大小和布局。范围内的值可以存储在内存中，可以对变量进行一系列操作。C# 中提供的基本的值类型大致可以分为以下几类：
-
-C# 允许定义其他值类型的变量，比如 enum，也允许定义引用类型变量，比如 class。这些将在以后的章节中进行讨论。在本章节中，只研究基本变量类型。C# 中......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by R on
-        2023-03-06
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2023/03/03/csharp1/">
-        <h2 class="post-title">
-            C#学习笔记（1）
-        </h2>
-        <h3 class="post-subtitle">
-            对C#语言进行一个系统性的学习，内容上会更偏向于WPF应用，内容只是个人学习过程的记录，copy了很多网站内容，不具有原创性。
-        </h3>
-        <div class="post-content-preview">
-            前言最近项目上遇到了很多使用 C# 的地方，上位机程序是 C# ，相机SDK示例程序也是 C#，但每次打开 vs 时都是一头雾水，看不懂的语言、项目文件甚至报错。因此决定从头开始细细的过一遍 C#，倒不是说要买本书从每个语句、函数的用法开始学，现在当务之急是在短时间内能看懂并处理好 C# 程序。pycharm 的使用让我对于 vs 的使用一窍不通，它的界面设置、模块添加方式以及插件等完全搞不......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by R on
-        2023-03-03
-    </p>
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -565,11 +570,11 @@ C# 允许定义其他值类型的变量，比如 enum，也允许定义引用类
                             
                         
                             
-                            <a href="/tags/#c++" title="c++" rel="3">c++</a>
+                            <a href="/tags/#c++" title="c++" rel="6">c++</a>
                             
                         
                             
-                            <a href="/tags/#基础编程" title="基础编程" rel="3">基础编程</a>
+                            <a href="/tags/#基础编程" title="基础编程" rel="4">基础编程</a>
                             
                         
                             
@@ -581,17 +586,15 @@ C# 允许定义其他值类型的变量，比如 enum，也允许定义引用类
                             
                         
                             
+                        
+                            
+                        
+                            
                             <a href="/tags/#网络通信" title="网络通信" rel="2">网络通信</a>
                             
                         
                             
                             <a href="/tags/#python" title="python" rel="2">python</a>
-                            
-                        
-                            
-                            <a href="/tags/#前端" title="前端" rel="2">前端</a>
-                            
-                        
                             
                         
                             
@@ -602,6 +605,14 @@ C# 允许定义其他值类型的变量，比如 enum，也允许定义引用类
                         
                             
                             <a href="/tags/#ros" title="ros" rel="6">ros</a>
+                            
+                        
+                            
+                            <a href="/tags/#前端" title="前端" rel="2">前端</a>
+                            
+                        
+                            
+                        
                             
                         
                             
@@ -694,7 +705,7 @@ C# 允许定义其他值类型的变量，比如 enum，也允许定义引用类
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; R&#39;s Blog 2023 
+                    Copyright &copy; R&#39;s Blog 2024 
                     <br>
                 </p>
             </div>

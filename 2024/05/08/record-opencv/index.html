@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="任博容，rbr,astronauting,blog">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          opencv 文档学习记录（非整理） - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/2024/05/08/record-opencv/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#opencv" title="opencv">opencv</a>
+                        
+                    </div>
+                    <h1>opencv 文档学习记录（非整理）</h1>
+                    <h2 class="subheading">opencv 文档及各函数的学习笔记</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2024-05-08
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h2><h3 id="Mat"><a href="#Mat" class="headerlink" title="Mat"></a>Mat</h3><h4 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h4><p>Mat 是 opencv 最基本的存储图像的容器，将图像以矩阵的形式存储了下来。</p>
+<p>在围绕 c 语言进行开发时，图象被存储在 IplImage 的 C 结构中，需要手动分配和解除内存，这在大项目中是一个很麻烦的问题。C++的出现以及类的概念使得可以自动管理内存，解决了这一问题。<strong>Mat 的第一特点在于不需要手动分配或清除内存。</strong></p>
+<p>Mat 是包含两个数据部分的类，矩阵标头和指向像素矩阵的指针，矩阵表头包含矩阵大小、存储方法等信息，一般来说大小恒定；而像素矩阵因为图片的不同相差也比较大。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Mat A, C; <span class="comment">// creates just the header parts</span></span><br><span class="line">A = <span class="built_in">imread</span>(argv[<span class="number">1</span>], IMREAD_COLOR); <span class="comment">// here we&#x27;ll know the method used (allocate matrix)</span></span><br><span class="line"><span class="function">Mat <span class="title">B</span><span class="params">(A)</span></span>; <span class="comment">// Use the copy constructor</span></span><br><span class="line">C = A; <span class="comment">// Assignment operator</span></span><br></pre></td></tr></table></figure>
+<p>图像数据本身是很大的，因此 <strong>Mat 对象在复制或者赋值的过程中一般只是复制了矩阵表头以及像素矩阵指针</strong>，使得它们指向同一个数据矩阵，这就避免了大量数据的反复复制。而在实际操作中，这些不同的数据对象也只是为同一个基础数据提供不同的访问方式。(上述几个矩阵指向的都是同一数据)</p>
+<p>当然，如果<strong>想要复制数据本身，则可以使用 <code>cv::Mat::clone()</code> 和 <code>cv::Mat::copyTo()</code></strong>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Mat F = A.<span class="built_in">clone</span>();</span><br><span class="line">Mat G;</span><br><span class="line">A.<span class="built_in">copyTo</span>(G);</span><br></pre></td></tr></table></figure>
+<h4 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h4><p>有多种的颜色存储方式，其中有RGB、HSV 和 HLS、YCrCb 以及 CIE L<em>a</em>b* ，opencv 所使用的存储方式是 BGR。</p>
+<h4 id="创建-Mat-对象"><a href="#创建-Mat-对象" class="headerlink" title="创建 Mat 对象"></a>创建 Mat 对象</h4><p>自行创建一个 Mat 对象：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Mat <span class="title">M</span><span class="params">(<span class="number">2</span>,<span class="number">2</span>, CV_8UC3, Scalar(<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>))</span></span>;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;M = &quot;</span> &lt;&lt; endl &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; M &lt;&lt; endl &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+<p>首先定义了行和列为 2*2 的矩阵，然后需要定义存储的数据类型以及每个矩阵点的通道数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CV_[<span class="function">The number of bits per <span class="title">item</span><span class="params">(位数)</span>][Signed <span class="keyword">or</span> <span class="title">Unsigned</span><span class="params">(有无符号)</span>][Type <span class="title">Prefix</span><span class="params">(类型前缀)</span>]C[The channel <span class="title">number</span><span class="params">(通道号)</span>]</span></span><br></pre></td></tr></table></figure>
+<p><code>CV_8UC3</code> 意味着我们使用 8 位长的无符号字符类型，每个像素有三个这样的字符类型来形成三个通道。</p>
+<p><code>cv::Scalar</code> 是四元素短向量，是一个用于表示颜色或其他多通道数据的类，通常用于初始化，同时 <code>Scalar::all()</code> 是 Scalar 类的一个静态成员函数，用于创建一个所有通道值相同的 Scalar 对象。</p>
+<p>也可以使用 M.create() 函数进行初始化：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">M.<span class="built_in">create</span>(<span class="number">4</span>,<span class="number">4</span>, <span class="built_in">CV_8UC</span>(<span class="number">2</span>));</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;M = &quot;</span>&lt;&lt; endl &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; M &lt;&lt; endl &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+<h3 id="opencv-像素遍历、表以及时间测量"><a href="#opencv-像素遍历、表以及时间测量" class="headerlink" title="opencv 像素遍历、表以及时间测量"></a>opencv 像素遍历、表以及时间测量</h3><p>对于三通道图片来说，数据量庞大，算法在处理的过程中会有很大的工作量，为此需要对色彩空间进行缩减</p>
+<p><img src="https://pic.imgdb.cn/item/663c39f90ea9cb1403cdfd99.png" alt="1"></p>
+<p>通过以上公式可以将色值以 10 为间隔进行空间缩减，但如果使用此公式对每个像素进行处理，同样会有很大的运算量，而色值是有明显的上下限的，所以可以考虑建一个所有可能情况的表，再根据表进分配，这样就省去了计算的过程。</p>
+<h4 id="时间测量"><a href="#时间测量" class="headerlink" title="时间测量"></a>时间测量</h4><p>在如何测量某段程序运行所需时间的问题上，cv 提供了两个函数：<code>cv::getTickCount()</code>和<code>cv::getTickFrequency()</code>。<code>cv::getTickCount()</code>给出了到运行指令时系统的 CPU 晶振次数（从开机或者某个时间点开始），<code>cv::getTickFrequency()</code>给出了系统每秒的晶振次数，通过这两个函数可以计算某个代码块的时间，如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> t = (<span class="type">double</span>)<span class="built_in">getTickCount</span>();</span><br><span class="line">&#123;body&#125;</span><br><span class="line">t = ((<span class="type">double</span>)<span class="built_in">getTickCount</span>() - t)/<span class="built_in">getTickFrequency</span>();</span><br></pre></td></tr></table></figure>
+<h4 id="建表"><a href="#建表" class="headerlink" title="建表"></a>建表</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> divideWith = <span class="number">0</span>; <span class="comment">// convert our input string to number - C++ style</span></span><br><span class="line">stringstream s;</span><br><span class="line">s &lt;&lt; argv[<span class="number">2</span>];</span><br><span class="line">s &gt;&gt; divideWith;</span><br><span class="line"><span class="keyword">if</span> (!s || !divideWith)</span><br><span class="line">&#123;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;Invalid number entered for dividing. &quot;</span> &lt;&lt; endl;</span><br><span class="line"><span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line">uchar table[<span class="number">256</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; ++i)</span><br><span class="line">table[i] = (uchar)(divideWith * (i/divideWith));</span><br></pre></td></tr></table></figure>
+<p>首先使用 C++ 字符串流类将命令行第三个参数从文本转换成整数，然后将 256 个数据按照规定的间隔进行稀释。（过程和 opencv 无关）</p>
+<h4 id="像素遍历"><a href="#像素遍历" class="headerlink" title="像素遍历"></a>像素遍历</h4><h5 id="法一，指针方法"><a href="#法一，指针方法" class="headerlink" title="法一，指针方法"></a>法一，指针方法</h5><p>对于多通道图像，列包含的子列数与通道数一样多，一般情况下，矩阵数据是以一维数组的形式存储在内存中的，而 <code>isContinuous()</code> 函数则用于检查这个数组是否是按照行优先的顺序连续存储的。如果矩阵是连续存储的，那么可以通过简单的指针操作来访问矩阵的每一个元素，而不需要考虑行与行之间的边界。</p>
+<p>根据指针操作方式（性能最佳），给出以下遍历像素缩减色彩空间的代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Mat&amp; <span class="title">ScanImageAndReduceC</span><span class="params">(Mat&amp; I, <span class="type">const</span> uchar* <span class="type">const</span> table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="comment">// accept only char type matrices</span></span><br><span class="line"> <span class="built_in">CV_Assert</span>(I.<span class="built_in">depth</span>() == CV_8U);</span><br><span class="line"> <span class="comment">//这行代码使用了 OpenCV 的 CV_Assert 宏，用于断言输入的图像 I 的深度是 CV_8U，即每个像素由一个无符号 8 位整数组成。</span></span><br><span class="line"> <span class="type">int</span> channels = I.<span class="built_in">channels</span>();</span><br><span class="line"> <span class="type">int</span> nRows = I.rows;</span><br><span class="line"> <span class="type">int</span> nCols = I.cols * channels;</span><br><span class="line"> <span class="keyword">if</span> (I.<span class="built_in">isContinuous</span>())</span><br><span class="line"> &#123;</span><br><span class="line"> nCols *= nRows;</span><br><span class="line"> nRows = <span class="number">1</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="type">int</span> i,j;</span><br><span class="line"> uchar* p;</span><br><span class="line"> <span class="keyword">for</span>( i = <span class="number">0</span>; i &lt; nRows; ++i)</span><br><span class="line"> &#123;</span><br><span class="line"> p = I.<span class="built_in">ptr</span>&lt;uchar&gt;(i);</span><br><span class="line"> <span class="comment">//ptr&lt;T&gt;(i) 是 cv::Mat 类的成员函数，用于获取指向矩阵中某一行数据的指针。在这里，&lt;uchar&gt; 是模板参数，用于指定要返回的指针的数据类型（即矩阵元素的类型），i 是行索引。</span></span><br><span class="line"> <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; nCols; ++j)</span><br><span class="line"> &#123;</span><br><span class="line"> p[j] = table[p[j]];</span><br><span class="line"> <span class="comment">//这里查的表就是此前稀释好的表，每个通道现在都被放到一行上，每个通道按照列表进行取值，省去了计算环节</span></span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">return</span> I;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Mat 的 data 属性返回第一行的指针，如果存储连续，可以直接用它进行遍历。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">uchar* p = I.data;</span><br><span class="line"><span class="keyword">for</span>( <span class="type">unsigned</span> <span class="type">int</span> i =<span class="number">0</span>; i &lt; ncol*nrows; ++i)</span><br><span class="line"> *p++ = table[*p];</span><br></pre></td></tr></table></figure>
+<h5 id="法二，迭代器方法"><a href="#法二，迭代器方法" class="headerlink" title="法二，迭代器方法"></a>法二，迭代器方法</h5><p>指针方法最为高效，但是如果考虑到我们遍历的是正确的数据，而且还要确保数据之间没有出现空隙，那么迭代器方法是最为安全的方法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Mat&amp; <span class="title">ScanImageAndReduceIterator</span><span class="params">(Mat&amp; I, <span class="type">const</span> uchar* <span class="type">const</span> table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="comment">// accept only char type matrices</span></span><br><span class="line"> <span class="built_in">CV_Assert</span>(I.<span class="built_in">depth</span>() == CV_8U);</span><br><span class="line"> <span class="type">const</span> <span class="type">int</span> channels = I.<span class="built_in">channels</span>();</span><br><span class="line"> <span class="keyword">switch</span>(channels)</span><br><span class="line"> &#123;</span><br><span class="line"> <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line"> &#123;</span><br><span class="line"> MatIterator_&lt;uchar&gt; it, end;</span><br><span class="line"> <span class="comment">//定义了一个 MatIterator_&lt;uchar&gt; 类型的迭代器 it 和一个迭代器 end，用于遍历单通道图像的每个像素值。</span></span><br><span class="line"> <span class="keyword">for</span>( it = I.<span class="built_in">begin</span>&lt;uchar&gt;(), end = I.<span class="built_in">end</span>&lt;uchar&gt;(); it != end; ++it)</span><br><span class="line"> *it = table[*it];</span><br><span class="line"><span class="comment">//要获取迭代器指向的值，在它前面使用 * 运算符</span></span><br><span class="line"> <span class="keyword">break</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line"> &#123;</span><br><span class="line"> MatIterator_&lt;Vec3b&gt; it, end;</span><br><span class="line"> <span class="comment">//Vec3b 是 OpenCV 中表示三通道颜色的数据类型之一。</span></span><br><span class="line"> <span class="keyword">for</span>( it = I.<span class="built_in">begin</span>&lt;Vec3b&gt;(), end = I.<span class="built_in">end</span>&lt;Vec3b&gt;(); it != end; ++it)</span><br><span class="line"> &#123;</span><br><span class="line"> (*it)[<span class="number">0</span>] = table[(*it)[<span class="number">0</span>]];</span><br><span class="line"> (*it)[<span class="number">1</span>] = table[(*it)[<span class="number">1</span>]];</span><br><span class="line"> (*it)[<span class="number">2</span>] = table[(*it)[<span class="number">2</span>]];</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">return</span> I;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Vec3b</code> 是一个模板类，表示一个长度为 3 的向量，每个元素的类型是 <code>uchar</code>，即无符号 8 位整数。<code>uchar</code> 是 OpenCV 中的数据类型，表示无符号 8 位整数，用于表示图像像素的数值范围在 0 到 255 之间的像素值。</p>
+<h5 id="法三，即时地址计算"><a href="#法三，即时地址计算" class="headerlink" title="法三，即时地址计算"></a>法三，即时地址计算</h5><p>此方法不建议用于遍历像素上，它主要是用来获取或修改图像上的随机元素的，它的基本用法是指定要访问的项目的行号和列号。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Mat&amp; <span class="title">ScanImageAndReduceRandomAccess</span><span class="params">(Mat&amp; I, <span class="type">const</span> uchar* <span class="type">const</span> table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="comment">// accept only char type matrices</span></span><br><span class="line"> <span class="built_in">CV_Assert</span>(I.<span class="built_in">depth</span>() == CV_8U);</span><br><span class="line"> <span class="type">const</span> <span class="type">int</span> channels = I.<span class="built_in">channels</span>();</span><br><span class="line"> <span class="keyword">switch</span>(channels)</span><br><span class="line"> &#123;</span><br><span class="line"> <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line"> &#123;</span><br><span class="line"> <span class="keyword">for</span>( <span class="type">int</span> i = <span class="number">0</span>; i &lt; I.rows; ++i)</span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> j = <span class="number">0</span>; j &lt; I.cols; ++j )</span><br><span class="line">        I.<span class="built_in">at</span>&lt;uchar&gt;(i,j) = table[I.<span class="built_in">at</span>&lt;uchar&gt;(i,j)];</span><br><span class="line"> <span class="keyword">break</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line"> &#123;</span><br><span class="line"> Mat_&lt;Vec3b&gt; _I = I;</span><br><span class="line"> <span class="keyword">for</span>( <span class="type">int</span> i = <span class="number">0</span>; i &lt; I.rows; ++i)</span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> j = <span class="number">0</span>; j &lt; I.cols; ++j )</span><br><span class="line">    &#123;</span><br><span class="line">        _I(i,j)[<span class="number">0</span>] = table[_I(i,j)[<span class="number">0</span>]];</span><br><span class="line">        _I(i,j)[<span class="number">1</span>] = table[_I(i,j)[<span class="number">1</span>]];</span><br><span class="line">        _I(i,j)[<span class="number">2</span>] = table[_I(i,j)[<span class="number">2</span>]];</span><br><span class="line">    &#125;</span><br><span class="line">    I = _I;</span><br><span class="line"> <span class="keyword">break</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">return</span> I;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于三通道的情况，在循环中直接修改原始图像 I 的像素值可能会导致意外的结果，因为每次修改像素值都会直接影响原始图像。所以，为了避免修改原始图像的像素值，使用临时矩阵 _I 来存储修改后的像素值是一种更安全的做法。最后再将临时矩阵_I 的值赋值给原始图像 I，以更新图像的像素值。</p>
+<h5 id="法四，查找表操作"><a href="#法四，查找表操作" class="headerlink" title="法四，查找表操作"></a>法四，查找表操作</h5><p><code>cv::LUT()</code> 是 OpenCV 中的一个函数，用于对图像应用查找表（Look-Up Table）操作：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">cv::LUT</span><span class="params">(InputArray src, InputArray lut, OutputArray dst)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<ul>
+<li>src：输入图像，可以是单通道或多通道的。</li>
+<li>lut：查找表，通常是一个一维数组，用于指定每个像素值的映射关系。</li>
+<li>dst：输出图像，用于存储经过查找表操作后的图像。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function">Mat <span class="title">lookUpTable</span><span class="params">(<span class="number">1</span>, <span class="number">256</span>, CV_8U)</span></span>;</span><br><span class="line"> uchar* p = lookUpTable.<span class="built_in">ptr</span>();</span><br><span class="line"> <span class="keyword">for</span>( <span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; ++i)</span><br><span class="line">     p[i] = table[i];</span><br><span class="line"><span class="comment">//构建 Mat 类型的查找表，然后应用函数</span></span><br><span class="line"> <span class="built_in">LUT</span>(I, lookUpTable, J);</span><br></pre></td></tr></table></figure>
+<p>四种方式下，LUT 函数是最快捷的，而如果打算进行简单的图像扫描，也可以使用指针方式，迭代器只是在此基础上保证了安全，放慢了速度。即时计算是最慢的，他这是提供了一种可行的办法，因此，在没有特殊要求的情况下，使用系统内置的 LUT。</p>
+<h3 id="矩阵掩码操作-lt-滤波-gt-（Mask-operations-on-matrices）"><a href="#矩阵掩码操作-lt-滤波-gt-（Mask-operations-on-matrices）" class="headerlink" title="矩阵掩码操作&lt;滤波&gt;（Mask operations on matrices）"></a>矩阵掩码操作&lt;滤波&gt;（Mask operations on matrices）</h3><p>矩阵的 mask 运算相当简单，就是通过 mask 矩阵（也称为 kernel）重新计算图像中的每个像素值，mask 能够调整临近像素值以及当前像素值对新像素值的影响程度，从数学的角度来看就是用指定的值做了加权平均。</p>
+<h4 id="以对比度增强为例"><a href="#以对比度增强为例" class="headerlink" title="以对比度增强为例"></a>以对比度增强为例</h4><p>为了实现对比度增强，想要对图像的每个像素应用以下公式：</p>
+<p><img src="https://pic.imgdb.cn/item/663c822f0ea9cb14033db941.png" alt="2"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Sharpen</span><span class="params">(<span class="type">const</span> Mat&amp; myImage,Mat&amp; Result)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="built_in">CV_Assert</span>(myImage.<span class="built_in">depth</span>() == CV_8U); </span><br><span class="line"> <span class="comment">// 确保输入图像数据采用无符号字符格式，表达式为false时抛出错误</span></span><br><span class="line"> <span class="type">const</span> <span class="type">int</span> nChannels = myImage.<span class="built_in">channels</span>();</span><br><span class="line"> Result.<span class="built_in">create</span>(myImage.<span class="built_in">size</span>(),myImage.<span class="built_in">type</span>());</span><br><span class="line"> <span class="comment">// 创建与输入具有相同大小和类型的输出图像</span></span><br><span class="line"> <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span> ; j &lt; myImage.rows<span class="number">-1</span>; ++j)</span><br><span class="line"> &#123;</span><br><span class="line">    <span class="type">const</span> uchar* previous = myImage.<span class="built_in">ptr</span>&lt;uchar&gt;(j - <span class="number">1</span>);</span><br><span class="line">    <span class="type">const</span> uchar* current = myImage.<span class="built_in">ptr</span>&lt;uchar&gt;(j );</span><br><span class="line">    <span class="type">const</span> uchar* next = myImage.<span class="built_in">ptr</span>&lt;uchar&gt;(j + <span class="number">1</span>);</span><br><span class="line">    uchar* output = Result.<span class="built_in">ptr</span>&lt;uchar&gt;(j);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i= nChannels;i &lt; nChannels*(myImage.cols<span class="number">-1</span>); ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        *output++ = <span class="built_in">saturate_cast</span>&lt;uchar&gt;(<span class="number">5</span>*current[i]</span><br><span class="line">        -current[i-nChannels] - current[i+nChannels] - previous[i] - next[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    Result.<span class="built_in">row</span>(<span class="number">0</span>).<span class="built_in">setTo</span>(<span class="built_in">Scalar</span>(<span class="number">0</span>));</span><br><span class="line">    Result.<span class="built_in">row</span>(Result.rows<span class="number">-1</span>).<span class="built_in">setTo</span>(<span class="built_in">Scalar</span>(<span class="number">0</span>));</span><br><span class="line">    Result.<span class="built_in">col</span>(<span class="number">0</span>).<span class="built_in">setTo</span>(<span class="built_in">Scalar</span>(<span class="number">0</span>));</span><br><span class="line">    Result.<span class="built_in">col</span>(Result.cols<span class="number">-1</span>).<span class="built_in">setTo</span>(<span class="built_in">Scalar</span>(<span class="number">0</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先，函数确保了输入数据的格式，然后创建与输入相同格式的输出图像。因为需要同时访问多行，所以需要确定好上一行、当前行以及下一行的指针，以及指向保存位置的指针。而保存位置的指针相比于原始图像其实是缺少了图像边界的（第一行/列和最后一行/列），因此需要对边界进行处理，在这里将边界设为了零值。因为缺少邻域，所以无法对边界同样的去应用算法。</p>
+<p>总的来说，就是确定好范围然后进行循环计算，将计算结果输出到新的图像中。</p>
+<h4 id="filter2D-函数"><a href="#filter2D-函数" class="headerlink" title="filter2D 函数"></a>filter2D 函数</h4><p>以上函数代码对图像进行了二维卷积操作，对应于 opencv 函数则是 filter2D 函数，此函数原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">cv::filter2D</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    InputArray src,             <span class="comment">// 输入图像</span></span></span></span><br><span class="line"><span class="params"><span class="function">    OutputArray dst,            <span class="comment">// 输出图像</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">int</span> ddepth,                 <span class="comment">// 输出图像的深度，如果为 -1，则使用输入图像的深度</span></span></span></span><br><span class="line"><span class="params"><span class="function">    InputArray kernel,          <span class="comment">// 卷积核</span></span></span></span><br><span class="line"><span class="params"><span class="function">    Point anchor = Point(<span class="number">-1</span>,<span class="number">-1</span>),<span class="comment">// 锚点位置，默认为卷积核中心</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">double</span> delta = <span class="number">0</span>,           <span class="comment">// 一个可选的值，用于调整结果图像的亮度</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">int</span> borderType = BORDER_DEFAULT <span class="comment">// 边界处理方式（就像前面函数中边界置零一样）</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>而如果要通过 filter2D 实现以上函数功能，则如下代码所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Mat kernel = (<span class="built_in">Mat_</span>&lt;<span class="type">char</span>&gt;(<span class="number">3</span>,<span class="number">3</span>) &lt;&lt; <span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>,</span><br><span class="line"><span class="number">-1</span>, <span class="number">5</span>, <span class="number">-1</span>,</span><br><span class="line"><span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">filter2D</span>( src, dst1, src.<span class="built_in">depth</span>(), kernel );</span><br></pre></td></tr></table></figure>
+<p>src 和 dst1 分别对应输入和输出，给定卷积核就可以完成对应功能。</p>
+<h4 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h4><p>卷积是一种在两个函数间产生新函数的数学操作，在离散情况下，卷积的公式为：</p>
+<p><img src="https://pic.imgdb.cn/item/663d904e0ea9cb140308aa70.png" alt="3"></p>
+<p>其中，f 和 g 是两个离散函数，* 表示卷积操作，[n] 表示函数在离散点 n 处的值。在实际应用中，通常会有限制卷积范围以处理有限的输入信号。在连续情况下，卷积的公式如下：</p>
+<p><img src="https://pic.imgdb.cn/item/663d90b90ea9cb1403094d35.png" alt="4"></p>
+<p><strong>卷积的物理意义大概可以理解为：系统某一时刻的输出是由多个输入共同作用（叠加）的结果</strong>，在图像上，卷积核上所有作用点依次作用于原始像素点后（即乘起来），线性叠加的输出结果，即是最终卷积的输出，也是我们想要的结果，我们称为destination pixel.</p>
+<p><img src="https://pic.imgdb.cn/item/663d91040ea9cb140309c795.png" alt="5"></p>
+<h4 id="为什么要使用卷积核"><a href="#为什么要使用卷积核" class="headerlink" title="为什么要使用卷积核"></a>为什么要使用卷积核</h4><p>先以上述程序实现的锐化为例，图像的锐化和边缘检测很像，我们先检测边缘，然后把边缘叠加到原来的边缘上，原本图像边缘的值如同被加强了一般，亮度没有变化，但是更加锐利。</p>
+<p>那么边缘是如何检测出来的？</p>
+<p>边缘是图像中灰度变化最明显的地方，因此可以直接根据灰度梯度的变化进行边缘检测，这也是最常见的边缘检测方法之一。这种方法大致相当于通过一阶导数检测边缘，但是一阶导数通常会产生较宽的边缘响应，而不是一个明确的边缘位置，<strong>因为一阶导数响应的是图像灰度值的变化率，而不是图像中边缘的位置。</strong></p>
+<p>一阶导数在边缘附近会产生一个峰值，但它的宽度较大，这意味着它会检测到边缘的变化范围比较宽。这样的话，如果直接使用一阶导数来检测边缘，可能会导致边缘检测结果比较模糊，不够精确。相比之下，<strong>二阶导数对图像中的边缘位置更加敏感。在边缘附近，二阶导数的值会出现一个明显的零交叉点，这个零交叉点可以用来确定边缘的位置。</strong>因此，通过二阶导数可以更精确地检测图像中的边缘。</p>
+<p>我们最关注的是一种各向同性的滤波器，这种滤波器的响应与滤波器作用的图像的突变方向无关。也就是说，各向同性滤波器是旋转不变的，<strong>即将原图像旋转之后进行滤波处理，与先对图像滤波再旋转的结果应该是相同的。</strong></p>
+<p>而最简单的各向同性微分算子是拉普拉斯算子，其定义为（针对二维图像f(x,y)）：</p>
+<p><img src="https://pic.imgdb.cn/item/663d96ea0ea9cb140313190a.png" alt="6"></p>
+<p><img src="https://pic.imgdb.cn/item/663d97360ea9cb140313761f.png" alt="7"></p>
+<p>图像像素下函数是离散的，因此使用一阶差分和二阶差分来描述一阶导数、二阶导数。以 x,y 为坐标轴中心点，以矩阵形式表达上述公式：</p>
+<p><img src="https://pic.imgdb.cn/item/663d97e60ea9cb14031443ce.png" alt="8"></p>
+<p>由于拉普拉斯是一种微分算子，因此其应用强调的是图像中的灰度突变，所以中心点应该为正值进行突出，边界点应该为负值进行淡化。将原图像和拉普拉斯图像叠加在一起，从而得到锐化后的结果，于是矩阵变为：</p>
+<p><img src="https://pic.imgdb.cn/item/663d98600ea9cb140314d3ed.png" alt="9"></p>
+<p>如上所述就得到了卷积核模板，强化了边缘，使得图像变得更加锐利。</p>
+<h3 id="图像操作"><a href="#图像操作" class="headerlink" title="图像操作"></a>图像操作</h3><p>从文件中读取图像：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Mat img = <span class="built_in">imread</span>(filename);</span><br><span class="line"><span class="comment">//如果读取一个jpg图片，默认是三个通道。如果想读取为灰度图像，用下面方法：</span></span><br><span class="line">Mat img = <span class="built_in">imread</span>(filename, IMREAD_GRAYSCALE);</span><br><span class="line"><span class="comment">//保存图像：</span></span><br><span class="line"><span class="built_in">imwrite</span>(filename, img);</span><br></pre></td></tr></table></figure>
+<p>图像文件格式由扩展名决定。另外 <code>imdecode</code> 和 <code>imencode</code> 函数是读取和写入到内存，而不是文件。</p>
+<h4 id="图像基本操作"><a href="#图像基本操作" class="headerlink" title="图像基本操作"></a>图像基本操作</h4><p><strong>获取像素灰度值（intensity values）：</strong></p>
+<p>为了获取图像灰度值，需要知道图像的数据类型和通道数。</p>
+<p>下面是单通道灰度图像（8UC1）和像素坐标（x，y）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Scalar intensity = img.<span class="built_in">at</span>&lt;uchar&gt;(y, x);<span class="comment">//注意是行、列坐标(column对应x，row对应y，所以先行后列对应的是先y后x)</span></span><br></pre></td></tr></table></figure>
+<p>intensity.val[0] 包含的就是该点的灰度值，如果想要先 x 后 y，则可以使用：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Scalar intensity = img.<span class="built_in">at</span>&lt;uchar&gt;(<span class="built_in">Point</span>(x, y));</span><br></pre></td></tr></table></figure>
+<p>接下来是 BGR 格式的三通道图像：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Vec3b intensity = img.<span class="built_in">at</span>&lt;Vec3b&gt;(y, x);<span class="comment">//注意是点的行、列位置</span></span><br><span class="line">uchar blue = intensity.val[<span class="number">0</span>];<span class="comment">//蓝色分量</span></span><br><span class="line">uchar green = intensity.val[<span class="number">1</span>];<span class="comment">//绿色分量</span></span><br><span class="line">uchar red = intensity.val[<span class="number">2</span>];<span class="comment">//红色分量</span></span><br></pre></td></tr></table></figure>
+<p>也可以使用相同方法来更改像素灰度：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">img.<span class="built_in">at</span>&lt;uchar&gt;(y, x) = <span class="number">128</span>;</span><br></pre></td></tr></table></figure>
+<p>opencv 中有一些函数，尤其是 calib3d 模块中，如 <code>cv::projectPoints</code>，它们以 2D 或 3D 点数组构成 Mat，矩阵应该只包含一列，每行对应一个点，矩阵类型应该相应为 32FC2 或 32FC3。这样的矩阵可以用 std::vector 来构造。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;Point2f&gt; points;</span><br><span class="line"> <span class="comment">//...对points数组进行赋值，如points.push(Point2f(x,y))等等</span></span><br><span class="line">Mat pointsMat = <span class="built_in">Mat</span>(points);<span class="comment">//生成Mat类型数据，这里是2通道</span></span><br><span class="line"></span><br><span class="line">Point2f point = pointsMat.<span class="built_in">at</span>&lt;Point2f&gt;(i, <span class="number">0</span>);<span class="comment">//访问Mat中第i个点</span></span><br></pre></td></tr></table></figure>
+<h4 id="内存管理和引用计数"><a href="#内存管理和引用计数" class="headerlink" title="内存管理和引用计数"></a>内存管理和引用计数</h4><p>上文提过，Mat 的数据类型是由包含矩阵或者图像的参数（行数、列数、数据类型等）和一个指向数据的指针构成。所以对应同一个数据，我们可以创建多个Mat对象。Mat 使用引用计数的方法来确定当一个 Mat 对象销毁时，数据是否需要随之销毁。下面是在不复制数据的情况下创建两个矩阵的示例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;Point3f&gt; points;</span><br><span class="line"><span class="comment">// .. fill the array</span></span><br><span class="line">Mat pointsMat = <span class="built_in">Mat</span>(points).<span class="built_in">reshape</span>(<span class="number">1</span>);</span><br><span class="line"><span class="comment">//先将points转换为32FC3的Mat，再reshape为32FC1的pointsMat </span></span><br></pre></td></tr></table></figure>
+<p>通过上述代码，最终得到的是一个具有 3 列的 32FC1 矩阵，而不是具有 1 列的 32FC3 矩阵。pointsMat 使用来自 points 的数据，并且在销毁时不会释放内存。在这种情况下，points 的使用寿命必须必 pointsMat 长才行。数据拷贝需要 cv::Mat::copyTo 或 cv::Mat::clone。</p>
+<p>在函数中将空的 Mat 对象进行输出时，函数内部会调用 <code>Mat::create</code>，为该矩阵分配数据内存，如果非空而且大小、数据类型均正确，就什么也不做。如果不同就会释放其原来的数据，分配新的数据，如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Mat img = <span class="built_in">imread</span>(<span class="string">&quot;image.jpg&quot;</span>);</span><br><span class="line">Mat sobelx;</span><br><span class="line"><span class="built_in">Sobel</span>(img, sobelx, CV_32F, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line"><span class="comment">//Sobel 函数用于计算图像的 Sobel 梯度,这个函数可以对图像进行水平、垂直方向的 Sobel 算子操作</span></span><br><span class="line"><span class="comment">//这里以空的 Mat 对象作为输出，会自动为其创建数据内容</span></span><br></pre></td></tr></table></figure>
+<h4 id="常规图像操作"><a href="#常规图像操作" class="headerlink" title="常规图像操作"></a>常规图像操作</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">img = <span class="built_in">Scalar</span>(<span class="number">0</span>);<span class="comment">//这里img是一副灰度图像，将其赋值为黑色图像</span></span><br><span class="line"><span class="comment">//划分区域：</span></span><br><span class="line"><span class="function">Rect <span class="title">r</span><span class="params">(<span class="number">10</span>, <span class="number">10</span>, <span class="number">100</span>, <span class="number">100</span>)</span></span>;</span><br><span class="line">Mat smallImg = <span class="built_in">img</span>(r);</span><br><span class="line"><span class="comment">//彩色转换为灰度：</span></span><br><span class="line">Mat img = <span class="built_in">imread</span>(<span class="string">&quot;image.jpg&quot;</span>); <span class="comment">// 加载8UC3图像</span></span><br><span class="line">Mat grey;  </span><br><span class="line"><span class="built_in">cvtColor</span>(img, grey, COLOR_BGR2GRAY); </span><br><span class="line"><span class="comment">//图像类型转换为32FC1：</span></span><br><span class="line">src.<span class="built_in">convertTo</span>(dst, CV_32F);</span><br></pre></td></tr></table></figure>
+<p>对于 32FC* 系列图像格式的解释：</p>
+<p>32F：表示数据类型为单精度浮点数（float），每个像素占用 32 位（4 字节）存储空间。</p>
+<p>C1、C2、C3：表示通道数，即图像或矩阵的颜色通道数。C1 表示单通道，C2 表示双通道，C3 表示三通道，以此类推。</p>
+<ul>
+<li>32FC1：表示单通道的单精度浮点数图像或矩阵，每个像素用单个浮点数表示。</li>
+<li>32FC2：表示双通道的单精度浮点数图像或矩阵，每个像素用两个浮点数表示。</li>
+<li>32FC3：表示三通道的单精度浮点数图像或矩阵，每个像素用三个浮点数表示。</li>
+</ul>
+<h4 id="图像显示"><a href="#图像显示" class="headerlink" title="图像显示"></a>图像显示</h4><p>常规图像显示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Mat img = <span class="built_in">imread</span>(<span class="string">&quot;image.jpg&quot;</span>);</span><br><span class="line"><span class="built_in">namedWindow</span>(<span class="string">&quot;image&quot;</span>, WINDOW_AUTOSIZE);<span class="comment">//如果不改变窗口属性，可以不写该行</span></span><br><span class="line"><span class="built_in">imshow</span>(<span class="string">&quot;image&quot;</span>, img);</span><br><span class="line"><span class="built_in">waitKey</span>();</span><br></pre></td></tr></table></figure>
+<p>32F 格式的图片需要转为 8U 类型才能进行显示(因为 imshow 函数默认假定图像的像素值范围是 [0, 255]，并且使用整型来表示像素值。)：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Mat img = <span class="built_in">imread</span>(<span class="string">&quot;image.jpg&quot;</span>);</span><br><span class="line">Mat grey;</span><br><span class="line"><span class="built_in">cvtColor</span>(img, grey, COLOR_BGR2GRAY);</span><br><span class="line">Mat sobelx;</span><br><span class="line"><span class="built_in">Sobel</span>(grey, sobelx, CV_32F, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line"><span class="type">double</span> minVal, maxVal;</span><br><span class="line"><span class="built_in">minMaxLoc</span>(sobelx, &amp;minVal, &amp;maxVal); <span class="comment">//find minimum and maximum intensities</span></span><br><span class="line">Mat draw;</span><br><span class="line">sobelx.<span class="built_in">convertTo</span>(draw, CV_8U, <span class="number">255.0</span>/(maxVal - minVal), -minVal * <span class="number">255.0</span>/(maxVal - minVal));</span><br><span class="line"><span class="built_in">namedWindow</span>(<span class="string">&quot;image&quot;</span>, WINDOW_AUTOSIZE);</span><br><span class="line"><span class="built_in">imshow</span>(<span class="string">&quot;image&quot;</span>, draw);</span><br><span class="line"><span class="built_in">waitKey</span>();</span><br></pre></td></tr></table></figure>
+<h3 id="图像融合"><a href="#图像融合" class="headerlink" title="图像融合"></a>图像融合</h3><p>通过下面的公式可以实现两幅图像的线性融合：</p>
+<p><img src="https://pic.imgdb.cn/item/664177e10ea9cb14035543d1.png" alt="10"></p>
+<p>通过改变 α 在 0 到 1 之间的值，就能够形成两张图片的交融，类似于幻灯片的溶解效果。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/imgcodecs.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/highgui.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="comment">// we&#x27;re NOT &quot;using namespace std;&quot; here, to avoid collisions between the beta variable and std::beta in c++17</span></span><br><span class="line"><span class="keyword">using</span> std::cin;</span><br><span class="line"><span class="keyword">using</span> std::cout;</span><br><span class="line"><span class="keyword">using</span> std::endl;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">( <span class="type">void</span> )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="type">double</span> alpha = <span class="number">0.5</span>; <span class="type">double</span> beta; <span class="type">double</span> input;</span><br><span class="line"> Mat src1, src2, dst;</span><br><span class="line"> cout &lt;&lt; <span class="string">&quot; Simple Linear Blender &quot;</span> &lt;&lt; endl;</span><br><span class="line"> cout &lt;&lt; <span class="string">&quot;-----------------------&quot;</span> &lt;&lt; endl;</span><br><span class="line"> cout &lt;&lt; <span class="string">&quot;* Enter alpha [0.0-1.0]: &quot;</span>;</span><br><span class="line"> cin &gt;&gt; input;</span><br><span class="line"> <span class="comment">// We use the alpha provided by the user if it is between 0 and 1</span></span><br><span class="line"> <span class="keyword">if</span>( input &gt;= <span class="number">0</span> &amp;&amp; input &lt;= <span class="number">1</span> )</span><br><span class="line"> &#123; alpha = input; &#125;</span><br><span class="line"> src1 = <span class="built_in">imread</span>( <span class="string">&quot;../data/LinuxLogo.jpg&quot;</span> );</span><br><span class="line"> src2 = <span class="built_in">imread</span>( <span class="string">&quot;../data/WindowsLogo.jpg&quot;</span> );</span><br><span class="line"> <span class="keyword">if</span>( src1.<span class="built_in">empty</span>() ) &#123; cout &lt;&lt; <span class="string">&quot;Error loading src1&quot;</span> &lt;&lt; endl; <span class="keyword">return</span> <span class="number">-1</span>; &#125;</span><br><span class="line"> <span class="keyword">if</span>( src2.<span class="built_in">empty</span>() ) &#123; cout &lt;&lt; <span class="string">&quot;Error loading src2&quot;</span> &lt;&lt; endl; <span class="keyword">return</span> <span class="number">-1</span>; &#125;</span><br><span class="line"> beta = ( <span class="number">1.0</span> - alpha );</span><br><span class="line"> <span class="built_in">addWeighted</span>( src1, alpha, src2, beta, <span class="number">0.0</span>, dst);</span><br><span class="line"> <span class="built_in">imshow</span>( <span class="string">&quot;Linear Blend&quot;</span>, dst );</span><br><span class="line"> <span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述程序实现了两幅图像融合的功能，其核心在于 addWeighted() 函数，该函数的两幅输入图像的大小和通道要一致。</p>
+<p><code>addWeighted()</code> 函数处理的公式为：</p>
+<p><img src="https://pic.imgdb.cn/item/66417a350ea9cb1403580e0f.png" alt="11"></p>
+<p>将各个参数按照之前的公式进行代入即可得到融合结果。</p>
+<h3 id="图像亮度、对比度改变"><a href="#图像亮度、对比度改变" class="headerlink" title="图像亮度、对比度改变"></a>图像亮度、对比度改变</h3><p>通常的图像处理过程是通过一副或者多副图像作为输入，输出一副图像作为结果，这其中有基于像素变换进行的点运算，也有基于区域变换进行的领域运算。</p>
+<p>对于像素变换来说，每个像素的输出值只依赖于对应的输入值，通常像素变换应用于亮度和对比度调整，以及颜色校正和变换上。</p>
+<p>像素变换的调整方式主要有两种，乘以或者加上一个常数：</p>
+<p><img src="https://pic.imgdb.cn/item/66417c3e0ea9cb14035a78dd.png" alt="12"></p>
+<p>其中参数 α 成为增益，β 称为偏置，分别用来控制对比度和亮度，f(x) 和 g(x) 是输入和输出图像的像素值，更常见公式如下：</p>
+<p><img src="https://pic.imgdb.cn/item/66417cc40ea9cb14035b8a0a.png" alt="13"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/imgcodecs.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/highgui.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="comment">// we&#x27;re NOT &quot;using namespace std;&quot; here, to avoid collisions between the beta variable and std::beta in c++17</span></span><br><span class="line"><span class="keyword">using</span> std::cin;</span><br><span class="line"><span class="keyword">using</span> std::cout;</span><br><span class="line"><span class="keyword">using</span> std::endl;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">( <span class="type">int</span> argc, <span class="type">char</span>** argv )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="function">CommandLineParser <span class="title">parser</span><span class="params">( argc, argv, <span class="string">&quot;&#123;@input | ../data/lena.jpg | input image&#125;&quot;</span> )</span></span>;</span><br><span class="line"> Mat image = <span class="built_in">imread</span>( parser.<span class="built_in">get</span>&lt;String&gt;( <span class="string">&quot;@input&quot;</span> ) );</span><br><span class="line"> <span class="keyword">if</span>( image.<span class="built_in">empty</span>() )</span><br><span class="line"> &#123;</span><br><span class="line"> cout &lt;&lt; <span class="string">&quot;Could not open or find the image!\n&quot;</span> &lt;&lt; endl;</span><br><span class="line"> cout &lt;&lt; <span class="string">&quot;Usage: &quot;</span> &lt;&lt; argv[<span class="number">0</span>] &lt;&lt; <span class="string">&quot; &lt;Input image&gt;&quot;</span> &lt;&lt; endl;</span><br><span class="line"> <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> Mat new_image = Mat::<span class="built_in">zeros</span>( image.<span class="built_in">size</span>(), image.<span class="built_in">type</span>() );</span><br><span class="line"> <span class="comment">//初始化新的图像像素值为0，与原图像大小类型相同</span></span><br><span class="line"> <span class="type">double</span> alpha = <span class="number">1.0</span>; <span class="comment">/*&lt; Simple contrast control */</span></span><br><span class="line"> <span class="type">int</span> beta = <span class="number">0</span>; <span class="comment">/*&lt; Simple brightness control */</span></span><br><span class="line"> cout &lt;&lt; <span class="string">&quot; Basic Linear Transforms &quot;</span> &lt;&lt; endl;</span><br><span class="line"> cout &lt;&lt; <span class="string">&quot;-------------------------&quot;</span> &lt;&lt; endl;</span><br><span class="line"> cout &lt;&lt; <span class="string">&quot;* Enter the alpha value [1.0-3.0]: &quot;</span>; cin &gt;&gt; alpha;</span><br><span class="line"> cout &lt;&lt; <span class="string">&quot;* Enter the beta value [0-100]: &quot;</span>; cin &gt;&gt; beta;</span><br><span class="line"> <span class="keyword">for</span>( <span class="type">int</span> y = <span class="number">0</span>; y &lt; image.rows; y++ ) &#123;</span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> x = <span class="number">0</span>; x &lt; image.cols; x++ ) &#123;</span><br><span class="line">        <span class="keyword">for</span>( <span class="type">int</span> c = <span class="number">0</span>; c &lt; image.<span class="built_in">channels</span>(); c++ ) &#123;</span><br><span class="line">            new_image.<span class="built_in">at</span>&lt;Vec3b&gt;(y,x)[c] =</span><br><span class="line">            <span class="built_in">saturate_cast</span>&lt;uchar&gt;( alpha*image.<span class="built_in">at</span>&lt;Vec3b&gt;(y,x)[c] + beta );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">imshow</span>(<span class="string">&quot;Original Image&quot;</span>, image);</span><br><span class="line"> <span class="built_in">imshow</span>(<span class="string">&quot;New Image&quot;</span>, new_image);</span><br><span class="line"> <span class="built_in">waitKey</span>();</span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>saturate_cast()</code> 函数用于执行安全的数据类型转换，确保被转换的值被限制在目标数据类型的有效范围内。如果值超过了目标数据类型能表示的最大值或最小值，它会被“饱和”到最大或最小值，而不会发生溢出或下溢。</p>
+<p>在实际应用中无需使用上述循环进行处理，可以直接应用如下函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">image.<span class="built_in">convertTo</span>(new_image, <span class="number">-1</span>, alpha, beta);</span><br></pre></td></tr></table></figure>
+<p><code>void cv::Mat::convertTo(OutputArray m, int rtype, double alpha=1, double beta=0) const;</code>，其中：</p>
+<ul>
+<li>m 是输出图像，即转换后的图像。</li>
+<li>rtype 是目标图像的数据类型。如果 rtype 为负数（例如 -1），则表示目标图像应与原始图像具有相同的数据类型。</li>
+<li>alpha 是可选的缩放因子，默认为 1。它用于调整像素值的强度。</li>
+<li>beta 是可选的偏移值，默认为 0。它用于调整像素值的偏移。</li>
+</ul>
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>下面是对前文调整亮度对比度的应用，同时介绍了伽马校正技术（校正图像亮度）。</p>
+<p><img src="https://pic.imgdb.cn/item/664181d90ea9cb140361eaa8.png" alt="14"></p>
+<p>上图中浅灰色是原始图像直方图，深灰色是亮度为 80 时的直方图，可以看出亮度的调整使得直方图整体右移，但是最大限额只有 255，由于饱和限制，超过 255 的像素只会保持在 255，因此最右侧变为竖线。</p>
+<p><img src="https://pic.imgdb.cn/item/664182800ea9cb1403643a9b.png" alt="15"></p>
+<p>上图则是调整了 α 后的直方图，如果 α 小于 1，灰度级会压缩，对比度也会降低，图像整体往中间收缩。</p>
+<p><strong>β 参数会增加亮度，同时图像会出现类似于蒙纱的效果，是因为产生的饱和降低了图像对比度。此时调整 α 参数会降低这种影响，但是也会因为饱和失去较亮区域的细节。</strong></p>
+<h5 id="伽马校正"><a href="#伽马校正" class="headerlink" title="伽马校正"></a>伽马校正</h5><p>伽马校正对输入输出像素进行了非线性变换，以此来校正图像的亮度：</p>
+<p><img src="https://pic.imgdb.cn/item/664183850ea9cb140365b727.png" alt="16"></p>
+<p>因为非线性的特点，对于不同的像素值，变换方式是不一样的。</p>
+<p><img src="https://pic.imgdb.cn/item/664183cf0ea9cb1403661372.png" alt="17"></p>
+<p>从上图可以看出，当 γ &lt; 1 时，输出值会更大，直方图会向右侧移动，反之 γ &gt; 1 时，直方图向左侧移动。</p>
+<p><img src="https://pic.imgdb.cn/item/664184a60ea9cb1403671ccc.png" alt="18"></p>
+<p>上述图像时调整 α 和 β 获得的，可以看出云朵部分就出现了过饱和失真，使用伽马校正效果如下：</p>
+<p><img src="https://pic.imgdb.cn/item/6641850c0ea9cb14036795d4.png" alt="19"></p>
+<p>可以看出，伽马校正由于其非线性的特点，失真较小，直方图对比如下，中间为原始直方图：</p>
+<p><img src="https://pic.imgdb.cn/item/664185400ea9cb140367d661.png" alt="20"></p>
+<p><strong>总结来看，伽马校正实现的是将左侧数据右移，对于右侧数据并无太大影响，尽可能的保留了图像细节，而这是线性变换无法实现的。</strong>实现代码如下，使用了查表操作简化计算量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Mat <span class="title">lookUpTable</span><span class="params">(<span class="number">1</span>, <span class="number">256</span>, CV_8U)</span></span>;<span class="comment">//建立lookup table</span></span><br><span class="line">uchar* p = lookUpTable.<span class="built_in">ptr</span>();</span><br><span class="line"><span class="keyword">for</span>( <span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; ++i) <span class="comment">//0~255分别计算变换结果，放在lookup table</span></span><br><span class="line">    p[i] = <span class="built_in">saturate_cast</span>&lt;uchar&gt;(<span class="built_in">pow</span>(i / <span class="number">255.0</span>, gamma_) * <span class="number">255.0</span>);</span><br><span class="line">​</span><br><span class="line">Mat res = img.<span class="built_in">clone</span>();</span><br><span class="line"><span class="built_in">LUT</span>(img, lookUpTable, res);<span class="comment">//用LUT函数执行图像变换</span></span><br></pre></td></tr></table></figure>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2024/03/18/interview/" data-toggle="tooltip" data-placement="top" title="嵌入式软件面试问题汇总">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#opencv" title="opencv">opencv</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2024 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

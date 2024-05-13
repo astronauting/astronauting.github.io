@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="任博容，rbr,astronauting,blog">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          C++ 学习记录（三） - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/2024/02/26/cpp3/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#基础编程" title="基础编程">基础编程</a>
+                        
+                    </div>
+                    <h1>C++ 学习记录（三）</h1>
+                    <h2 class="subheading">C++ 学习过程中的程序及每章个人总结，此处梳理七到八章，重点在于几种主要结构的使用。</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2024-02-26
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>七八章主要围绕函数展开，七章介绍函数基础性知识，八章讲 C++ 新增的函数特性，与前面各种变量类型以及指针数组都有很大的联系，还有比较复杂冗余的一些概念，接下来进行一一的拆分总结。</p>
+<h2 id="第七章：函数——C-的编程模块"><a href="#第七章：函数——C-的编程模块" class="headerlink" title="第七章：函数——C++的编程模块"></a>第七章：函数——C++的编程模块</h2><h3 id="函数的基本"><a href="#函数的基本" class="headerlink" title="函数的基本"></a>函数的基本</h3><p>在 C++ 中使用函数，必须完成三方面的工作：提供函数定义、提供函数原型、调用函数。</p>
+<p>在定义函数的环节，可以将函数分为两类：没有返回值的函数和有返回值的函数，其中没有返回值的函数被称为 void 函数，有返回值的函数对于返回值类型有着一定的限制：<strong>不能是数组</strong>。</p>
+<h4 id="提供函数原型的原因"><a href="#提供函数原型的原因" class="headerlink" title="提供函数原型的原因"></a>提供函数原型的原因</h4><p>函数原型不要求提供变量名，原型中的变量名相当于占位符，因此也不必与函数定义中的变量名相同。原型的存在确保了以下几点：</p>
+<ul>
+<li>编译器正确处理函数返回值</li>
+<li>编译器检查使用的参数数目是否正确</li>
+<li>编译器检查使用的参数类型，并在不正确的情况下尝试转换为正确类型</li>
+</ul>
+<p>总而言之，就是为了确保编译器的检查工作。</p>
+<h3 id="函数的传参"><a href="#函数的传参" class="headerlink" title="函数的传参"></a>函数的传参</h3><p>c++ 通常按值传递参数，传递给函数的值是实参（argument），函数中用于接收传递值的变量则是形参（parameter），形参是局部变量，会在函数结束时进行释放。</p>
+<h3 id="函数与数组"><a href="#函数与数组" class="headerlink" title="函数与数组"></a>函数与数组</h3><h4 id="指针处理数组"><a href="#指针处理数组" class="headerlink" title="指针处理数组"></a>指针处理数组</h4><p>C++ 在函数中使用指针来处理数组，将数组名视为指针，在数组名作为函数参数传入时，实际上传递的是地址。因此需要在函数原型声明中使用指针声明，这里需要结合例子说明一下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> cookies[Arsize];<span class="comment">//定义一个数组</span></span><br><span class="line"><span class="type">int</span> sum = <span class="built_in">sum_arr</span>(cookies,Arsize);<span class="comment">//函数处理数组</span></span><br></pre></td></tr></table></figure>
+<p>这里 <code>sum_arr</code> 的函数原型对应如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">sum_arr</span><span class="params">(<span class="type">int</span>* arr, <span class="type">int</span> n)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>在这个函数原型中，int* arr 和 int arr[] 含义是相同的，都表明 arr 是一个 int 指针，而 int arr[] 还可以提醒用户 arr 指向的是数组第一个 int 元素。</p>
+<p>另外，对于遍历数组而言，使用指针加法和数组下标是等效的，如下两个恒等式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr[i] == *(arr+i);</span><br><span class="line">&amp;arr[i] == arr+i;</span><br></pre></td></tr></table></figure>
+<h4 id="传递数组时的隐患"><a href="#传递数组时的隐患" class="headerlink" title="传递数组时的隐患"></a>传递数组时的隐患</h4><p>传递常规变量时，函数使用的是该变量的拷贝，不会影响原变量；而传递数组时，<strong>函数将使用原来的数组</strong>，因为传递的只是地址。这种特性使得原数组承担着可能被修改的风险，因此在某些不需要修改的条件下可以在函数声明时加入 const 来进行限定，这意味着不能在函数中进行数据修改，但原始数组本身并非常量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">show_array</span><span class="params">(<span class="type">const</span> <span class="type">double</span> ar[],<span class="type">int</span> n)</span></span>;</span><br></pre></td></tr></table></figure>
+<h4 id="指针与-const"><a href="#指针与-const" class="headerlink" title="指针与 const"></a>指针与 const</h4><p>可以使用两种方式将 const 关键字用于指针，第一种方法是让指针指向一个常量对象，第二种方法是将指针本身声明为常量。c++ 禁止将 const 的地址赋给非 const 指针，同样常量数组的地址也不能赋给非常量指针。</p>
+<p>在使用函数中尽可能使用 const 可以避免无意间的错误，也可以使得函数既能处理 const 实参也能处理非 const 实参，否则将只能接受非 const 数据。</p>
+<h3 id="函数和二维数组"><a href="#函数和二维数组" class="headerlink" title="函数和二维数组"></a>函数和二维数组</h3><p>函数在声明二维数组时若指定行或列为固定值，则此数组的行或列在函数运算过程中始终为固定值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ar2[r][c] == *(*(ar2 + r) + c);</span><br></pre></td></tr></table></figure>
+<p>二维数组在声明的过程中无法使用 const，因为二维数组在使用指针表示时已经进入了二级间接关系，其本身的声明已经存在了指针。除非将其本身的声明中的指针规定为常量，否则无法使用 const。</p>
+<h3 id="函数和-C-风格字符串"><a href="#函数和-C-风格字符串" class="headerlink" title="函数和 C 风格字符串"></a>函数和 C 风格字符串</h3><p>将字符串作为参数传递给函数时，表示字符串的方式有三种：char 数组、用引号括起的字符串常量、被设置为字符串的地址的 char 指针。字符串有内置的结束字符，因此不必将字符串长度作为参数传递给函数，而函数可以使用循环来检查每个字符，直到遇到结尾的空值字符。</p>
+<h3 id="函数和结构"><a href="#函数和结构" class="headerlink" title="函数和结构"></a>函数和结构</h3><p>结构变量的行为更接近于基本的单值变量，可以像普通变量一样按值传递结构，也可以通过地址运算符 &amp; 来传递结构地址进行操作。这样可以避免按值传递结构的缺点，即复制结构将增加系统内存要求，降低系统运行速度。</p>
+<p>在将 cin&gt;&gt; 用作测试条件读取输入的情况下，对于不合法输入将设置一个错误条件，禁止进一步读取输入。如果在输入循环后还要进行输入，则必须使用 cin.clear() 重置输入，然后还可能需要通过读取不合法的输入来丢弃它们。示例如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Enter value #&quot;</span> &lt;&lt; (i+<span class="number">1</span>) &lt;&lt; <span class="string">&quot;:&quot;</span>;</span><br><span class="line">    cin &gt;&gt; temp;</span><br><span class="line">    <span class="keyword">if</span> (!cin)</span><br><span class="line">    &#123;</span><br><span class="line">        cin.<span class="built_in">clear</span>();</span><br><span class="line">        <span class="keyword">while</span> (cin.<span class="built_in">get</span>() != <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Bad input; input process terminated.\n&quot;</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (temp &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    ar[i] = temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="传递结构的地址"><a href="#传递结构的地址" class="headerlink" title="传递结构的地址"></a>传递结构的地址</h4><p>若要修改函数使得函数传递的并非结构的值而是结构的地址，需要注意三点：调用函数时将结构地址（&amp;xxx）而非结构本身（xxx）传递给函数，将形参声明为指向结构的指针类型，对于形参应该使用间接成员运算符（-&gt;）而非成员运算符（句点）。</p>
+<h3 id="函数和-string、array-对象"><a href="#函数和-string、array-对象" class="headerlink" title="函数和 string、array 对象"></a>函数和 string、array 对象</h3><p>与数组相比，string 对象与结构更加相似，如果需要多个字符串，可以声明一个 string 对象数组，而不是二维 char 数组。</p>
+<p>在 C++ 中类对象是基于结构的，因此结构编程方面的有些考虑因素也适用于类，即<strong>可按值传递也可以按指针传递</strong>。</p>
+<p>模板 array 并非只能存储基本数据类型，还可以存储类对象。</p>
+<h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><p>函数自己调用自己称为递归，通常的方法将递归调用放在 if 语句中。</p>
+<p>在需要将一项工作不断分为两项较小的、类似的工作时，递归非常有用。需要注意，<strong>调用次数将呈几何级数增长。</strong></p>
+<p>以 void 类型的递归函数 recurs() 的代码为例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">recurs</span><span class="params">(argumentlist)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">statements1</span></span><br><span class="line"><span class="function">    <span class="title">if</span> <span class="params">(test)</span></span></span><br><span class="line"><span class="function">        <span class="title">recurs</span><span class="params">(arguments)</span></span></span><br><span class="line"><span class="function">    statements2</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>在上述函数中，如果 recurs 被调用了五次，则 statements1 按照函数调用的顺序执行五次，然后 statements2 按照相反的顺序执行五次，相当于是“对称”的关系。</p>
+<h3 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h3><p>将一个函数的地址作为参数传递给新的函数，与直接调用相比比较麻烦，但是它允许在不同的时间传递不同函数的地址，意味着可以在不同的时间使用不同的函数。</p>
+<p>函数指针的使用有三个环节：获取函数的地址、声明一个函数指针、使用函数指针来调用函数。</p>
+<ul>
+<li>获取函数地址：单纯的使用函数名就代表该函数的地址</li>
+<li>声明函数指针：将函数声明中的函数部分用指针声明来代替，如：<code>double 函数名(int)</code> 对应的函数指针声明为 <code>double (*pt)(int)</code>。之后只需要将指针 <code>pt</code> 和函数名建立相等关系即可。</li>
+<li>使用指针来调用函数：c++ 允许像使用函数名一样使用指针代表函数，即：<code>double y = (*pt)(5)</code> 和 <code>double y = pt(5)</code> 所表示的功能是一样的，但前一种更能表示代码正在使用函数指针。</li>
+</ul>
+<p><strong>函数指针的意义在于函数可以作为参数传递给函数，增加了函数的适用性，一个模板函数可以自由的选择不同的算法。</strong></p>
+<h4 id="深入探讨函数指针"><a href="#深入探讨函数指针" class="headerlink" title="深入探讨函数指针"></a>深入探讨函数指针</h4><p><strong>需要注意，函数指针声明时的括号必不可缺。</strong><code>const double * f1()</code> 和 <code>const double (*f1)()</code> 代表的意义完全不同，前者表示函数 f1 返回值是指向 double 类型的指针，后者表示的才是函数指针。若要表示返回值是 double 类型的函数指针，则声明应该为 <code>const double * (*f1)()</code>。</p>
+<p>函数指针数组则在以上基础上再做添加，假设 f1 是一个包含三个元素的函数指针数组，则该数组声明如下所示：<code>const double *(*f1[3])()</code>。对于函数指针可以直接用 auto 进行自动类型推断，而对于函数指针数组则不能，因为 auto 只能用于单值初始化，而不能用于初始化列表。</p>
+<p>除此以外还可以用 typedef 创建类型别名来进行简化，通过减少输入量来让程序更容易理解。</p>
+<h2 id="第八章-函数探幽——面向更高级应用的函数相关功能"><a href="#第八章-函数探幽——面向更高级应用的函数相关功能" class="headerlink" title="第八章 函数探幽——面向更高级应用的函数相关功能"></a>第八章 函数探幽——面向更高级应用的函数相关功能</h2><h3 id="内联函数（inline）"><a href="#内联函数（inline）" class="headerlink" title="内联函数（inline）"></a>内联函数（inline）</h3><p>常规函数和内联函数之间的主要区别不在于编写方式，而在于C++编译器如何将它们组合到程序中，如果代码执行时间很短，则内联调用可以节省非内联调用的大部分时间。</p>
+<p>要使用此特性，必须保证<strong>在函数声明前加上关键字 inline</strong> 或者<strong>在函数定义前加上关键字 inline</strong>。通常的做法是省略原型，将整个定义放在本应该提供原型的地方。</p>
+<p>inline 是 C++ 新增的特性，C 语言中使用预处理器语句 #define 来提供宏，这相当于是内联代码的原始实现，但是宏不能按值传递，只是实现了文本替换。因此，如果使用了宏来执行类似函数的功能，应该考虑转换为内联函数。</p>
+<h3 id="引用变量（-amp-）"><a href="#引用变量（-amp-）" class="headerlink" title="引用变量（&amp;）"></a>引用变量（&amp;）</h3><p>&amp; 可以用来指示变量的地址，也可以用来进行声明引用。</p>
+<p>引用看上去很像伪装表示的指针，但是引用和指针的差别在于<strong>必须在声明引用时将其初始化，不可以像指针一样先声明再初始化。</strong>不论是直接还是间接，引用关系一经确定就不得修改。</p>
+<h4 id="引用被用作函数参数"><a href="#引用被用作函数参数" class="headerlink" title="引用被用作函数参数"></a>引用被用作函数参数</h4><p>引用最常被用作函数参数，使函数中的变量名成为调用程序中变量的别名，这种传参的方法被称为引用传递。引用传递相比于值传递来说差别体现在可以修改原变量的值上。同时，按引用传递和按值传递在应用程序中看起来是一致的，两者的区分只能通过原型或者函数定义才能知道。</p>
+<h4 id="引用的属性和特别之处"><a href="#引用的属性和特别之处" class="headerlink" title="引用的属性和特别之处"></a>引用的属性和特别之处</h4><p>如果想让函数使用传递给它的信息，但又不修改信息内容，就应该使用常量引用（const），此种情况一般出现在数据比较大的情况下。（值传递需要拷贝副本，浪费时间空间）</p>
+<p>对于形参为 const 引用的函数，如果实参不匹配，则对应行为类似于值传递，为确保原始数据不被修改，将使用临时变量来存储值。</p>
+<p>使用 const 的三个理由：</p>
+<ul>
+<li>使用 const 可以避免无意中修改数据的编程错误</li>
+<li>使用 const 使得函数能够正确处理 const 和非 const 实参</li>
+<li>使用 const 使函数能够正确生成并使用临时变量</li>
+</ul>
+<h4 id="引用与结构和类"><a href="#引用与结构和类" class="headerlink" title="引用与结构和类"></a>引用与结构和类</h4><p>引用非常适用于结构和类，其主要就是为了这些类型而提出，而非基本的内置类型，因为引用节省了时间和内存。</p>
+<p>而在使用引用的函数中，也包含了返回引用的情况，返回引用最重要的一点在于<strong>应该避免返回函数终止时不再存在的内存单元引用</strong>（不能返回临时变量的引用，也应该避免返回指向临时变量的指针），最简单避免这种问题的方法就是返回一个作为参数传递给函数的引用。</p>
+<p>另一种方法是通过 new 的方式分配新的存储空间，但是函数往往隐藏了对 new 的调用，使得很容易忘记使用 delete 来释放内存。</p>
+<p>返回引用时可以将 const 用于引用返回类型，这是为了防止出现反复赋值、内容覆盖。如 re_ex 函数是一个返回引用的函数，如果不用 const 进行返回类型限定，会有以下情况发生：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">re_ex</span>(dup,five) = four;</span><br></pre></td></tr></table></figure>
+<h4 id="引用参数的适用情况"><a href="#引用参数的适用情况" class="headerlink" title="引用参数的适用情况"></a>引用参数的适用情况</h4><p>使用引用参数的主要原因有两个，其一在于使得程序员能够修改调用函数中的数据对象，其二在于提高了程序的运行速度。</p>
+<p>不对使用参数进行修改的函数：</p>
+<ul>
+<li>数据对象很小，按值传递</li>
+<li>数据对象为数组，使用指针，并将指针声明为指向 const</li>
+<li>数据对象为较大结构，使用 const 引用</li>
+<li>数据对象为类，使用 const 引用，传递类对象的标准方式是按引用传递</li>
+</ul>
+<p>修改使用参数的函数：</p>
+<ul>
+<li>内置数据类型用指针</li>
+<li>数组只能用指针</li>
+<li>结构使用指针或引用</li>
+<li>类对象使用引用</li>
+</ul>
+<h3 id="ostream-对象的格式化方法"><a href="#ostream-对象的格式化方法" class="headerlink" title="ostream 对象的格式化方法"></a>ostream 对象的格式化方法</h3><p>方法 <code>setf()</code> 可以设置各种状态，<code>setf(ios_base::fixed)</code> 将对象置于使用定点表示法的模式，<code>setf(ios_base::showpoint)</code> 将对象置于显示小数点的模式，即使小数部分为零。</p>
+<p>方法 <code>precision()</code> 指定显示多少位的小数。</p>
+<p>方法 <code>width()</code> 设置下一次输出操作使用的字段宽度，这种设置只在显示下一个值的时候有效，然后将恢复到默认设置。</p>
+<h3 id="默认参数"><a href="#默认参数" class="headerlink" title="默认参数"></a>默认参数</h3><p>默认参数是指当函数调用中省略了实参时自动使用的一个值，设置方法是将值赋给原型中的参数，对于带参数列表的函数，必须<strong>从右向左</strong>添加默认值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">hatpo</span> <span class="params">(<span class="type">int</span> n,<span class="type">int</span> m = <span class="number">4</span>,<span class="type">int</span> j = <span class="number">5</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">chico</span> <span class="params">(<span class="type">int</span> n = <span class="number">1</span>,<span class="type">int</span> m = <span class="number">44</span> ,<span class="type">int</span> j = <span class="number">5</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是只有原型指定默认参数，函数定义和没有默认参数时完全相同。</p>
+<h3 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h3><p>函数多态（函数重载）能够使用多个同名函数，区分在于参数列表的不同。</p>
+<p>函数重载的关键在于函数的参数列表（也成为函数特征标），C++允许定义名称相同的函数，条件是它们的特征标不同，如果参数数目或参数类型不同，则特征标也不同。</p>
+<p>如果在调用的过程中，参数类型没有与原型匹配，C++ 会尝试使用标准类型转换强制进行匹配，如果还是不行将会拒绝调用，视为错误。</p>
+<p>为了避免引用和类型之间产生混乱，检查函数特征标时将会把类型引用和类型本身视为同一个特征标。重载时，返回类型可以不同，但是特征标也必须不同。</p>
+<p><strong>一般情况下，仅当函数基本上执行相同任务，但使用不同形式的数据时，才应用函数重载。</strong></p>
+<h3 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h3><p>函数模板是通用的函数描述，使用<strong>泛型</strong>来定义函数，其中泛型可以用具体的类型替换，通过将类型传递给模板，可以使得编译器生成该类型的函数。</p>
+<h4 id="函数模板格式"><a href="#函数模板格式" class="headerlink" title="函数模板格式"></a>函数模板格式</h4><p>要建立一个模板并将类型命名为 AnyType，关键字 template 和 typename 是必需的，并且在函数原型和函数声明处都要出现，关键字使用 typename 或者 class 均可。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Swap</span><span class="params">(T &amp;a,T &amp;b)</span></span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Account</span><span class="params">(T &amp;a,T &amp;b)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>函数模板不能缩短可执行程序，最终的代码不包含任何模板，而只包含了为程序生成的实际函数。更常见的情形是将模板放在头文件中，并在需要使用模板的文件中包含头文件。</p>
+<h4 id="模板重载以及局限性"><a href="#模板重载以及局限性" class="headerlink" title="模板重载以及局限性"></a>模板重载以及局限性</h4><p>并非所有的模板参数都必须是模板参数类型，同时模板可以重载。</p>
+<p>模板的局限性在于假设模板定义了乘法运算符，但对应的类型为数组、指针或者结构时，这种假设就不再成立了。对这种情况有两种解决方案，一种是为特定类型提供具体化的模板定义，另一种则是重载运算符，使其能够应用于特定的结构或者类。</p>
+<h4 id="显式具体化、实例化和具体化"><a href="#显式具体化、实例化和具体化" class="headerlink" title="显式具体化、实例化和具体化"></a>显式具体化、实例化和具体化</h4>
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2024/03/18/interview/" data-toggle="tooltip" data-placement="top" title="嵌入式软件面试问题汇总">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2023/11/29/cpp2/" data-toggle="tooltip" data-placement="top" title="C++ 学习记录（二）">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#基础编程" title="基础编程">基础编程</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2024 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
