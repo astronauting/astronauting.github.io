@@ -177,7 +177,7 @@
                         
                     </div>
                     <h1>opencv 文档学习记录（非整理）</h1>
-                    <h2 class="subheading">opencv 文档及各函数的学习笔记</h2>
+                    <h2 class="subheading">opencv 文档及各函数的学习笔记，核心模块部分，涉及 Mat、像素遍历、图像基本操作以及对比度亮度的基本调试。</h2>
                     <span class="meta">
                         Posted by R on
                         2024-05-08
@@ -199,7 +199,7 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h2 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h2><h3 id="Mat"><a href="#Mat" class="headerlink" title="Mat"></a>Mat</h3><h4 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h4><p>Mat 是 opencv 最基本的存储图像的容器，将图像以矩阵的形式存储了下来。</p>
+                <h3 id="Mat"><a href="#Mat" class="headerlink" title="Mat"></a>Mat</h3><h4 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h4><p>Mat 是 opencv 最基本的存储图像的容器，将图像以矩阵的形式存储了下来。</p>
 <p>在围绕 c 语言进行开发时，图象被存储在 IplImage 的 C 结构中，需要手动分配和解除内存，这在大项目中是一个很麻烦的问题。C++的出现以及类的概念使得可以自动管理内存，解决了这一问题。<strong>Mat 的第一特点在于不需要手动分配或清除内存。</strong></p>
 <p>Mat 是包含两个数据部分的类，矩阵标头和指向像素矩阵的指针，矩阵表头包含矩阵大小、存储方法等信息，一般来说大小恒定；而像素矩阵因为图片的不同相差也比较大。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Mat A, C; <span class="comment">// creates just the header parts</span></span><br><span class="line">A = <span class="built_in">imread</span>(argv[<span class="number">1</span>], IMREAD_COLOR); <span class="comment">// here we&#x27;ll know the method used (allocate matrix)</span></span><br><span class="line"><span class="function">Mat <span class="title">B</span><span class="params">(A)</span></span>; <span class="comment">// Use the copy constructor</span></span><br><span class="line">C = A; <span class="comment">// Assignment operator</span></span><br></pre></td></tr></table></figure>
@@ -356,6 +356,10 @@
                 
 
                 <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2024/05/13/record-opencv1/" data-toggle="tooltip" data-placement="top" title="opencv 文档学习记录(二)">&larr; Previous Post</a>
+                        </li>
                     
                     
                         <li class="next">

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="任博容，rbr,astronauting,blog">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          opencv 文档学习记录(二) - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/2024/05/13/record-opencv1/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#opencv" title="opencv">opencv</a>
+                        
+                    </div>
+                    <h1>opencv 文档学习记录(二)</h1>
+                    <h2 class="subheading">opencv 文档及各函数的学习笔记，核心模块部分，涉及离散傅里叶变换、读写 XML 和 YAML 以及并行运行。</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2024-05-13
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h3 id="DFT-离散傅里叶变换"><a href="#DFT-离散傅里叶变换" class="headerlink" title="DFT 离散傅里叶变换"></a>DFT 离散傅里叶变换</h3><p>图像在经过傅里叶变换后会分解为正弦和余弦成分，换句话说，会把一副图像从空间域转换到频域，任意的函数都可以被正弦和余弦函数精确逼近，傅里叶变换所实现的就是这种逼近。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/core.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/imgproc.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/imgcodecs.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/highgui.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">help</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> cout &lt;&lt; endl</span><br><span class="line"> &lt;&lt; <span class="string">&quot;This program demonstrated the use of the discrete Fourier transform (DFT). &quot;</span> &lt;&lt; endl</span><br><span class="line"> &lt;&lt; <span class="string">&quot;The dft of an image is taken and it&#x27;s power spectrum is displayed.&quot;</span> &lt;&lt; endl</span><br><span class="line"> &lt;&lt; <span class="string">&quot;Usage:&quot;</span> &lt;&lt; endl</span><br><span class="line"> &lt;&lt; <span class="string">&quot;./discrete_fourier_transform [image_name -- default ../data/lena.jpg]&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> ** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="built_in">help</span>();</span><br><span class="line"> <span class="type">const</span> <span class="type">char</span>* filename = argc &gt;=<span class="number">2</span> ? argv[<span class="number">1</span>] : <span class="string">&quot;../data/lena.jpg&quot;</span>;</span><br><span class="line"> Mat I = <span class="built_in">imread</span>(filename, IMREAD_GRAYSCALE);</span><br><span class="line"> <span class="keyword">if</span>( I.<span class="built_in">empty</span>())&#123;</span><br><span class="line"> cout &lt;&lt; <span class="string">&quot;Error opening image&quot;</span> &lt;&lt; endl;</span><br><span class="line"> <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> Mat padded; <span class="comment">//expand input image to optimal size</span></span><br><span class="line"> <span class="type">int</span> m = <span class="built_in">getOptimalDFTSize</span>( I.rows );</span><br><span class="line"> <span class="type">int</span> n = <span class="built_in">getOptimalDFTSize</span>( I.cols ); <span class="comment">// 通过在边界添加零值实现扩展图像大小以适应 DFT 处理</span></span><br><span class="line"> <span class="built_in">copyMakeBorder</span>(I, padded, <span class="number">0</span>, m - I.rows, <span class="number">0</span>, n - I.cols, BORDER_CONSTANT, Scalar::<span class="built_in">all</span>(<span class="number">0</span>));</span><br><span class="line"> <span class="comment">//void cv::copyMakeBorder(InputArray src, OutputArray dst, int top, int bottom, int left, int right, int borderType, const Scalar&amp; value = Scalar())</span></span><br><span class="line"><span class="comment">//为输入图像添加边框，top、bottom、left、right表示各部位边框大小，borderType表示边框类型，value是填充边框的值</span></span><br><span class="line"> Mat planes[] = &#123;<span class="built_in">Mat_</span>&lt;<span class="type">float</span>&gt;(padded), Mat::<span class="built_in">zeros</span>(padded.<span class="built_in">size</span>(), CV_32F)&#125;;<span class="comment">//planes数组，存储傅里叶变换的虚部和实部</span></span><br><span class="line"> Mat complexI;</span><br><span class="line"> <span class="built_in">merge</span>(planes, <span class="number">2</span>, complexI); <span class="comment">// 将两个单通道的对象合并为一个双通道对象，第一个通道存实部，第二个虚部</span></span><br><span class="line"> <span class="built_in">dft</span>(complexI, complexI); <span class="comment">// this way the result may fit in the source matrix</span></span><br><span class="line"> <span class="comment">// compute the magnitude and switch to logarithmic scale</span></span><br><span class="line"> <span class="comment">// =&gt; log(1 + sqrt(Re(DFT(I))^2 + Im(DFT(I))^2))</span></span><br><span class="line"> <span class="built_in">split</span>(complexI, planes); <span class="comment">// planes[0] = Re(DFT(I), planes[1] = Im(DFT(I))</span></span><br><span class="line"> <span class="built_in">magnitude</span>(planes[<span class="number">0</span>], planes[<span class="number">1</span>], planes[<span class="number">0</span>]);<span class="comment">// planes[0] = magnitude</span></span><br><span class="line"> Mat magI = planes[<span class="number">0</span>];</span><br><span class="line"> magI += Scalar::<span class="built_in">all</span>(<span class="number">1</span>); <span class="comment">// switch to logarithmic scale</span></span><br><span class="line"> <span class="built_in">log</span>(magI, magI);</span><br><span class="line"> <span class="comment">// crop the spectrum, if it has an odd number of rows or columns</span></span><br><span class="line"> magI = <span class="built_in">magI</span>(<span class="built_in">Rect</span>(<span class="number">0</span>, <span class="number">0</span>, magI.cols &amp; <span class="number">-2</span>, magI.rows &amp; <span class="number">-2</span>));</span><br><span class="line"> <span class="comment">// rearrange the quadrants of Fourier image so that the origin is at the image center</span></span><br><span class="line"> <span class="type">int</span> cx = magI.cols/<span class="number">2</span>;</span><br><span class="line"> <span class="type">int</span> cy = magI.rows/<span class="number">2</span>;</span><br><span class="line"> <span class="function">Mat <span class="title">q0</span><span class="params">(magI, Rect(<span class="number">0</span>, <span class="number">0</span>, cx, cy))</span></span>; <span class="comment">// Top-Left - Create a ROI per quadrant</span></span><br><span class="line"> <span class="function">Mat <span class="title">q1</span><span class="params">(magI, Rect(cx, <span class="number">0</span>, cx, cy))</span></span>; <span class="comment">// Top-Right</span></span><br><span class="line"> <span class="function">Mat <span class="title">q2</span><span class="params">(magI, Rect(<span class="number">0</span>, cy, cx, cy))</span></span>; <span class="comment">// Bottom-Left</span></span><br><span class="line"> <span class="function">Mat <span class="title">q3</span><span class="params">(magI, Rect(cx, cy, cx, cy))</span></span>; <span class="comment">// Bottom-Right</span></span><br><span class="line"> Mat tmp; <span class="comment">// swap quadrants (Top-Left with Bottom-Right)</span></span><br><span class="line"> q0.<span class="built_in">copyTo</span>(tmp);</span><br><span class="line"> q3.<span class="built_in">copyTo</span>(q0);</span><br><span class="line"> tmp.<span class="built_in">copyTo</span>(q3);</span><br><span class="line"> q1.<span class="built_in">copyTo</span>(tmp); <span class="comment">// swap quadrant (Top-Right with Bottom-Left)</span></span><br><span class="line"> q2.<span class="built_in">copyTo</span>(q1);</span><br><span class="line"> tmp.<span class="built_in">copyTo</span>(q2);</span><br><span class="line"> <span class="built_in">normalize</span>(magI, magI, <span class="number">0</span>, <span class="number">1</span>, NORM_MINMAX); <span class="comment">// Transform the matrix with float values into a</span></span><br><span class="line"> <span class="comment">// viewable image form (float between values 0 and 1).</span></span><br><span class="line"> <span class="built_in">imshow</span>(<span class="string">&quot;Input Image&quot;</span> , I ); <span class="comment">// Show the result</span></span><br><span class="line"> <span class="built_in">imshow</span>(<span class="string">&quot;spectrum magnitude&quot;</span>, magI);</span><br><span class="line"> <span class="built_in">waitKey</span>();</span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>二维图像的傅里叶变换公式：</p>
+<p><img src="https://pic.imgdb.cn/item/6641c7c30ea9cb1403c6d3aa.png" alt="1"></p>
+<p>f 是空间域中的图像值，F 是频域中的图像值，变换的结果是复数。如果想要观察这个结果，可以观察实数部分和虚数部分的图像，也可以观察变换结果的幅度和相位图像。在整个过程中只有幅度图像是我们感兴趣的部分，因为它包含着我们需要的所有图像几何信息，但是如果想要修改变换结果，那就需要用到所有部分。</p>
+<p>上述例子展示了如何计算和显示傅里叶变换后的幅度图像，数字图像是离散的，像素取值是离散的，因此这里傅里叶变换也是离散的，如果想从几何角度了解图像结构就会用到这个方法。以下对程序主要步骤进行详细讲解：</p>
+<h4 id="图像最佳尺寸扩展"><a href="#图像最佳尺寸扩展" class="headerlink" title="图像最佳尺寸扩展"></a>图像最佳尺寸扩展</h4><p>DFT 的性能与输入图像的尺寸有关，如果图像的尺寸是2、3、5的倍数，速度最快。为了实现最大性能，通常对图像边界进行补充，使得能够满足最佳尺寸要求。使用函数 <code>getOptimalDFTSize()</code> 会返回这个最佳尺寸，然后使用 <code>copyMakeBorder()</code> 函数来扩展图像 (扩展部分的像素值初始化为0)</p>
+<h4 id="创建变量存放实部和虚部"><a href="#创建变量存放实部和虚部" class="headerlink" title="创建变量存放实部和虚部"></a>创建变量存放实部和虚部</h4><p>傅里叶变换的结果是复数，这意味着每幅图形的变换结果是两幅图像（复数的实部和虚部）。另外，频域取值范围远大于对应的空域部分，因此变换结果至少用float类型的数据。所以输入图像需要转化为该类型，并且增加一个通道存放虚部。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Mat planes[] = &#123;<span class="built_in">Mat_</span>&lt;<span class="type">float</span>&gt;(padded), Mat::<span class="built_in">zeros</span>(padded.<span class="built_in">size</span>(), CV_32F)&#125;;</span><br><span class="line">Mat complexI;</span><br><span class="line"><span class="built_in">merge</span>(planes, <span class="number">2</span>, complexI); <span class="comment">// Add to the expanded another plane with zeros</span></span><br></pre></td></tr></table></figure>
+<h4 id="执行函数并将实部和虚部转换为幅值"><a href="#执行函数并将实部和虚部转换为幅值" class="headerlink" title="执行函数并将实部和虚部转换为幅值"></a>执行函数并将实部和虚部转换为幅值</h4><p>幅值计算公式如下所示：</p>
+<p><img src="https://pic.imgdb.cn/item/6641cd3c0ea9cb1403d02d52.png" alt="2"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dft</span>(complexI, complexI); <span class="comment">// this way the result may fit in the source matrix</span></span><br><span class="line"><span class="built_in">split</span>(complexI, planes); <span class="comment">// planes[0] = Re(DFT(I), planes[1] = Im(DFT(I))</span></span><br><span class="line"><span class="built_in">magnitude</span>(planes[<span class="number">0</span>], planes[<span class="number">1</span>], planes[<span class="number">0</span>]);<span class="comment">// planes[0] = magnitude</span></span><br><span class="line">Mat magI = planes[<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
+<p>dft 计算后结果覆盖了原变量，然后将其实部和虚部进行了拆分，存放在 planes 数组中。magnitude 函数使用了上述公式，计算幅值并将结果保存在 planes[0] 中。</p>
+<h4 id="转换为对数刻度"><a href="#转换为对数刻度" class="headerlink" title="转换为对数刻度"></a>转换为对数刻度</h4><p>傅里叶系数的动态范围太大，不适宜用图像显示，而且一些较小和快速变化的值不容易观察到，这会导致高值全部变为白点，小值则是黑点。为了进行灰度值可视化，可以将线性刻度转换为对数刻度：</p>
+<p><img src="https://pic.imgdb.cn/item/6641cf7b0ea9cb1403d5f5e6.png" alt="3"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">magI += Scalar::<span class="built_in">all</span>(<span class="number">1</span>); <span class="comment">// switch to logarithmic scale</span></span><br><span class="line"><span class="built_in">log</span>(magI, magI);</span><br></pre></td></tr></table></figure>
+<h4 id="截取并重新组合图像"><a href="#截取并重新组合图像" class="headerlink" title="截取并重新组合图像"></a>截取并重新组合图像</h4><p>在之前进行计算时为了简化流程我们将图像进行了扩展，现在为了可视化，可以重新组合图像象限，使得原点与图像中心对齐：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// crop the spectrum, if it has an odd number of rows or columns</span></span><br><span class="line">magI = <span class="built_in">magI</span>(<span class="built_in">Rect</span>(<span class="number">0</span>, <span class="number">0</span>, magI.cols &amp; <span class="number">-2</span>, magI.rows &amp; <span class="number">-2</span>));</span><br><span class="line"><span class="comment">// rearrange the quadrants of Fourier image so that the origin is at the image center</span></span><br><span class="line"><span class="type">int</span> cx = magI.cols/<span class="number">2</span>;</span><br><span class="line"><span class="type">int</span> cy = magI.rows/<span class="number">2</span>;</span><br><span class="line"><span class="function">Mat <span class="title">q0</span><span class="params">(magI, Rect(<span class="number">0</span>, <span class="number">0</span>, cx, cy))</span></span>; <span class="comment">// Top-Left - Create a ROI per quadrant</span></span><br><span class="line"><span class="function">Mat <span class="title">q1</span><span class="params">(magI, Rect(cx, <span class="number">0</span>, cx, cy))</span></span>; <span class="comment">// Top-Right</span></span><br><span class="line"><span class="function">Mat <span class="title">q2</span><span class="params">(magI, Rect(<span class="number">0</span>, cy, cx, cy))</span></span>; <span class="comment">// Bottom-Left</span></span><br><span class="line"><span class="function">Mat <span class="title">q3</span><span class="params">(magI, Rect(cx, cy, cx, cy))</span></span>; <span class="comment">// Bottom-Right</span></span><br><span class="line">Mat tmp; <span class="comment">// swap quadrants (Top-Left with Bottom-Right)</span></span><br><span class="line">q0.<span class="built_in">copyTo</span>(tmp);</span><br><span class="line">q3.<span class="built_in">copyTo</span>(q0);</span><br><span class="line">tmp.<span class="built_in">copyTo</span>(q3);</span><br><span class="line">q1.<span class="built_in">copyTo</span>(tmp); <span class="comment">// swap quadrant (Top-Right with Bottom-Left)</span></span><br><span class="line">q2.<span class="built_in">copyTo</span>(q1);</span><br><span class="line">tmp.<span class="built_in">copyTo</span>(q2);</span><br></pre></td></tr></table></figure>
+<p>这里值得一提的是第一行代码 <code>magI = magI(Rect(0, 0, magI.cols &amp; -2, magI.rows &amp; -2))</code>，这里裁剪频谱使它的行数和列数都是偶数，以便后面进行重新组合。这里将宽度和高度与 -2 进行了位与运算，通常情况下整数和整数位与运算是针对其二进制数进行位与的，-2 的二进制表示常使用补码表示，在这里其八位二进制补码是 11111110，通过与运算能确保第一位永远是 0，即行和列永远是偶数。</p>
+<p>这里交换象限的目的是让原来的图像中四个角点拼凑到中心点，也就是将频谱的原点移到图像中心便于分析，因为这些点的位置对应于频谱的低频信息，低频信息表示图像整体亮度和颜色分布，这里有几张截图可供参考：</p>
+<p><img src="https://pic.imgdb.cn/item/6641dbd70ea9cb1403e91b30.png" alt="3"></p>
+<p><img src="https://pic.imgdb.cn/item/6641dbf70ea9cb1403e93d78.png" alt="4"></p>
+<h4 id="归一化"><a href="#归一化" class="headerlink" title="归一化"></a>归一化</h4><p>上面经过对数变换后，数值可能仍然不在0和1之间。这里使用 <code>cv::normalize()</code> 函数进行变换：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">normalize</span>(magI, magI, <span class="number">0</span>, <span class="number">1</span>, NORM_MINMAX);</span><br></pre></td></tr></table></figure>
+<h3 id="读写-XML-和-YAML-文件"><a href="#读写-XML-和-YAML-文件" class="headerlink" title="读写 XML 和 YAML 文件"></a>读写 XML 和 YAML 文件</h3><p>XML 和 YAML 文件可用于保存算法参数或数据，比如 SVM、神经网络的训练结果等，在读写过程中，两者没有区别，仅仅是文件后缀名不同而已，但是用文本编辑器查看时，会发现 YAML 文件更为简洁，这一部分主要用 OpenCV 实现上述两种文件的读写，包括常见的数据类型、Mat 类型、自定义数据类型等。针对自定义的数据类型，通过添加读写函数，实现了与常见数据类型同样的读写方法。使用到的 opencv 数据类型有 cv::FileStorage , cv::FileNode 和 cv::FileNodeIterator。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2024/06/05/cpp4/" data-toggle="tooltip" data-placement="top" title="C++ 学习记录（四）">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2024/05/08/record-opencv/" data-toggle="tooltip" data-placement="top" title="opencv 文档学习记录（非整理）">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#opencv" title="opencv">opencv</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2024 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

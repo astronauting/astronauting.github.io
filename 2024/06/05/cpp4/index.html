@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="任博容，rbr,astronauting,blog">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          C++ 学习记录（四） - R的博客 | RBR&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://astronauting-rbr.top/2024/06/05/cpp4/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/hux-blog.min.css">
+
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">R&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">知</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">时</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">类</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#基础编程" title="基础编程">基础编程</a>
+                        
+                    </div>
+                    <h1>C++ 学习记录（四）</h1>
+                    <h2 class="subheading">C++ 学习过程中的程序及每章个人总结，此处梳理九到十章，重点在于内存模型、名称空间以及类的初步介绍。</h2>
+                    <span class="meta">
+                        Posted by R on
+                        2024-06-05
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>链接类型、作用域以及名称空间，这是第九章的核心内容，对象、类以及类的基本定义，是第十章的核心内容。</p>
+<h2 id="第九章：内存模型和名称空间"><a href="#第九章：内存模型和名称空间" class="headerlink" title="第九章：内存模型和名称空间"></a>第九章：内存模型和名称空间</h2><h3 id="单独编译"><a href="#单独编译" class="headerlink" title="单独编译"></a>单独编译</h3><p>程序一般可以分成三个部分：</p>
+<ul>
+<li>头文件：包含结构声明和使用这些结构的函数原型</li>
+<li>源代码文件：包含与结构有关函数的代码</li>
+<li>源代码文件：调用函数的代码</li>
+</ul>
+<p>这种组织策略很便捷，一个文件包含用户定义类型，一个文件包含调用用户定义类型的函数，两个文件组成了一个软件包。</p>
+<h4 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h4><p>头文件中通常包含：</p>
+<ul>
+<li>函数原型</li>
+<li><h1 id="define-或-const-定义的符号常量"><a href="#define-或-const-定义的符号常量" class="headerlink" title="define 或 const 定义的符号常量"></a>define 或 const 定义的符号常量</h1></li>
+<li>结构、类声明</li>
+<li>模板声明</li>
+<li>内联函数</li>
+</ul>
+<p>在包含头文件时使用 “ ” 而不是 &lt;&gt;。如果文件名包含在尖括号中，会从标准头文件目录查找，而双引号的情况则会先从当前工作目录或者源代码目录进行查找，<strong>因此在包含自己的头文件时应该使用引号而不是尖括号。</strong></p>
+<p>同一个文件中头文件只能包含一次，#ifndef 指令可以有效防止将头文件包含多次的情况，将声明现在 #ifndef 和 #endif 之间，可以让程序忽略第一次包含以外的所有内容。</p>
+<h3 id="存储连续性、作用域和连接性"><a href="#存储连续性、作用域和连接性" class="headerlink" title="存储连续性、作用域和连接性"></a>存储连续性、作用域和连接性</h3><p>c++11 使用四种不同方案存储数据，方案的区别在于数据保留在内存中的时间：</p>
+<ul>
+<li>自动存储持续性：在函数定义中声明的变量的存储持续性是自动的，执行完代码块以后内存释放</li>
+<li>静态存储持续性：函数外定义的变量和使用关键字 static 定义的变量的存储持续性均为静态</li>
+<li>线程存储持续性：如果变量使用关键字 thread_local 声明，生命周期和所属的线程一样长</li>
+<li>动态存储持续性：用 new 分配的内存一直存在，直到使用 delete 运算符进行释放</li>
+</ul>
+<h4 id="作用域和链接"><a href="#作用域和链接" class="headerlink" title="作用域和链接"></a>作用域和链接</h4><p>作用域描述名称在文件中的可见范围，链接性描述名称如何在不同单元间共享，链接性为外部表示可在文件间共享，为内部表示只能由一个文件中的函数共享，<strong>自动变量不能共享，因此没有链接性。</strong></p>
+<h4 id="自动存储持续性"><a href="#自动存储持续性" class="headerlink" title="自动存储持续性"></a>自动存储持续性</h4><p>作用域为局部的变量只在定义它的代码块中可用，作用域为全局的变量在定义位置到文件结尾间都可以用。</p>
+<p>自动变量的管理方式为栈，还有一种形式为寄存器变量，使用关键字 register，它建议编译器使用 CPU 寄存器来存储自动变量，关键字可以显式的指出变量是自动的，并且只能用于原本就是自动的变量。</p>
+<h4 id="静态持续变量"><a href="#静态持续变量" class="headerlink" title="静态持续变量"></a>静态持续变量</h4><p>静态持续变量有三种链接性，外部（可在其他文件中访问）、内部（仅在当前文件中访问）以及无链接性（在函数或者代码块中访问）。三种链接性都在整个程序执行期间存在，因此程序不需要特殊的如栈的装置来管理它们，将分配固定的内存块来存储所有的静态变量。</p>
+<p><strong>链接性为外部的静态变量需要在代码块外直接声明，为内部的需要在代码块外通过限定符 static 来声明，没有链接性的则是在代码块内部并使用 static 限定符。</strong></p>
+<h4 id="初始化问题"><a href="#初始化问题" class="headerlink" title="初始化问题"></a>初始化问题</h4><p>零初始化和常量表达式初始化统称为静态初始化，表示编译器处理文件时进行初始化，动态初始化意味着编译后进行初始化。</p>
+<p>所有静态变量被零初始化，如果使用常量表达式初始化变量，将执行简单计算完成常量表达式初始化，如果没有足够的信息，则执行动态初始化。（往往是指涉及到函数的情况）</p>
+<h4 id="静态持续性与链接性"><a href="#静态持续性与链接性" class="headerlink" title="静态持续性与链接性"></a>静态持续性与链接性</h4><h5 id="静态持续、外部链接"><a href="#静态持续、外部链接" class="headerlink" title="静态持续、外部链接"></a>静态持续、外部链接</h5><p>链接性为外部的变量通常简称为外部变量或全局变量，C++ 有“单定义规则”，该规则指出变量只能有一次定义。<strong>因此变量声明要么是定义声明，要么是引用声明。</strong></p>
+<p>引用声明使用关键字 extern，不进行初始化，多个文件中使用外部变量只需要定义一次，在其他文件中则使用关键字 extern 进行声明。</p>
+<p><strong>c++ 提供作用域解析运算符（::），放在变量名前面时表示使用该变量的全局版本。</strong></p>
+<h5 id="静态持续、无链接"><a href="#静态持续、无链接" class="headerlink" title="静态持续、无链接"></a>静态持续、无链接</h5><p>无连接性的静态变量只在启动时进行一次初始化，之后再调用函数时不会像自动变量一样初始化。</p>
+<h4 id="说明符和限定符"><a href="#说明符和限定符" class="headerlink" title="说明符和限定符"></a>说明符和限定符</h4><p>c++ 关键字中的存储说明符或 cv-限定符的 C++ 关键字提供了其他有关存储的信息。</p>
+<p>存储说明符如下所示：</p>
+<ul>
+<li>auto（在 c++11 中不再是说明符）</li>
+<li>register</li>
+<li>static</li>
+<li>extern</li>
+<li>thread_local</li>
+<li>mutable</li>
+</ul>
+<p>在同一个声明中不能使用多个说明符，但 thread_local 除外，它可以与 static 或者 extern 结合。</p>
+<p>c++11 之前，auto 指出变量为自动变量，11 之后用于自动类型推断。register 用于在声明中指示寄存器存储，在 c++11 中仅用于显式地指出变量为自动变量。mutable 可以用来指出即使结构（或类）变量为 const，其某个成员也可以被修改。</p>
+<h5 id="cv-限定符"><a href="#cv-限定符" class="headerlink" title="cv-限定符"></a>cv-限定符</h5><p>cv 表示 const 和 volatile，关键字 volatile 表示即使程序代码没有对内存单元进行修改，其值也可能发生变化。</p>
+<p>在默认情况下全局变量的链接性是外部的，但 const 全局变量的链接性是内部的，就像使用了 static 限定符一样。这样的目的是方便多个文件使用常量，而不用去一一引用，只要在两个源代码文件中包括同一个头文件，则它们将获得同一组常量。</p>
+<p>如果希望某个常量的链接性为外部，则可以使用 extern 关键字来覆盖默认的内部链接性：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">const</span> <span class="type">int</span> states = <span class="number">50</span>;</span><br></pre></td></tr></table></figure>
+<p>这样所有使用该常量的文件中都需要使用 extern 关键字来声明它。</p>
+<h4 id="函数和链接性"><a href="#函数和链接性" class="headerlink" title="函数和链接性"></a>函数和链接性</h4><p>一般情况下，所有函数的存储持续性为静态，链接性为外部。可以使用 static 将函数的链接性设置为内部，使之只能在一个文件中使用，那就必须同时在原型和函数定义中使用该关键字。</p>
+<h3 id="名称空间"><a href="#名称空间" class="headerlink" title="名称空间"></a>名称空间</h3><p>声明区域是指可以在其中进行声明的区域，如可以在函数外面声明全局变量，其声明区域为所在文件；对于在函数中声明的变量，其声明区域为所在的代码块。</p>
+<p>变量的潜在作用域从声明点开始，到其声明区域的结尾。变量的作用域是指变量对程序而言可见的范围，这一范围可能会比潜在作用域小，因为全局变量有可能被局部同名变量短暂覆盖。</p>
+<h4 id="新的名称空间特性"><a href="#新的名称空间特性" class="headerlink" title="新的名称空间特性"></a>新的名称空间特性</h4><p>c++ 可以通过定义一种新的声明区域来创建命名的名称空间，这样做的目的之一是提供一个声明名称的区域。一个名称空间中的名称不会与另一个名称空间的相同名称发生冲突，同时允许程序的其他部分使用该名称空间中声明的东西。</p>
+<p>名称空间可以是全局的，也可以位于另一个名称空间中，但不能位于代码块中。名称空间中的声明和定义规则同全局声明和定义规则相同。</p>
+<p>访问给定名称空间中的名称需要使用作用域解析运算符 ::，未被装饰的名称称为未限定的名称，包含名称空间的名称称为限定的名称。</p>
+<h4 id="using-声明和-using-编译指令"><a href="#using-声明和-using-编译指令" class="headerlink" title="using 声明和 using 编译指令"></a>using 声明和 using 编译指令</h4><p>using 声明使特定的标识符可用，using 编译指令使整个名称空间可用：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> rbr::fetch;<span class="comment">//using 声明</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> rbr;<span class="comment">//using 编译指令</span></span><br></pre></td></tr></table></figure>
+<p>名称空间可以嵌套，也可以创建别名。可以通过省略名称空间名称来创建未命名的名称空间，但是不能在未命名名称空间之外的其他文件中使用该空间，这提供了链接性为内部的静态变量的替代品。</p>
+<h4 id="名称空间相关原则"><a href="#名称空间相关原则" class="headerlink" title="名称空间相关原则"></a>名称空间相关原则</h4><ul>
+<li>使用在已命名的名称空间中声明的变量，而不是使用静态全局变量或者外部全局变量。</li>
+<li>函数库、类库应该放到名称空间中</li>
+<li>导入名称时首选使用作用域解析运算符或者 using 声明。</li>
+</ul>
+<h2 id="第十章：对象和类"><a href="#第十章：对象和类" class="headerlink" title="第十章：对象和类"></a>第十章：对象和类</h2><p><strong>最重要的面向对象编程特性：抽象、封装和数据隐藏、多态、继承、代码的可重用性。</strong></p>
+<p>本章主要内容：类的定义、抽象、封装、数据隐藏、构造函数和析构函数、this 指针。</p>
+<h3 id="面向过程和面向对象编程"><a href="#面向过程和面向对象编程" class="headerlink" title="面向过程和面向对象编程"></a>面向过程和面向对象编程</h3><p>面向过程编程先考虑步骤，再考虑如何表示数据，而面向对象编程不仅要考虑数据的表示，还要考虑使用数据的方式，即数据存储和用户接口。这种处理方式将数据以及处理数据的基本方法集合在一个对象中。</p>
+<h3 id="抽象和类"><a href="#抽象和类" class="headerlink" title="抽象和类"></a>抽象和类</h3><p>类型本身就是抽象的类设计，基本类型如 int、float 这些在声明时不仅仅分配了内存，还规定了可对变量执行的操作，基本类型就是系统内置的封装好的类。而用户自定义的类型需要自己提供定义以及方法，这换来了强大的功能和灵活性。</p>
+<h4 id="类的基本概念"><a href="#类的基本概念" class="headerlink" title="类的基本概念"></a>类的基本概念</h4><p>类是将抽象转换成用户定义类型的工具，将数据表示和操纵数据的方法组合成一个整洁的包。<strong>类规范由两个部分组成</strong>：</p>
+<ul>
+<li>类声明：以数据成员的方式描述数据部分，以成员函数的方式描述公有接口</li>
+<li>类方法：描述如何实现类成员函数</li>
+</ul>
+<p><strong>接口是一个共享框架，供两个系统交互使用，类的接口就是设计的方法，供程序使用与类对象进行交互。</strong></p>
+<p>通常将接口（类定义）放在头文件中，并将实现（类方法的具体代码）放在源代码中。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Stock</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    string company;</span><br><span class="line">    <span class="type">long</span> shares;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">acquire</span><span class="params">(<span class="type">const</span> string &amp; co,<span class="type">long</span> n,<span class="type">double</span> pr)</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">buy</span><span class="params">(<span class="type">long</span> num,<span class="type">double</span> price)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通常使用<code>class</code>指出代码定义了一个类设计，此处 Stock 是这个新类的类型名，我们能够声明 Stock 类型的变量，称为对象或者实例。</p>
+<p>存储的数据构成类数据成员部分，要执行的操作以类函数成员的形式出现，可以就地定义，也可以用原型表示。（一般就地定义在私有部分，原型在公有部分。）</p>
+<h5 id="访问控制"><a href="#访问控制" class="headerlink" title="访问控制"></a>访问控制</h5><p>关键字 <code>private</code> 和 <code>public</code> 描述了对类成员的访问控制，使用类对象的程序都可以直接访问公有部分，但只有公有成员函数能够访问对象的私有成员，<strong>所以说公有成员函数提供了对象和程序之间的接口。</strong>这种阻止程序直接访问数据的操作被称为数据隐藏。</p>
+<p>数据隐藏是一种封装，封装的另一个例子是将类函数定义和类声明放在不同的文件中。</p>
+<p>无论是成员函数还是数据项，都可以放在公有或私有任意一处，但是由于隐藏数据，通常来说数据放在私有部分，组成类接口的成员函数放在公有部分。<strong>通常程序员使用私有成员函数来处理不属于公有接口的实现细节。</strong></p>
+<p><code>private</code> 是类对象的默认访问控制。**类和结构的唯一区别是结构的默认访问类型是 <code>public</code>。</p>
+<h5 id="实现类成员函数"><a href="#实现类成员函数" class="headerlink" title="实现类成员函数"></a>实现类成员函数</h5><p>为类声明中的原型表示的成员函数提供代码时，成员函数定义和常规函数定义非常相似，但有两个特殊特征：</p>
+<ul>
+<li>定义成员函数时，使用作用域解析运算符（::）来标识函数所属的类</li>
+<li>类方法可以访问类的 private</li>
+</ul>
+<p>acquire() 函数的函数头如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Stock::acquire</span><span class="params">(<span class="type">const</span> string &amp;co,<span class="type">long</span> n,<span class="type">double</span> pr)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>同一个类下的其他成员函数不必使用作用域解析运算符就可以使用该类下的其他方法。**Stock::acquire() 是函数的限定名，而简单的 acquire() 是全名的缩写，只能在类作用域中使用。</p>
+<h3 id="类的构造函数和析构函数"><a href="#类的构造函数和析构函数" class="headerlink" title="类的构造函数和析构函数"></a>类的构造函数和析构函数</h3><h4 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h4><p>类的构造函数专门用于构造新对象、将值赋给它们的数据成员，并且构造函数的名称与类名相同。（因为类的数据部分是私有，因此无法像基本类型一样直接初始化）</p>
+<h5 id="声明和定义"><a href="#声明和定义" class="headerlink" title="声明和定义"></a>声明和定义</h5><p>构造函数同样需要函数原型，并且可以使用默认参数来完成参数赋值，<strong>没有返回类型，原型位于类声明的共有部分。</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Stock</span>(<span class="type">const</span> string &amp;co,<span class="type">long</span> n=<span class="number">0</span>,<span class="type">double</span> pr=<span class="number">0.0</span>);</span><br></pre></td></tr></table></figure>
+<p>构造函数的参数表示的不是类成员，而是赋给类成员的值，因此参数名不能和类成员相同。</p>
+<h5 id="使用构造函数"><a href="#使用构造函数" class="headerlink" title="使用构造函数"></a>使用构造函数</h5><p>类构造函数的初始化方式有显式和隐式两种：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Stock food = <span class="built_in">Stock</span>(<span class="string">&quot;balll&quot;</span>,<span class="number">250</span>,<span class="number">1.25</span>);</span><br><span class="line"><span class="function">Stock <span class="title">food</span><span class="params">(<span class="string">&quot;balll&quot;</span>,<span class="number">250</span>,<span class="number">1.25</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>构造函数被用来创建对象，但是不能通过对象来调用。</p>
+<h5 id="默认构造函数"><a href="#默认构造函数" class="headerlink" title="默认构造函数"></a>默认构造函数</h5><p>如果没有提供任何构造函数，则 C++ 将自动提供默认构造函数，其声明中不包含值，因此也没有参数。</p>
+<p>当且仅当没有定义任何构造函数时，编译器才会提供默认构造函数。如果定义了构造函数，那么就必须提供默认构造函数，定义默认构造函数的方式有两种，一种是给已有构造函数的所有参数提供默认值，另一种是通过函数重载来定义另一个构造函数 —— 一个没有参数的构造函数。</p>
+<h4 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h4><p>对象过期时将自动调用析构函数完成清理工作，<strong>析构函数的名称是在类名前加~，析构函数没有返回值和声明类型，也没有参数。</strong></p>
+<p>通常析构函数出现在需要使用 delete 来释放内存的情况下。</p>
+<h4 id="const-成员函数"><a href="#const-成员函数" class="headerlink" title="const 成员函数"></a>const 成员函数</h4><p>将类对象声明为 const 类型时，所调用的函数必须确保不会修改调用对象，但是编译器无法自动判断调用对象不被修改，因此需要对成员函数增设新语法。C++ 的解决办法是将 const 关键字放在函数的括号后面。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">show</span><span class="params">()</span> <span class="type">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p>函数定义和函数声明都应该如此，这种被称为 const 成员函数，只要类方法不修改调用对象，就应该将其声明为 const。</p>
+<h3 id="this-指针"><a href="#this-指针" class="headerlink" title="this 指针"></a>this 指针</h3><p>每个类成员函数不止设计到调用它的对象，也可能需要涉及到多个对象，在这个过程中，函数如何表示调用自身的对象？</p>
+<p>C++ 提出使用 this 指针来指向用来调用成员函数的对象，<strong>一般来说，所有的类方法都将 this 指针设置为调用它的对象的地址。</strong></p>
+<h3 id="对象数组"><a href="#对象数组" class="headerlink" title="对象数组"></a>对象数组</h3><p>在创建同一个类的多个对象时，比较合适的做法是创建对象数组，声明对象数组的方法和声明标准类型的方法相同。</p>
+<h3 id="类作用域"><a href="#类作用域" class="headerlink" title="类作用域"></a>类作用域</h3><p>在类中定义的名称的作用域为整个类，可以在不同类中使用相同的类成员名而不会引起冲突。</p>
+<p>在类声明或者成员函数定义中，可以使用未修饰的成员名称，在其他情况下使用类成员名时，必须根据上下文使用直接成员运算符（.）、间接成员运算符（-&gt;）或作用域解析运算符（::）。</p>
+<p>无法直接使符号常量的作用域为类，因为声明类只是描述了对象形式，并没有创建对象。有两种方式可以实现这一目标，一种是在类中声明一个枚举，另一种是使用关键字 static。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一种方式，枚举</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Sdu</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">enum</span> &#123;Month = <span class="number">12</span>&#125;;</span><br><span class="line">    <span class="type">double</span> costs[Month];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//第二种方式，静态类成员</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Sdu</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">int</span> Month = <span class="number">12</span>;</span><br><span class="line">    <span class="type">double</span> costs[Month];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2024/06/18/cpp5/" data-toggle="tooltip" data-placement="top" title="C++ 学习记录（五）">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2024/05/13/record-opencv1/" data-toggle="tooltip" data-placement="top" title="opencv 文档学习记录(二)">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                          <a class="tag" href="/tags/#基础编程" title="基础编程">基础编程</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/astronauting">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; R&#39;s Blog 2024 
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://astronauting-rbr.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://astronauting-rbr.top/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

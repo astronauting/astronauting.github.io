@@ -56,7 +56,119 @@
 
     <!-- ga & ba script hoook -->
     <script></script>
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
 
 
 <!-- hack iOS CSS :active style -->
@@ -187,6 +299,75 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/2023/04/03/robot3/">
+        <h2 class="post-title">
+            机械臂基础（应用）知识学习3
+        </h2>
+        <h3 class="post-subtitle">
+            本篇着重介绍总结逆运动学部分知识，并且给出 python 应用程序。
+        </h3>
+        <div class="post-content-preview">
+            前言从目前的一些网站资料上看，机械臂运动学相关的讲解是非常散乱的，就算是有人用大量篇幅去讲解、归纳也还是有很多问题存在。我觉得这中间最重要的点在于过程中公式推导和几何理解没办法直接通过文本形式讲的很透彻，原理理解方面推荐台大林沛群老师的机器人运动学课程，里面老师会结合机器人模型进行讲解，更容易理解。无论是网课还是网上主流的教程，都只给出了满足佩珀准则（机械臂三轴交于一点）的方法，我的项目所应......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by R on
+        2023-04-03
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2023/03/15/robot2/">
+        <h2 class="post-title">
+            机械臂基础（应用）知识学习2
+        </h2>
+        <h3 class="post-subtitle">
+             本篇着重介绍正运动学部分，即如何从关节角度推出坐标和旋转角度。
+        </h3>
+        <div class="post-content-preview">
+            前言上篇文章中提到了 DH 法以及对应的 MATLAB 建模方法，但是这部分的内容只是确定了四个 DH 参数，剩下的相当于交给了工具库去做。但要真正理解这个转换过程，需要通过实际的计算求解出坐标值，这便是这篇的重点，也是正运动学的核心内容。
+运动学正解理论求运动学正解就是已知各关节的运动参数，求末端执行器的相对参考坐标系的位姿。求解步骤如下：
+
+各连杆首尾相连；
+确定各连杆间的齐次变换矩阵；......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by R on
+        2023-03-15
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2023/03/09/robot1/">
+        <h2 class="post-title">
+            机械臂基础（应用）知识学习1
+        </h2>
+        <h3 class="post-subtitle">
+             "学习的目的是了解机械臂运动学求正逆解，先从整体概念框架入手。本篇着重介绍 DH 法建模。"
+        </h3>
+        <div class="post-content-preview">
+            前言项目上最近需要实现机械臂坐标求位姿，设计到了机器人运动学范畴，实际上本科是学过这方面的课程，但是由于那会儿准备考研几乎一节都没听，现在想起来那门课是真的很重要。就初步了解来看，过程中应该有很多公式推导环节，需要细细学习和记录。
+
+基本概念控制方式：机器人有两种控制方式：开环以及闭环控制，开环控制中感知部分（传感器、相机等）能够得到的是物体坐标，由此可以控制机械臂末端执行器到达坐标。闭环控......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by R on
+        2023-03-09
+    </p>
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -340,11 +521,11 @@ C# 允许定义其他值类型的变量，比如 enum，也允许定义引用类
                             
                         
                             
-                            <a href="/tags/#c++" title="c++" rel="6">c++</a>
+                            <a href="/tags/#c++" title="c++" rel="9">c++</a>
                             
                         
                             
-                            <a href="/tags/#基础编程" title="基础编程" rel="4">基础编程</a>
+                            <a href="/tags/#基础编程" title="基础编程" rel="6">基础编程</a>
                             
                         
                             
@@ -383,6 +564,8 @@ C# 允许定义其他值类型的变量，比如 enum，也允许定义引用类
                         
                             
                         
+                            
+                            <a href="/tags/#opencv" title="opencv" rel="2">opencv</a>
                             
                         
                             

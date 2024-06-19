@@ -302,6 +302,72 @@ mjx-container[display="true"] + br {
 
 <div class="post-preview">
 
+    <a href="/2023/09/07/calibrate-new/">
+        <h2 class="post-title">
+            手眼标定全过程梳理
+        </h2>
+        <h3 class="post-subtitle">
+            对前段时间学习的总结，以及对手眼标定的原理推导再梳理
+        </h3>
+        <div class="post-content-preview">
+            之前写过关于手眼标定的推导性内容，后面写到一半因为时间紧张就没有写下去，之后因为汇报需要写成了 PPT 的形式。经过自己的一番讲解后感觉理解上更加顺畅了，但是无论是 PPT 还是之前写的文章都没有很清晰的进行表达，包括两种情况下的推导对比都比较混乱，下标也没有统一。
+这样如果是站在学习的人的角度是很容易搞乱的，包括我自己在学习的过程中也是反复调查进行对比才慢慢理解，我觉得这个过程本不必这么复......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by R on
+        2023-09-07
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2023/09/05/record-blog/">
+        <h2 class="post-title">
+            博客搭建过程详细记录
+        </h2>
+        <h3 class="post-subtitle">
+            搭建方式为 hexo 和 github pages,没有服务器的静态博客
+        </h3>
+        <div class="post-content-preview">
+            前言注意：过程中使用了 Github 相关功能，需要科学上网，因此自行斟酌可行性。
+之前兴致冲冲的搭建了一回博客网站，但是动态元素太多，加载起来比较慢，整体风格也不是很喜欢。
+新学期趁着总结文档的机会，花了两天的时间把整个流程重新走了一遍，此外还上了点难度，下狠心去找一个自己很喜欢的风格，也就是现在在用的 hux blog 模板。hexo 下的作者是 kaijun，原作者是 黄玄，都是非常顶......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by R on
+        2023-09-05
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2023/06/15/cpp1/">
+        <h2 class="post-title">
+            c++上手记录
+        </h2>
+        <h3 class="post-subtitle">
+            快学快用式的学习，主要目的在于快速上手应用，深入学习放在之后进行
+        </h3>
+        <div class="post-content-preview">
+            前言最近项目上屡屡碰到需要使用c++的地方，并且随着各种方面开发的进行觉得实在应该扎扎实实的学习一门语言吃饭，无奈时间实在不太够用，于是先从上手的角度对c++进行了初步学习，起码达到能看懂程序的阶段。然后根据需求写了关于opencv的几个函数，并且尝试了多线程的处理，效果是很理想的，多线程的方式简直就是解决卡顿最大的利器。刚刚开始入门，很多语句还看不太懂，先把我应用实现的一些小功能做个记录，......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by R on
+        2023-06-15
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/2023/06/07/record-orangepi/">
         <h2 class="post-title">
             基于yolov5及香橙派5的视觉识别项目记录
@@ -456,75 +522,6 @@ ros包创建及......
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/2023/04/03/robot3/">
-        <h2 class="post-title">
-            机械臂基础（应用）知识学习3
-        </h2>
-        <h3 class="post-subtitle">
-            本篇着重介绍总结逆运动学部分知识，并且给出 python 应用程序。
-        </h3>
-        <div class="post-content-preview">
-            前言从目前的一些网站资料上看，机械臂运动学相关的讲解是非常散乱的，就算是有人用大量篇幅去讲解、归纳也还是有很多问题存在。我觉得这中间最重要的点在于过程中公式推导和几何理解没办法直接通过文本形式讲的很透彻，原理理解方面推荐台大林沛群老师的机器人运动学课程，里面老师会结合机器人模型进行讲解，更容易理解。无论是网课还是网上主流的教程，都只给出了满足佩珀准则（机械臂三轴交于一点）的方法，我的项目所应......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by R on
-        2023-04-03
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2023/03/15/robot2/">
-        <h2 class="post-title">
-            机械臂基础（应用）知识学习2
-        </h2>
-        <h3 class="post-subtitle">
-             本篇着重介绍正运动学部分，即如何从关节角度推出坐标和旋转角度。
-        </h3>
-        <div class="post-content-preview">
-            前言上篇文章中提到了 DH 法以及对应的 MATLAB 建模方法，但是这部分的内容只是确定了四个 DH 参数，剩下的相当于交给了工具库去做。但要真正理解这个转换过程，需要通过实际的计算求解出坐标值，这便是这篇的重点，也是正运动学的核心内容。
-运动学正解理论求运动学正解就是已知各关节的运动参数，求末端执行器的相对参考坐标系的位姿。求解步骤如下：
-
-各连杆首尾相连；
-确定各连杆间的齐次变换矩阵；......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by R on
-        2023-03-15
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2023/03/09/robot1/">
-        <h2 class="post-title">
-            机械臂基础（应用）知识学习1
-        </h2>
-        <h3 class="post-subtitle">
-             "学习的目的是了解机械臂运动学求正逆解，先从整体概念框架入手。本篇着重介绍 DH 法建模。"
-        </h3>
-        <div class="post-content-preview">
-            前言项目上最近需要实现机械臂坐标求位姿，设计到了机器人运动学范畴，实际上本科是学过这方面的课程，但是由于那会儿准备考研几乎一节都没听，现在想起来那门课是真的很重要。就初步了解来看，过程中应该有很多公式推导环节，需要细细学习和记录。
-
-基本概念控制方式：机器人有两种控制方式：开环以及闭环控制，开环控制中感知部分（传感器、相机等）能够得到的是物体坐标，由此可以控制机械臂末端执行器到达坐标。闭环控......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by R on
-        2023-03-09
-    </p>
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -570,11 +567,11 @@ ros包创建及......
                             
                         
                             
-                            <a href="/tags/#c++" title="c++" rel="6">c++</a>
+                            <a href="/tags/#c++" title="c++" rel="9">c++</a>
                             
                         
                             
-                            <a href="/tags/#基础编程" title="基础编程" rel="4">基础编程</a>
+                            <a href="/tags/#基础编程" title="基础编程" rel="6">基础编程</a>
                             
                         
                             
@@ -613,6 +610,8 @@ ros包创建及......
                         
                             
                         
+                            
+                            <a href="/tags/#opencv" title="opencv" rel="2">opencv</a>
                             
                         
                             

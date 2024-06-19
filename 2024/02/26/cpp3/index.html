@@ -294,12 +294,27 @@
 <p>为了避免引用和类型之间产生混乱，检查函数特征标时将会把类型引用和类型本身视为同一个特征标。重载时，返回类型可以不同，但是特征标也必须不同。</p>
 <p><strong>一般情况下，仅当函数基本上执行相同任务，但使用不同形式的数据时，才应用函数重载。</strong></p>
 <h3 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h3><p>函数模板是通用的函数描述，使用<strong>泛型</strong>来定义函数，其中泛型可以用具体的类型替换，通过将类型传递给模板，可以使得编译器生成该类型的函数。</p>
-<h4 id="函数模板格式"><a href="#函数模板格式" class="headerlink" title="函数模板格式"></a>函数模板格式</h4><p>要建立一个模板并将类型命名为 AnyType，关键字 template 和 typename 是必需的，并且在函数原型和函数声明处都要出现，关键字使用 typename 或者 class 均可。</p>
+<h4 id="函数模板格式"><a href="#函数模板格式" class="headerlink" title="函数模板格式"></a>函数模板格式</h4><p>要建立一个模板并将类型命名为 AnyType，<strong>关键字 template 和 typename 是必需的，并且在函数原型和函数声明处都要出现</strong>，关键字使用 typename 或者 class 均可。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Swap</span><span class="params">(T &amp;a,T &amp;b)</span></span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Account</span><span class="params">(T &amp;a,T &amp;b)</span></span>;</span><br></pre></td></tr></table></figure>
 <p>函数模板不能缩短可执行程序，最终的代码不包含任何模板，而只包含了为程序生成的实际函数。更常见的情形是将模板放在头文件中，并在需要使用模板的文件中包含头文件。</p>
 <h4 id="模板重载以及局限性"><a href="#模板重载以及局限性" class="headerlink" title="模板重载以及局限性"></a>模板重载以及局限性</h4><p>并非所有的模板参数都必须是模板参数类型，同时模板可以重载。</p>
 <p>模板的局限性在于假设模板定义了乘法运算符，但对应的类型为数组、指针或者结构时，这种假设就不再成立了。对这种情况有两种解决方案，一种是为特定类型提供具体化的模板定义，另一种则是重载运算符，使其能够应用于特定的结构或者类。</p>
-<h4 id="显式具体化、实例化和具体化"><a href="#显式具体化、实例化和具体化" class="headerlink" title="显式具体化、实例化和具体化"></a>显式具体化、实例化和具体化</h4>
+<h4 id="显式具体化、实例化和具体化"><a href="#显式具体化、实例化和具体化" class="headerlink" title="显式具体化、实例化和具体化"></a>显式具体化、实例化和具体化</h4><h5 id="显式具体化"><a href="#显式具体化" class="headerlink" title="显式具体化"></a>显式具体化</h5><p>前面提到的函数模板局限性的解决方案中有一点是提供具体化的模板定义，简言之就是特殊情况特殊处理方式，即显式具体化。</p>
+<ul>
+<li>对于给定的函数名，可以有非模板函数、模板函数和显式具体化模板函数以及它们的重载版本</li>
+<li>显式具体化的原型和定义应该以 <code>template&lt;&gt;</code> 打头，并通过名称指定类型</li>
+<li>具体化优先于常规模板，而非模板函数优先于具体化和常规模板</li>
+</ul>
+<p>以下示例展现了交换 job 结构的非模板函数、模板函数和具体化的原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(job &amp;,job &amp;)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(T &amp;,T &amp;)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;&gt; <span class="type">void</span> <span class="built_in">swap</span>&lt;job&gt;(job &amp;,job &amp;);</span><br></pre></td></tr></table></figure>
+<h5 id="实例化和具体化"><a href="#实例化和具体化" class="headerlink" title="实例化和具体化"></a>实例化和具体化</h5><p>包含函数模板本身并不会生成函数定义，而使用模板生成函数定义是，得到的是模板实例，这种实例化方法成为<strong>隐式实例化</strong>。</p>
+<p>c++ 现在还允许显式实例化，意味着可以直接命令编译器创建特定的实例，其语法是声明所需要使用的种类————用&lt;&gt;符号指示类型，并在声明前加上关键字 template。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> <span class="type">void</span> <span class="built_in">Swap</span>&lt;<span class="type">int</span>&gt;(<span class="type">int</span>,<span class="type">int</span>);</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，这里的 template 没有 &lt;&gt;，与其不同的是显示具体化使用如下等价声明：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;&gt; <span class="type">void</span> <span class="built_in">Swap</span>&lt;<span class="type">int</span>&gt;(<span class="type">int</span> &amp;,<span class="type">int</span> &amp;);</span><br><span class="line"><span class="keyword">template</span> &lt;&gt; <span class="function"><span class="type">void</span> <span class="title">Swap</span><span class="params">(<span class="type">int</span> &amp;,<span class="type">int</span> &amp;)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>显式具体化表达的是不要使用模板生成定义，使用专门的显式定义函数去定义；而显示实例化则表示使用模板生成某种类型定义。</p>
+<p>隐式实例化、显式实例化和显示具体化统称为具体化。</p>
+
 
                 <hr>
 
